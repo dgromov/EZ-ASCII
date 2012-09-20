@@ -1,0 +1,34 @@
+-- GROUP NAME  --
+-- Project Proposal -- 
+-- DATE -- 
+
+Programming Language Description: 
+
+	We are planning on implementing a programming language for the purpose of creating and manipulating ASCII Art. ASCII Art is a form of drawing various of pictures using only the characters defined by the ASCII character set. The goal of the language will be to provide simple mechanisms for dealing with ASCII images. It will allow users to create images by adding and manipulating each character individually or by loading in an existing image and converting that to an ASCII format and then dealing with that. The language will provide a way to make functions or modules for the purposes of reuse. This will enable eventual library building allowing the programmers to create more interesting constructs and images using this language. 
+
+	There will be several basic data types for this language. The most important of which is one single character. We will also represent integers and some decimal numbers for convinience in drawing. For ease of use in data manipulation, this language will also support loops so that one can iterate through the entire image and address each character easily. 
+
+Why is this interesting? 
+
+	Drawing ASCII art is a fairly difficult task. One has to know where exactly something should be put to look correct, how many spaces there should be between it and the next thing and which characters to use to display what. Sometimes one can find ASCII art representation of other images on the internet that seemed to take a long time to draw. This language would be a solution to this problem of drawing difficulty. Using this programming languge a user can simply input an image of what they want and recieve an in memory ascii image which they are now free to manipulate or just save if they think it is pretty.  
+
+	This language will introduce the concept of shades with respect to the image being drawn. While drawing ASCII are one generally works with two shades of colors which we can call active and passive colors. For the purpose of this language active colors are those that are created by the ascii characters themselves and passive colors are those that come from the "canvas" being drawn on. This language will solve the problem of forcing the artist to figure out which characters to use by allowing them to simply specify the activeness of the character being drawn without worrying which particular character that is. The characters for the different active levels will be preset and changable via progam configuration at compile time. 
+
+	For the image manipulation the user will have the complete freedom to change any character in that image or change all characters of a given active level to another one. This way an image's color can be "inverted" or simply darkened to conform to the user's tastes. 
+
+	One of the main uses for this programing language will naturally be to convert images from other formats into an ASCII format. However, using the various abilities available to the programmer, he/she should quickly be able to set up functionality to draw various shapes and constructs and manually create images. 
+
+Describe a program: 
+
+	This language will be designed in such a way to allow its users to achieve their desired functionality in a few lines of code. Essentially, you write a little but it does a lot. A program might look as follows: 
+
+	*	Load image from some jpeg file 
+	* 	Store this image in a two dimensional array of "points"
+	*	Save a copy of the created image
+	* 	Change all points with a activeness of 5 to 7 (Make those points darker)
+	*	Clear a border around the edge of the image 
+	*	Save the new image 
+
+Functionality: How to read in image files
+	
+	OCAML image libraries will read in an image and convert it to black and white (for simplicity). We will then apply Floyd–Steinberg dithering to the created image to effectively normalize the points we have and see which one's we can get rid of. Then, for each character sized block of the image we will count the number and activness of the pixels there and create a character to represent that. These charcters will get stored in a 2D array and given to the user for manipulation. 
