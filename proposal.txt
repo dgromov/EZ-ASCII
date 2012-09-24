@@ -32,3 +32,5 @@ Describe a program:
 Functionality: How to read in image files
 	
 	OCAML image libraries will read in an image and convert it to black and white (for simplicity). We will then apply Floyd–Steinberg dithering to the created image to effectively normalize the points we have and see which one's we can get rid of. Then, for each character sized block of the image we will count the number and activness of the pixels there and create a character to represent that. These charcters will get stored in a 2D array and given to the user for manipulation. 
+
+tetsing
