@@ -77,7 +77,7 @@ Different argument represent different ways of selecting things: the following i
 	- Select points based on boolean expression
 		: ci[exp] -- Get all of the elements with intensity conforming to the boolean condition
 				     boolean expression must be in format ([cond][0-255][(&&)|(||)])* 
-					 where cond is one of >, <, =, <=, >= 
+					 where cond is one of ~=, >, <, =, <=, >= 
 					 // Can someone come up with the regex for this? 
 
 -- Usage -- 
