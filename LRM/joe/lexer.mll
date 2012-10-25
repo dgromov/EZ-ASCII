@@ -10,6 +10,8 @@ let digit = ['0'-'9']
 rule token = parse
       [' ' '\t']                                { token lexbuf }
       | ['\n' ]                                 { EOL }
+      | [',']                                   { COMMA }
+      | [':']                                   { COLON }
       | ['[']                                   { LBRACKET }
       | [']']                                   { RBRACKET }
       | letter (letter | digit | '_')* as id    { ID(id) }

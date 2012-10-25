@@ -1,6 +1,8 @@
 type token =
   | INT of (string)
   | ID of (string)
+  | COMMA
+  | COLON
   | LBRACKET
   | RBRACKET
   | EOL
