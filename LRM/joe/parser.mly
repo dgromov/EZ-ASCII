@@ -1,7 +1,8 @@
 /* File parser.mly */
 %token <string> INT 
 %token <string> ID
-%token COMMA, COLON, LBRACKET, RBRACKET, EOL
+%token <string> CMP
+%token AND, OR, COMMA, COLON, LBRACKET, RBRACKET, EOL
 
 %start main             /* the entry point */
 %type <string> main
@@ -22,4 +23,10 @@ select_stmt:
       | INT COLON INT COMMA INT           { "selection by horizontal slice" }
       | INT COMMA                         { "selection by full vertical slice" }
       | COMMA INT                         { "selection by full horizontal slice" }
-      | COMMA                             { "selection by all" } 
+      | COMMA                             { "selection by all" }
+      | bool_expr                         { $1 }
+
+bool_expr:
+        CMP INT                           { "selection by bool expression" }
+      | CMP INT AND bool_expr             { $4 }
+      | CMP INT OR bool_expr              { $4 }
