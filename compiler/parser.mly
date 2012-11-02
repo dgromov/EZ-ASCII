@@ -2,6 +2,7 @@
 %token <string> INT 
 %token <string> ID
 %token <string> CMP
+%token <string> STR
 %token AND, OR, COMMA, COLON, LBRACKET, RBRACKET, EOL
 
 %start main             /* the entry point */
@@ -11,10 +12,14 @@
 main:
       expr EOL                            { $1 }
 
-expr:   INT                               { $1 }
+expr:   
+        literal                           { $1 }
       | ID                                { $1 }
       | ID LBRACKET select_stmt RBRACKET  { $3 }
-      
+
+literal:
+        INT                               { "integer: " ^ $1 }
+      | STR                               { "string: " ^ $1 }  
 
 select_stmt:
         INT COMMA INT                     { "selection by point" }
