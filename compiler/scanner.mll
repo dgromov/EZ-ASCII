@@ -1,4 +1,4 @@
-(* File lexer.mll *)
+(* File scanner.mll *)
 {
         open Parser
         exception Eof
