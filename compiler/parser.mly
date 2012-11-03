@@ -4,7 +4,7 @@
 %token <string> CMP
 %token <string> STR
 %token TRUE, FALSE
-%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, EOL 
+%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET
 %token LT, GT, EQ, LEQ, GEQ, NEQ 
 %token MASK, IF, FOR, RETURN, LBRACE, RBRACE, FXN 
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
@@ -22,7 +22,7 @@
 
 %%
 main:
-        stmt SEMICOLON EOL                { $1 }
+        stmt SEMICOLON                    { $1 }
 
 expr:  
         INT                               { "integer: " ^ $1 }

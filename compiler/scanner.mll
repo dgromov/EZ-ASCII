@@ -18,9 +18,8 @@ let esc_char  = "\\\"" | "\\/"
 let strchar   = printable | ' ' | '\t' | esc_char 
 
 rule token = parse
-        [' ' '\t']                              { token lexbuf }
+        [' ' '\t' '\n' '\r']                    { token lexbuf }
       | "//"                                    { comment lexbuf } 
-      | ['\n' '\r']                             { EOL }
       | ","                                     { COMMA }
       | ";"                                     { SEMICOLON }
 
