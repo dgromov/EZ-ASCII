@@ -2,6 +2,7 @@
 /*                      */
 /*                      */
 
+%{ open Ast %}
 
 %token <int> INT 
 %token <string> ID
@@ -23,24 +24,24 @@
 %right ASSIGN
 %nonassoc UMINUS         /* highest precedence */
 
-%start main             /* the entry point */
-%type <string> main
+%start program           /* the entry point */
+%type <Ast.program> program 
 
 %%
-main:
-        stmt SEMICOLON                    { $1 }
+program:
+        expr SEMICOLON                    { $1 }
 
 expr:  
-        INT                               { "integer: " ^ string_of_int $1 }
-      | STR                               { "string " ^ $1 }
-      | expr PLUS expr                    { "addition" }
-      | expr MINUS expr                   { "subtraction" }
-      | expr TIMES expr                   { "multiplication" }
-      | expr DIVIDE expr                  { "division" }
-      | expr MOD expr                     { "modulus" }
-      | MINUS expr %prec UMINUS           { "unary minus" }
-      | ID LBRACKET select_stmt RBRACKET  { $3 }
-
+        INT                               { Literal($1) }
+      | STR                               { Id($1) }
+      | expr PLUS expr                    { Binop($1, Plus, $3) }
+      | expr MINUS expr                   { Binop($1, Minus, $3) }
+      | expr TIMES expr                   { Binop($1, Times, $3) }
+      | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
+      | expr MOD expr                     { Binop($1, Mod, $3) }
+      /*| MINUS expr %prec UMINUS           { "unary minus" }
+      | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
+/*
 stmt:
         ID ASSIGN expr                    { "assignment: " ^ $3 }
       | expr OUTPUT STDOUT                { "output to stdout" }
@@ -65,3 +66,7 @@ bool_expr:
       | NEQ INT                           { "selection by bool expression (~=)" }
       | bool_expr AND bool_expr           { $3 }
       | bool_expr OR bool_expr            { $3 }
+
+
+
+      */

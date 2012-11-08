@@ -1,4 +1,5 @@
 type op = 	Plus | Minus | Times | Divide | Mod | And | Or | Lt | Gt | Eq | Leq | Geq | Neq | Mask
+
 type expr = (* Expressions *)
 Literal of int (* 42 *)
 | Id of string (* foo *)
@@ -23,4 +24,5 @@ locals : string list; (* Locally defined variables *)
 body : stmt list;
 }
 
-type program = stmt list * func_decl list (* global vars, funcs *)
+type program = expr (* stmt list * func_decl list (* global vars, funcs *) *)
+
