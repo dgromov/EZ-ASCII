@@ -1,4 +1,4 @@
-(* FILE:  scanner.mlll *)
+(* FILE:  scanner.mll *)
 {
         open Parser
         exception Eof
@@ -11,15 +11,17 @@ let dblquote  = '"'
 (* printable ASCII chars, excluding double quote and forward slash *)   
 let printable = ['!' '#'-'.' '0'-'~']
 
-(* escape double quote and forward slash *)
-let esc_char  = "\\\"" | "\\/"
+(* escape sequences: newline, horiz tab, single/double quote, back/forw slash *)
+let esc_char  = "\\n" | "\\t" | "\\\"" | "\\\'" | "\\/" | "\\"
+
+let comment = "//" _* ['\r' '\n']
 
 (* allowable characters for strings *)
 let strchar   = printable | ' ' | '\t' | esc_char 
 
 rule token = parse
         [' ' '\t' '\n' '\r']                    { token lexbuf }
-      | "//"                                    { comment lexbuf } 
+      | "//"                                    { comment lexbuf }
       | ","                                     { COMMA }
       | ";"                                     { SEMICOLON }
 
@@ -34,35 +36,54 @@ rule token = parse
       | "&&"                                    { AND }
       | "||"                                    { OR }
 
-      (* boolean operators *)
+      (* boolean operators/keywords *)
       | "<"                                     { LT }
       | ">"                                     { GT }
       | "="                                     { EQ }
       | "<="                                    { LEQ }
       | ">="                                    { GEQ }
       | "~="                                    { NEQ }
+      | "~"                                     { NEGATE }
+      | "true"                                  { TRUE }
+      | "false"                                 { FALSE }
 
-      (* canvas operators *)
+      (* canvas operators/keywords/constants *)
       | "&"                                     { MASK }
       | "["                                     { LBRACKET }
       | "]"                                     { RBRACKET }
       | ":"                                     { COLON }
       | "out"                                   { STDOUT }
+      | "SHIFT_UP"                              { INT(0) }
+      | "SHIFT_LEFT"                            { INT(1) }
+      | "SHIFT_DOWN"                            { INT(2) }
+      | "SHIFT_RIGHT"                           { INT(3) }
+      | "$w"                                    { ATTR_W }
+      | "$h"                                    { ATTR_H }
+      | "$g"                                    { ATTR_G }
 
       (* statement operators/keywords *)
       | "if"                                    { IF }
+      | "else"                                  { ELSE }
       | "for"                                   { FOR }
+      | "|"                                     { FOR_SEP }
       | "Fun"                                   { FXN }
+      | "include"                               { INCLUDE }
       | "return"                                { RETURN }
       | "{"                                     { LBRACE }
       | "}"                                     { RBRACE }
       | "<-"                                    { ASSIGN }
       | "->"                                    { OUTPUT }
 
-      | "true"                                  { TRUE }
-      | "false"                                 { FALSE }
+      (* built-in functions *)
+      | "main"                                  { MAIN }
+      | "blank"                                 { BLANK }
+      | "load"                                  { LOAD }
+      | "map"                                   { MAP }
+      | "shift"                                 { SHIFT }
+
       | letter (letter | digit | '_')* as id    { ID(id) }
-      | digit+ as lit                           { INT(lit) }
+      | digit+ as lit                           { INT(int_of_string lit) }
+
       | dblquote strchar* dblquote as str       { STR(str) }
       | eof                                     { raise Eof }
 

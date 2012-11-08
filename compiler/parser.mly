@@ -1,21 +1,27 @@
-/* File parser.mly */
-%token <string> INT 
+/* File parser.mly      */
+/*                      */
+/*                      */
+
+
+%token <int> INT 
 %token <string> ID
 %token <string> CMP
 %token <string> STR
 %token TRUE, FALSE
-%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET
-%token LT, GT, EQ, LEQ, GEQ, NEQ 
-%token MASK, IF, FOR, RETURN, LBRACE, RBRACE, FXN 
+%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, EOL
+%token LT, GT, EQ, LEQ, GEQ, NEQ, NEGATE
+%token ATTR, MASK, IF, ELSE, FOR, FOR_SEP, INCLUDE, RETURN, LBRACE, RBRACE, FXN 
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
-%token ASSIGN, OUTPUT, STDOUT
+%token ASSIGN, OUTPUT, ATTR_W, ATTR_H, ATTR_G, STDOUT
+%token MAIN, BLANK, LOAD, INCLUDE, MAP, SHIFT
 
-%right ASSIGN
-%left PLUS, MINUS
+%left PLUS, MINUS        /* lowest precedence */
 %left TIMES, DIVIDE, MOD
 %left EQ, NEQ
 %left LT, GT, GEQ, LEQ
 %left AND, OR
+%right ASSIGN
+%nonassoc UMINUS         /* highest precedence */
 
 %start main             /* the entry point */
 %type <string> main
@@ -25,17 +31,18 @@ main:
         stmt SEMICOLON                    { $1 }
 
 expr:  
-        INT                               { "integer: " ^ $1 }
+        INT                               { "integer: " ^ string_of_int $1 }
       | STR                               { "string " ^ $1 }
       | expr PLUS expr                    { "addition" }
       | expr MINUS expr                   { "subtraction" }
       | expr TIMES expr                   { "multiplication" }
       | expr DIVIDE expr                  { "division" }
       | expr MOD expr                     { "modulus" }
+      | MINUS expr %prec UMINUS           { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 }
 
 stmt:
-        ID ASSIGN expr                    { "assignment" }
+        ID ASSIGN expr                    { "assignment: " ^ $3 }
       | expr OUTPUT STDOUT                { "output to stdout" }
       | expr OUTPUT STR                   { "output to filepath" }
 
@@ -56,5 +63,5 @@ bool_expr:
       | LEQ INT                           { "selection by bool expression (<=)" }
       | GEQ INT                           { "selection by bool expression (>=)" }
       | NEQ INT                           { "selection by bool expression (~=)" }
-      | bool_expr AND bool_expr       { $3 }
-      | bool_expr OR bool_expr        { $3 }
+      | bool_expr AND bool_expr           { $3 }
+      | bool_expr OR bool_expr            { $3 }
