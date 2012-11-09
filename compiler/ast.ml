@@ -17,7 +17,7 @@ type stmt =                               (* Statements *)
   | Assign of string * expr               (* foo <- 42 *)
   | OutputC of string                     (* canvas -> out *)
   | OutputF of string                     (* canvas -> "C:\test.png" *)
-  | If of expr * stmt *stmt               (* if (foo = 42) {} *)
+  | If of expr * stmt * stmt              (* if (foo = 42) {} *)
   | If_else of expr * stmt * stmt         (* if (foo = 42) {} else {} *)
   | For of expr * expr * expr * stmt      (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
 
