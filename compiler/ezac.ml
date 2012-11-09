@@ -65,17 +65,27 @@ let _ =
               let e_val, e_env = eval env e 
               in
                 var, (NameMap.add var e_val e_env)
+          | If(cond, s) ->
+              let c1, c_env = eval env cond in
+                if (bool_of_int (int_of_string c1)) then
+                  exec c_env s
+                else "", env
         
         in
         let (var, updated_env) = 
           (* read one line of code (input) and output result *)
           exec env (Parser.program Scanner.token lexbuf)
-        in 
-          print_endline ("> " ^ var ^ " assigned " ^ (NameMap.find var updated_env));
+        in match var with
+          "" -> parseline (lineno + 1) updated_env
+          | _ -> 
+            print_endline ("> " ^ var ^ " assigned " ^ (NameMap.find var updated_env));
+            flush stdout;
+            parseline (lineno + 1) updated_env;
+
           (*print_endline ("> " ^ " = " ^ (string_of_int (NameMap.find var
            * updated_env)));*)
-          flush stdout;
-          parseline (lineno + 1) updated_env;
+
+
       with 
         | Parsing.Parse_error -> 
             print_endline ("> *** Syntax error at line " ^ string_of_int(lineno) ^ " ***");

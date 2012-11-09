@@ -40,14 +40,16 @@ stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-     /* | expr SEMICOLON                 { Expr($1) } */
-      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
-      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
+      | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
+     /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
      /* | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt stmt   { For($3, $5, $7, $9) } 
 
 expr_opt:
                                           { Noexpre }
       | expr                              { $1 } */
+
+/* stmt_block:
+      stmt_block stmt                     { $2 :: $1 }*/
 
 expr:  
         INT                               { IntLiteral($1) }
