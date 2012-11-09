@@ -1,7 +1,7 @@
 (* FILE:  scanner.mll *)
 {
         open Parser
-        exception Eof
+        exception Eof 
 }
 
 let letter    = ['a'-'z' 'A'-'Z']
@@ -20,7 +20,8 @@ let comment = "//" _* ['\r' '\n']
 let strchar   = printable | ' ' | '\t' | esc_char 
 
 rule token = parse
-        [' ' '\t' '\n' '\r']                    { token lexbuf }
+        [' ' '\t']                              { token lexbuf }
+      | ['\n' '\r']                             { EOL }
       | "//"                                    { comment lexbuf }
       | ","                                     { COMMA }
       | ";"                                     { SEMICOLON }

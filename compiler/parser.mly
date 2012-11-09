@@ -29,23 +29,27 @@
 
 %%
 program:
-        expr SEMICOLON                    { $1 }
+        /* nothing                      { [] }  */
+        stmt EOL                         { $1  }
+   /*   | program fdecl                     { fst $1, ($2 :: snd $1) } */
+
+stmt:
+        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
+      | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
+      | ID OUTPUT STR SEMICOLON        { OutputF($1) }
 
 expr:  
-        INT                               { Literal($1) }
-      | STR                               { Id($1) }
+        INT                               { IntLiteral($1) }
+      | STR                               { StrLiteral($1) } 
+      | ID                                { Id($1) }
       | expr PLUS expr                    { Binop($1, Plus, $3) }
       | expr MINUS expr                   { Binop($1, Minus, $3) }
       | expr TIMES expr                   { Binop($1, Times, $3) }
       | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
       | expr MOD expr                     { Binop($1, Mod, $3) }
-      /*| MINUS expr %prec UMINUS           { "unary minus" }
+      /*| MINUS expr %prec UMINUS         { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
 /*
-stmt:
-        ID ASSIGN expr                    { "assignment: " ^ $3 }
-      | expr OUTPUT STDOUT                { "output to stdout" }
-      | expr OUTPUT STR                   { "output to filepath" }
 
 select_stmt:
         INT COMMA INT                     { "selection by point" }
@@ -66,7 +70,5 @@ bool_expr:
       | NEQ INT                           { "selection by bool expression (~=)" }
       | bool_expr AND bool_expr           { $3 }
       | bool_expr OR bool_expr            { $3 }
-
-
 
       */
