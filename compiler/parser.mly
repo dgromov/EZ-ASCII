@@ -9,18 +9,21 @@
 %token <string> CMP
 %token <string> STR
 %token TRUE, FALSE
-%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, EOL
+%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, LPAREN, RPAREN, EOL
 %token LT, GT, EQ, LEQ, GEQ, NEQ, NEGATE
 %token ATTR, MASK, IF, ELSE, FOR, FOR_SEP, INCLUDE, RETURN, LBRACE, RBRACE, FXN 
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
 %token ASSIGN, OUTPUT, ATTR_W, ATTR_H, ATTR_G, STDOUT
 %token MAIN, BLANK, LOAD, INCLUDE, MAP, SHIFT
 
+%nonassoc NOELSE
+%nonassoc ELSE
 %left PLUS, MINUS        /* lowest precedence */
 %left TIMES, DIVIDE, MOD
 %left EQ, NEQ
 %left LT, GT, GEQ, LEQ
 %left AND, OR
+%left LPAREN, RPAREN
 %right ASSIGN
 %nonassoc UMINUS         /* highest precedence */
 
@@ -37,6 +40,14 @@ stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
+     /* | expr SEMICOLON                 { Expr($1) } */
+      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
+      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
+     /* | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt stmt   { For($3, $5, $7, $9) } 
+
+expr_opt:
+                                          { Noexpre }
+      | expr                              { $1 } */
 
 expr:  
         INT                               { IntLiteral($1) }
@@ -47,6 +58,15 @@ expr:
       | expr TIMES expr                   { Binop($1, Times, $3) }
       | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
       | expr MOD expr                     { Binop($1, Mod, $3) }
+      | expr EQ expr                      { Binop($1, Eq, $3) }
+      | expr NEQ expr                     { Binop($1, Neq, $3) }
+      | expr LT expr                      { Binop($1, Lt, $3) }
+      | expr GT expr                      { Binop($1, Gt, $3) }
+      | expr LEQ expr                     { Binop($1, Leq, $3) }
+      | expr GEQ expr                     { Binop($1, Geq, $3) }
+      | expr OR expr                      { Binop($1, Or, $3) }
+      | expr AND expr                     { Binop($1, And, $3) }      
+      | LPAREN expr RPAREN                { $2 }
       /*| MINUS expr %prec UMINUS         { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
 /*

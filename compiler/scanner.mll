@@ -72,6 +72,8 @@ rule token = parse
       | "return"                                { RETURN }
       | "{"                                     { LBRACE }
       | "}"                                     { RBRACE }
+      | "("                                     { LPAREN }
+      | ")"                                     { RPAREN }
       | "<-"                                    { ASSIGN }
       | "->"                                    { OUTPUT }
 

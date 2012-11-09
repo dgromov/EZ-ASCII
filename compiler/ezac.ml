@@ -18,6 +18,10 @@ let env_to_str m =
     | hd :: tl -> print_map_helper ((fst hd) ^ " = " ^ (string_of_int (snd hd)) ^ "\n" ^ s) tl
   in print_map_helper "" bindings
 
+let bool_of_int i =
+  if i > 0 then true
+  else false
+
 let _ =
   try 
     let lexbuf =
@@ -37,12 +41,21 @@ let _ =
           | Binop(e1, op, e2) -> 
               let v1, env = eval env e1 in
               let v2, env = eval env e2 in
-                string_of_int (match op with
+              let boolean i = if i then 1 else 0 in
+              string_of_int (match op with
                     Plus   -> (int_of_string v1) + (int_of_string v2)
                   | Minus  -> (int_of_string v1) - (int_of_string v2)
                   | Times  -> (int_of_string v1) * (int_of_string v2)
                   | Divide -> (int_of_string v1) / (int_of_string v2)
                   | Mod    -> (int_of_string v1) mod (int_of_string v2)
+                  | Eq     -> boolean((int_of_string v1) == (int_of_string v2))
+                  | Neq    -> boolean((int_of_string v1) != (int_of_string v2))
+                  | Lt     -> boolean((int_of_string v1) <  (int_of_string v2))
+                  | Gt     -> boolean((int_of_string v1) >  (int_of_string v2))
+                  | Leq    -> boolean((int_of_string v1) <= (int_of_string v2))
+                  | Geq    -> boolean((int_of_string v1) >= (int_of_string v2))
+                  | Or     -> boolean((bool_of_int (int_of_string v1)) || (bool_of_int (int_of_string v2)))
+                  | And    -> boolean((bool_of_int (int_of_string v1)) && (bool_of_int (int_of_string v2)))
                 ), env
         in
         (* execute statements and return updated environments *)                               
