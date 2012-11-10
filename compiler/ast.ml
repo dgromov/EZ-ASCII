@@ -28,4 +28,4 @@ type func_decl = {
   body : stmt list;
 }
 
-type program = stmt  (* * func_decl list (* global vars, funcs *)  *)
+type program = string list * func_decl list (* global vars, funcs *) 

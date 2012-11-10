@@ -31,12 +31,11 @@ let _ =
       try 
 		(* Put function declarations in a symbol table *)
 		let func_decls = List.fold_left
-				(fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
-				NameMap.empty funcs
+			(fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
+			NameMap.empty funcs
 		in
         (* eval: evaluates expressions and returns (value, updated env) *)
         let rec call fdecl actuals globals = 
-        (* eval: evaluates expressions and returns (value, updated env) *)
         let rec eval env = function
             IntLiteral(e1)    -> string_of_int e1, env
           | StrLiteral(e1)    -> e1, env
@@ -64,7 +63,7 @@ let _ =
                   | And    -> boolean((bool_of_int (int_of_string v1)) && (bool_of_int (int_of_string v2)))
                 ), env
         in
-		  | Call("print", [e]) ->
+		 | Call("print", [e]) ->
 			   let v, env = eval env e in
 			   print_endline (string_of_int v);
 			   0, env
