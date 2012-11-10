@@ -31,9 +31,10 @@ let _ =
       try 
 		(* Put function declarations in a symbol table *)
 		let func_decls = List.fold_left
-						(fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
-						NameMap.empty funcs
+				(fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
+				NameMap.empty funcs
 		in
+        (* eval: evaluates expressions and returns (value, updated env) *)
         let rec call fdecl actuals globals = 
         (* eval: evaluates expressions and returns (value, updated env) *)
         let rec eval env = function
