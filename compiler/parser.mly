@@ -1,43 +1,119 @@
-/* File parser.mly */
-%token <string> INT 
+/* File parser.mly      */
+/*                      */
+/*                      */
+
+%{ open Ast %}
+
+%token <int> INT 
 %token <string> ID
 %token <string> CMP
 %token <string> STR
 %token TRUE, FALSE
-%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET
-%token LT, GT, EQ, LEQ, GEQ, NEQ 
-%token MASK, IF, FOR, RETURN, LBRACE, RBRACE, FXN 
+%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, LPAREN, RPAREN, EOL
+%token LT, GT, EQ, LEQ, GEQ, NEQ, NEGATE
+%token ATTR, MASK, IF, ELSE, FOR, FOR_SEP, INCLUDE, RETURN, LBRACE, RBRACE, FXN 
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
-%token ASSIGN, OUTPUT, STDOUT
+%token ASSIGN, OUTPUT, ATTR_W, ATTR_H, ATTR_G, STDOUT
+%token MAIN, BLANK, LOAD, INCLUDE, MAP, SHIFT
 
-%right ASSIGN
-%left PLUS, MINUS
+%nonassoc NOELSE
+%nonassoc ELSE
+%left PLUS, MINUS        /* lowest precedence */
 %left TIMES, DIVIDE, MOD
 %left EQ, NEQ
 %left LT, GT, GEQ, LEQ
 %left AND, OR
+%left LPAREN, RPAREN
+%right ASSIGN
+%nonassoc UMINUS         /* highest precedence */
 
-%start main             /* the entry point */
-%type <string> main
+%start program           /* the entry point */
+%type <Ast.program> program 
 
 %%
-main:
-        stmt SEMICOLON                    { $1 }
+program:
+        /* nothing*/                   { [], [] }
+    | program vdecl                    { ($2 :: fst $1), snd $1 }
+	| program fdecl                    { fst $1, ($2 :: snd $1) } 
 
-expr:  
-        INT                               { "integer: " ^ $1 }
-      | STR                               { "string " ^ $1 }
-      | expr PLUS expr                    { "addition" }
-      | expr MINUS expr                   { "subtraction" }
-      | expr TIMES expr                   { "multiplication" }
-      | expr DIVIDE expr                  { "division" }
-      | expr MOD expr                     { "modulus" }
-      | ID LBRACKET select_stmt RBRACKET  { $3 }
+fdecl:
+	ID LPAREN args_opt RPAREN LBRACKET vdecl_list stmt_list RBRACKET
+						{ { fname = $1;
+							args  = $3;
+							locals= List.rev $6;
+							body  = List.rev $7 } }	
+
+args_opt:
+  /* nothing */ 				{ [] }
+	| args_list 				{ List.rev $1 }
+
+args_list:
+		ID 						{ [$1] }
+	| args_list COMMA ID  		{ $3 :: $1 }
+
+vdecl_list:
+	/* nothing */				{ [] }
+	| vdecl_list vdecl 		    { $2 :: $1 }
+
+vdecl:
+	INT ID SEMICOLON 			{ $2 }
+
+stmt_list:
+	/* nothing */ 				{ [] }
+	| stmt_list stmt 			{ $2 :: $1 }
 
 stmt:
-        ID ASSIGN expr                    { "assignment" }
-      | expr OUTPUT STDOUT                { "output to stdout" }
-      | expr OUTPUT STR                   { "output to filepath" }
+        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
+      | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
+      | ID OUTPUT STR SEMICOLON        { OutputF($1) }
+<<<<<<< HEAD
+	  | RETURN expr SEMICOLON          { Return($2) }
+	  | LBRACKET stmt_list RBRACKET    { Block(List.rev $2) }
+      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
+      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
+=======
+      | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
+     /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
+>>>>>>> ae3341352b243b3cc043c527d58541f38926570c
+     /* | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt stmt   { For($3, $5, $7, $9) } 
+
+expr_opt:
+                                          { Noexpre }
+      | expr                              { $1 } */
+
+/* stmt_block:
+      stmt_block stmt                     { $2 :: $1 }*/
+
+expr:  
+        INT                               { IntLiteral($1) }
+      | STR                               { StrLiteral($1) } 
+      | ID                                { Id($1) }
+      | expr PLUS expr                    { Binop($1, Plus, $3) }
+      | expr MINUS expr                   { Binop($1, Minus, $3) }
+      | expr TIMES expr                   { Binop($1, Times, $3) }
+      | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
+      | expr MOD expr                     { Binop($1, Mod, $3) }
+      | expr EQ expr                      { Binop($1, Eq, $3) }
+      | expr NEQ expr                     { Binop($1, Neq, $3) }
+      | expr LT expr                      { Binop($1, Lt, $3) }
+      | expr GT expr                      { Binop($1, Gt, $3) }
+      | expr LEQ expr                     { Binop($1, Leq, $3) }
+      | expr GEQ expr                     { Binop($1, Geq, $3) }
+      | expr OR expr                      { Binop($1, Or, $3) }
+      | expr AND expr                     { Binop($1, And, $3) }      
+      | ID LPAREN actuals_opt RPAREN 	  { Call($1, $3) }
+	  | LPAREN expr RPAREN 				  { $2 }
+      /*| MINUS expr %prec UMINUS         { "unary minus" }
+      | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
+	  
+actuals_opt:
+	  /* nothing */{ [] }
+	| actuals_list { List.rev $1 }
+
+actuals_list:
+	  expr 						{ [$1] }
+	| actuals_list COMMA expr   { $3 :: $1 }
+/*
 
 select_stmt:
         INT COMMA INT                     { "selection by point" }
@@ -56,5 +132,7 @@ bool_expr:
       | LEQ INT                           { "selection by bool expression (<=)" }
       | GEQ INT                           { "selection by bool expression (>=)" }
       | NEQ INT                           { "selection by bool expression (~=)" }
-      | bool_expr AND bool_expr       { $3 }
-      | bool_expr OR bool_expr        { $3 }
+      | bool_expr AND bool_expr           { $3 }
+      | bool_expr OR bool_expr            { $3 }
+
+      */
