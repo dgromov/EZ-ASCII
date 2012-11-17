@@ -65,11 +65,11 @@ let _ =
               let e_val, e_env = eval env e 
               in
                 var, (NameMap.add var e_val e_env)
-          | If(cond, s) ->
+          | If(cond, s, s2) ->
               let c1, c_env = eval env cond in
                 if (bool_of_int (int_of_string c1)) then
                   exec c_env s
-                else "", env
+                else exec c_env s2
         
         in
         let (var, updated_env) = 
