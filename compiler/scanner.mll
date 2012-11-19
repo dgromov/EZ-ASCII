@@ -54,10 +54,10 @@ rule token = parse
       | "]"                                     { RBRACKET }
       | ":"                                     { COLON }
       | "out"                                   { STDOUT }
-      | "SHIFT_UP"                              { INT(0) }
+      (*| "SHIFT_UP"                              { INT(0) }
       | "SHIFT_LEFT"                            { INT(1) }
       | "SHIFT_DOWN"                            { INT(2) }
-      | "SHIFT_RIGHT"                           { INT(3) }
+      | "SHIFT_RIGHT"                           { INT(3) }*)
       | "$w"                                    { ATTR_W }
       | "$h"                                    { ATTR_H }
       | "$g"                                    { ATTR_G }
@@ -85,7 +85,7 @@ rule token = parse
       | "shift"                                 { SHIFT }
 
       | letter (letter | digit | '_')* as id    { ID(id) }
-      | digit+ as lit                           { INT(int_of_string lit) }
+      | digit+ as lit                           { INTLITERAL(int_of_string lit) }
 
       | dblquote strchar* dblquote as str       { STR(str) }
       | eof                                     { raise Eof }

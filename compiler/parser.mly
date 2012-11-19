@@ -4,7 +4,8 @@
 
 %{ open Ast %}
 
-%token <int> INT 
+%token <int> INTLITERAL
+%token <bool> BOOLLITERAL
 %token <string> ID
 %token <string> CMP
 %token <string> STR
@@ -15,6 +16,7 @@
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
 %token ASSIGN, OUTPUT, ATTR_W, ATTR_H, ATTR_G, STDOUT
 %token MAIN, BLANK, LOAD, INCLUDE, MAP, SHIFT
+%token INT BOOL CANVAS
 
 %nonassoc NOELSE
 %nonassoc ELSE
@@ -32,32 +34,32 @@
 
 %%
 program:
-        /* nothing*/                   { [], [] }
-    | program vdecl                    { ($2 :: fst $1), snd $1 }
-	| program fdecl                    { fst $1, ($2 :: snd $1) } 
-
+          stmt EOL              { $1 }
+        | program vdecl { ($2 :: fst $1), snd $1 } 
+        | program fdecl { fst $1, ($2 :: snd $1) }
+		
 fdecl:
-	ID LPAREN args_opt RPAREN LBRACKET vdecl_list stmt_list RBRACKET
-						{ { fname = $1;
-							args  = $3;
-							locals= List.rev $6;
-							body  = List.rev $7 } }	
+		ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
+				{ { fname = $1;
+					formals = $3;
+					locals = List.rev $6;
+					body = List.rev $7 } }
+					
 
-args_opt:
-  /* nothing */ 				{ [] }
-	| args_list 				{ List.rev $1 }
-
-args_list:
-		ID 						{ [$1] }
-	| args_list COMMA ID  		{ $3 :: $1 }
+formals_opt:
+		/* nothing */ { [] }
+		| formal_list { List.rev($1) }
+formal_list:
+		ID			 { [$1] }
+		| formal_list COMMA ID { $3 :: $1 }
 
 vdecl_list:
-	/* nothing */				{ [] }
-	| vdecl_list vdecl 		    { $2 :: $1 }
-
+		/* nothing */ { [] }
+		| vdecl_list vdecl { $2 :: $1 }
 vdecl:
-	INT ID SEMICOLON 			{ $2 }
-
+		ID SEMICOLON { $1 }
+		
+		
 stmt_list:
 	/* nothing */ 				{ [] }
 	| stmt_list stmt 			{ $2 :: $1 }
@@ -66,26 +68,19 @@ stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-<<<<<<< HEAD
-	  | RETURN expr SEMICOLON          { Return($2) }
-	  | LBRACKET stmt_list RBRACKET    { Block(List.rev $2) }
-      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
-      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
-=======
-      | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
-     /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
->>>>>>> ae3341352b243b3cc043c527d58541f38926570c
-     /* | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt stmt   { For($3, $5, $7, $9) } 
+	  | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
+      | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
+      | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 
 expr_opt:
-                                          { Noexpre }
-      | expr                              { $1 } */
+      expr                              { $1 } 
 
 /* stmt_block:
       stmt_block stmt                     { $2 :: $1 }*/
 
 expr:  
-        INT                               { IntLiteral($1) }
+        INTLITERAL		                      { IntLiteral($1) }
+	  | BOOLLITERAL							  { BoolLiteral($1)}
       | STR                               { StrLiteral($1) } 
       | ID                                { Id($1) }
       | expr PLUS expr                    { Binop($1, Plus, $3) }
@@ -107,12 +102,15 @@ expr:
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
 	  
 actuals_opt:
-	  /* nothing */{ [] }
-	| actuals_list { List.rev $1 }
-
+		/* nothing */ { [] }
+		| actuals_list { List.rev $1 }
 actuals_list:
-	  expr 						{ [$1] }
-	| actuals_list COMMA expr   { $3 :: $1 }
+		expr { [$1] }
+		| actuals_list COMMA expr { $3 :: $1 }
+		
+
+include_stmt:
+		| LBRACKET STR RBRACKET     		{"include [filepath]"}
 /*
 
 select_stmt:

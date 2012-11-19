@@ -29,13 +29,6 @@ let _ =
       else Lexing.from_channel stdin in
     let rec parseline lineno env =
       try 
-		(* Put function declarations in a symbol table *)
-		let func_decls = List.fold_left
-			(fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
-			NameMap.empty funcs
-		in
-        (* eval: evaluates expressions and returns (value, updated env) *)
-        let rec call fdecl actuals globals = 
         let rec eval env = function
             IntLiteral(e1)    -> string_of_int e1, env
           | StrLiteral(e1)    -> e1, env
@@ -63,26 +56,7 @@ let _ =
                   | And    -> boolean((bool_of_int (int_of_string v1)) && (bool_of_int (int_of_string v2)))
                 ), env
         in
-		 | Call("print", [e]) ->
-			   let v, env = eval env e in
-			   print_endline (string_of_int v);
-			   0, env
-		  | Call(f, actuals) ->
-			   let fdecl = 
-				try NameMap.find f func_decls
-				with Not_found -> raise (Failure ("undefined function " ^ f))
-			   in
-			   let ractuals, env = List.fold_left
-				(fun (actuals, env) actual ->
-				 let v, env = eval env actual in v :: actuals, env)
-				 ([], env) actuals
-			   in
-			   let (locals, globals) = env in
-			   try
-				 let globals = call fdecl (List.rev ractuals) globals
-				 in 0, (locals, globals)
-			   with ReturnException(v, globals) -> v, (locals, globals)							
-        in
+		 
         (* execute statements and return updated environments *)                               
         let rec exec env = function
             Assign(var, e) ->
@@ -90,11 +64,21 @@ let _ =
               let e_val, e_env = eval env e 
               in
                 var, (NameMap.add var e_val e_env)
-          | If(cond, s) ->
+         | If(cond, s, s2) ->
               let c1, c_env = eval env cond in
                 if (bool_of_int (int_of_string c1)) then
                   exec c_env s
-                else "", env
+                else exec c_env s2
+		 (*| For(e1, e2, e3, s) ->
+              let _, env = eval env e1 in 
+				let rec loop env =
+					let v, env = eval env e2 in
+						if (bool_of_int (int_of_string v)) then
+							let _, env = eval (exec env s) e3 in
+							loop env
+						else
+							env
+				in loop env*)
         
         in
         let (var, updated_env) = 
@@ -111,8 +95,8 @@ let _ =
            * updated_env)));*)
 
 
-      with 
-        | Parsing.Parse_error -> 
+        with 
+        |Parsing.Parse_error -> 
             print_endline ("> *** Syntax error at line " ^ string_of_int(lineno) ^ " ***");
             exit 0; 
     in parseline 1 NameMap.empty 
