@@ -8,6 +8,13 @@ module IntMap =
 let blank height width = 
   Array.make_matrix height width 0;;
 
+(* Make File Name *)
+let make_name name render = 
+  if render then 
+    name 
+  else 
+    String.concat "" [name; ".i"]
+
 (* Print Row *)
 let print_row row render the_map oc =
   Array.iter 
@@ -23,16 +30,25 @@ let print_row row render the_map oc =
 
 (* Print Canvas *)
 let print_canvas can render the_map oc =
-  Array.iter 
-  (
-    fun x ->
-         ( 
-            print_row x render the_map oc;
-            output_string oc "\n";
+ 
+    Array.iter 
+    (
+      fun x ->
+           ( 
+              print_row x render the_map oc;
+              output_string oc "\n";
 
-         )
-  )
-  can;; 
+           )
+    )
+    can;
+  close_out oc;;
+
+let print_canvas_out can render the_map = 
+  print_canvas can render the_map stdout;; 
+
+let print_canvas_file can render the_map file_name = 
+  let oc = open_out (make_name file_name render) in
+    print_canvas can render the_map oc;;  
 
 let make_map vals =
   let rec add_val the_map = function
@@ -41,12 +57,14 @@ let make_map vals =
   in add_val IntMap.empty vals
 
 let _ = 
+(*   let img = Images.load "testimg.jpg" []
+  img; 
+ *)
+
+
+
   let the_map = make_map ['q';'z'] in 
-  
-  (* let oc = stdout in  *)
-  let oc = open_out "output.txt" in
-    print_canvas (blank 10 10) false the_map oc;
-    close_out oc; 
+  print_canvas_file (blank 10 10) true the_map "test";
   print_string "\n"
 
 (* let oc = open_out "output.txt" in

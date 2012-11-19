@@ -41,6 +41,35 @@ program:
 stmt_list:
                                         { [] }
     | stmt_list stmt                    { $2 :: $1 }
+        /* nothing*/                   { [], [] }
+    | program vdecl                    { ($2 :: fst $1), snd $1 }
+	| program fdecl                    { fst $1, ($2 :: snd $1) } 
+
+fdecl:
+	ID LPAREN args_opt RPAREN LBRACKET vdecl_list stmt_list RBRACKET
+						{ { fname = $1;
+							args  = $3;
+							locals= List.rev $6;
+							body  = List.rev $7 } }	
+
+args_opt:
+  /* nothing */ 				{ [] }
+	| args_list 				{ List.rev $1 }
+
+args_list:
+		ID 						{ [$1] }
+	| args_list COMMA ID  		{ $3 :: $1 }
+
+vdecl_list:
+	/* nothing */				{ [] }
+	| vdecl_list vdecl 		    { $2 :: $1 }
+
+vdecl:
+	INT ID SEMICOLON 			{ $2 }
+
+stmt_list:
+	/* nothing */ 				{ [] }
+	| stmt_list stmt 			{ $2 :: $1 }
 
 stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
@@ -49,6 +78,12 @@ stmt:
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
       | FOR for_stmt FOR_SEP expr_opt FOR_SEP for_stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
+
+  	  | RETURN expr SEMICOLON          { Return($2) }
+	    | LBRACKET stmt_list RBRACKET    { Block(List.rev $2) }
+      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
+      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
+      | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
 
 for_stmt:
   ID ASSIGN expr       { Assign($1, $3) }
@@ -76,9 +111,18 @@ expr:
       | expr GEQ expr                     { Binop($1, Geq, $3) }
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }      
-      | LPAREN expr RPAREN                { $2 }
+      | ID LPAREN actuals_opt RPAREN 	  { Call($1, $3) }
+	  | LPAREN expr RPAREN 				  { $2 }
       /*| MINUS expr %prec UMINUS         { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
+	  
+actuals_opt:
+	  /* nothing */{ [] }
+	| actuals_list { List.rev $1 }
+
+actuals_list:
+	  expr 						{ [$1] }
+	| actuals_list COMMA expr   { $3 :: $1 }
 /*
 
 select_stmt:
