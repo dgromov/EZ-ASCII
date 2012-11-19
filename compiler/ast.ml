@@ -12,6 +12,7 @@ type expr =                                 (* Expressions *)
   | Binop of expr * op * expr               (* a + b *)
   | Call of string * expr list              (* foo(1, 25) *)
 
+
 type stmt =                                 (* Statements *)
     Block of stmt list                      (* { ... } *)
   | Return of expr                          (* return 42; *)
@@ -21,7 +22,6 @@ type stmt =                                 (* Statements *)
   | If of expr * stmt * stmt                      (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of expr * expr * expr * stmt   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
-
 
 type func_decl = {
 		fname : string;                           (* Name of the function *)

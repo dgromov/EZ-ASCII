@@ -69,16 +69,18 @@ let _ =
                 if (bool_of_int (int_of_string c1)) then
                   exec c_env s
                 else exec c_env s2
-		 (*| For(e1, e2, e3, s) ->
-              let _, env = eval env e1 in 
-				let rec loop env =
-					let v, env = eval env e2 in
-						if (bool_of_int (int_of_string v)) then
-							let _, env = eval (exec env s) e3 in
-							loop env
-						else
-							env
-				in loop env*)
+		  
+          | For(e1, e2, e3, s) ->
+              let _, env = exec env e1 in 
+              let rec loop env =
+                let v, env = eval env e2 in
+                if (bool_of_int (int_of_string v)) then
+                  let v2, env = exec env e3 in
+                  let _, env = exec env s in
+                  loop env
+                else
+                  exec env s
+              in loop env
         
         in
         let (var, updated_env) = 
