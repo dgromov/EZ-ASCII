@@ -70,7 +70,7 @@ stmt:
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
 	  | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
-      | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
+      | FOR for_stmt FOR_SEP expr_opt FOR_SEP for_stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 	  | RETURN expr SEMICOLON          { Return($2) }
 
 for_stmt:

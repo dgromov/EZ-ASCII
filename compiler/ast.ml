@@ -21,7 +21,7 @@ type stmt =                                 (* Statements *)
   | OutputF of string                       (* canvas -> "C:\test.png" *)
   | If of expr * stmt * stmt                      (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
-  | For of expr * expr * expr * stmt   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
+  | For of stmt * expr * stmt * stmt   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
 
 type func_decl = {
 		fname : string;                           (* Name of the function *)
