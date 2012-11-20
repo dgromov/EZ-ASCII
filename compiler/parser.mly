@@ -34,12 +34,12 @@
 
 %%
 program:
-          stmt EOL                         { $1 }
+                                  { [],[] }
         | program vdecl { ($2 :: fst $1), snd $1 } 
         | program fdecl { fst $1, ($2 :: snd $1) }
         
 fdecl:
-		ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
+		 ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
 				{ { fname = $1;
 					formals = $3;
 					locals = List.rev $6;
@@ -72,10 +72,6 @@ stmt:
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
       | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 	  | RETURN expr SEMICOLON          { Return($2) }
-	  | LBRACKET stmt_list RBRACKET    { Block(List.rev $2) }
-      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
-      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
-      | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
 
 for_stmt:
   ID ASSIGN expr       { Assign($1, $3) }
