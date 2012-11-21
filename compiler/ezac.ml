@@ -63,7 +63,8 @@ let _ =
                   | And    -> boolean((bool_of_int (int_of_string v1)) && (bool_of_int (int_of_string v2)))
                 ), env
         in
-		 | Call("print", [e]) ->
+
+		  | Call("print", [e]) ->
 			   let v, env = eval env e in
 			   print_endline (string_of_int v);
 			   0, env

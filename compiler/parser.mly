@@ -66,15 +66,12 @@ stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-<<<<<<< HEAD
 	  | RETURN expr SEMICOLON          { Return($2) }
 	  | LBRACKET stmt_list RBRACKET    { Block(List.rev $2) }
       | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
       | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
-=======
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
      /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
->>>>>>> ae3341352b243b3cc043c527d58541f38926570c
      /* | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt stmt   { For($3, $5, $7, $9) } 
 
 expr_opt:
