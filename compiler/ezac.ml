@@ -29,6 +29,14 @@ let _ =
       else Lexing.from_channel stdin in
     let rec parseline lineno env =
       try 
+		(* Put function declarations in a symbol table *)
+		let func_decls = List.fold_left
+						(fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
+						NameMap.empty funcs
+		in
+        let rec call fdecl actuals globals = 
+        (* eval: evaluates expressions and returns (value, updated env) *)
+
         let rec eval env = function
             IntLiteral(e1)    -> string_of_int e1, env
           | StrLiteral(e1)    -> e1, env
@@ -56,7 +64,27 @@ let _ =
                   | And    -> boolean((bool_of_int (int_of_string v1)) && (bool_of_int (int_of_string v2)))
                 ), env
         in
-		 
+
+		  | Call("print", [e]) ->
+			   let v, env = eval env e in
+			   print_endline (string_of_int v);
+			   0, env
+		  | Call(f, actuals) ->
+			   let fdecl = 
+				try NameMap.find f func_decls
+				with Not_found -> raise (Failure ("undefined function " ^ f))
+			   in
+			   let ractuals, env = List.fold_left
+				(fun (actuals, env) actual ->
+				 let v, env = eval env actual in v :: actuals, env)
+				 ([], env) actuals
+			   in
+			   let (locals, globals) = env in
+			   try
+				 let globals = call fdecl (List.rev ractuals) globals
+				 in 0, (locals, globals)
+			   with ReturnException(v, globals) -> v, (locals, globals)							
+        in
         (* execute statements and return updated environments *)                               
         let rec exec env = function
             Assign(var, e) ->
