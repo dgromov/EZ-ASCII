@@ -7,7 +7,6 @@ type op = Plus | Minus | Times | Divide | Mod
 type expr =                                 (* Expressions *)
     IntLiteral of int                       (* 42 *)
   | StrLiteral of string                    (* "this is a string" *)
-  | BoolLiteral of bool						(* true *)
   | Id of string                            (* foo *)
   | Binop of expr * op * expr               (* a + b *)
   | Call of string * expr list              (* foo(1, 25) *)
@@ -24,10 +23,10 @@ type stmt =                                 (* Statements *)
   | For of stmt * expr * stmt * stmt   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
 
 type func_decl = {
-		fname : string;                           (* Name of the function *)
-		formals : string list;                       (* Formal argument names *)
-		locals : string list;                     (* Locally defined variables *)
-		body : stmt list;
+  fname : string;                           (* Name of the function *)
+  args : string list;                       (* Formal argument names *)
+  locals : string list;                     (* Locally defined variables *)
+  body : stmt list;
 }
 
-type program = string list * func_decl list (* global vars, funcs *) 
+type program = stmt  (* * func_decl list (* global vars, funcs *)  *)

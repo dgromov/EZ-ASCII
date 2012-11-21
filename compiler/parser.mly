@@ -69,23 +69,12 @@ stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-<<<<<<< HEAD
 	    | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
       | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 	    | RETURN expr SEMICOLON          { Return($2) }
-=======
-<<<<<<< HEAD
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
      /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
-=======
-	  | RETURN expr SEMICOLON          { Return($2) }
-	  | LBRACKET stmt_list RBRACKET    { Block(List.rev $2) }
-      | IF LPAREN expr RPAREN stmt %prec NOELSE     { If($3, $5, Block([])) }
-      | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) }
->>>>>>> add functions to parser (need to fix one shift/reduce conflict)
-     /* | FOR expr_opt FOR_SEP expr_opt FOR_SEP expr_opt stmt   { For($3, $5, $7, $9) } 
->>>>>>> 17e9a5a87301f61664c1111642420a2f1fc900bd
 
 expr_opt:
       expr                              { $1 } 
@@ -117,7 +106,6 @@ expr:
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
 	  
 actuals_opt:
-<<<<<<< HEAD
 		/* nothing */ { [] }
 		| actuals_list { List.rev $1 }
 actuals_list:
@@ -127,14 +115,6 @@ actuals_list:
 
 include_stmt:
 		| LBRACKET STR RBRACKET     		{"include [filepath]"}
-=======
-	  /* nothing */{ [] }
-	| actuals_list { List.rev $1 }
-
-actuals_list:
-	  expr 						{ [$1] }
-	| actuals_list COMMA expr   { $3 :: $1 }
->>>>>>> 17e9a5a87301f61664c1111642420a2f1fc900bd
 /*
 
 select_stmt:
