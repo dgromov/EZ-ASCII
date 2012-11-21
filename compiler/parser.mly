@@ -68,14 +68,11 @@ stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-	  | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
+	    | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
-      | FOR for_stmt FOR_SEP expr_opt FOR_SEP for_stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
-	  | RETURN expr SEMICOLON          { Return($2) }
+      | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
+	    | RETURN expr SEMICOLON          { Return($2) }
 
-for_stmt:
-  ID ASSIGN expr       { Assign($1, $3) }
-      
 expr_opt:
       expr                              { $1 } 
 
@@ -84,7 +81,7 @@ expr_opt:
 
 expr:  
         INTLITERAL		                      { IntLiteral($1) }
-	  | BOOLLITERAL							  { BoolLiteral($1)}
+	    | BOOLLITERAL							  { BoolLiteral($1)}
       | STR                               { StrLiteral($1) } 
       | ID                                { Id($1) }
       | expr PLUS expr                    { Binop($1, Plus, $3) }
