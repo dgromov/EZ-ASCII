@@ -1,0 +1,152 @@
+Exclusive Constructs - Elements unique to this language
+----------------------------------------------------------------------------------------------------
+
+Canvas - A canvas is an object representing some 2D image. 
+
+Character Intensity - A measure of how much of the space allocated for a character is actually taken
+					  up by that character. This is represented as positive integer.
+
+Intensity Mapping - A mapping of character intensities to the actual characters they describe. 
+					This will be implemented as a hash map or something like this. 
+
+Intensity Granularity - A value that defines the change in intensity between each intensity value. 
+						The higher this value is, the more levels of intensity there are but there 
+						is less of a difference between each of them. 
+----------------------------------------------------------------------------------------------------
+
+Arrow Operator
+----------------------------------------------------------------------------------------------------
+Left Arrow (<-) 
+	- Used for variable assignment 
+	- Canvas manipulation 
+
+Right Arrow (->)
+	- Used for canvas output
+----------------------------------------------------------------------------------------------------
+
+Creating a canvas - using blank  
+----------------------------------------------------------------------------------------------------
+blank([width], [height], [granularity])
+
+-- Function blank(x,y) -- 
+blank - A function that returns a black canvas of some specified size. 
+
+-- Params -- 
+width - The width of the canvas in character spaces (Int)
+height - The height of the canvas in character spaces (Int)
+granularity - The initial granularity of the canvas (Int)
+
+-- Usage --  
+can <- blank(20, 30, 10); 
+----------------------------------------------------------------------------------------------------
+
+Creating a canvas - using load  
+----------------------------------------------------------------------------------------------------
+load([filename], [granularity])
+
+-- Function blank(x,y) -- 
+load - A function that loads an image into a canvas from a specified file
+	   Should accept whatever types are nice for OCaml. 
+	   TODO: HOW?!?!  
+
+-- Params -- 
+filepath - The file path to the image in question. (String)
+granularity - The granularity at which the image should be loaded. The higher this is the more
+			  "detailed" the picture will be. (Int)
+
+-- Usage --  
+can <- load('pic.jpg', 10); 
+----------------------------------------------------------------------------------------------------
+
+Selecting piece of canvas 
+----------------------------------------------------------------------------------------------------
+ci[argument] - ci is a canvas identifier will return a canvas of the same dimensions as ci 
+			   containing only the desired elements. The rest are blank. 
+
+Different argument represent different ways of selecting things: the following is possible: 
+	- Select 1 point 
+		: ci[x, y] 
+
+	- Select range of points 
+		: ci[x1:x2, y1:y2] -- Rectangle (x2 and y2 must be greater than x1 and y1 respectively)
+		: ci[x, y1:y2] -- Vertical Slice
+		: ci[x1:x2, y] -- Horizontal Slice 
+		: ci[,y] or ci[x,] or ci[,] -- Shorthand for full vertical slice, 
+					  				   full horizontal slice, all
+
+	- Select points based on boolean expression
+		: ci[exp] -- Get all of the elements with intensity conforming to the boolean condition
+				     boolean expression must be in format ([cond][0-255][(&&)|(||)])* 
+					 where cond is one of ~=, >, <, =, <=, >= 
+					 // Can someone come up with the regex for this? 
+
+-- Usage -- 
+
+// Assuming existing canvas named can
+
+can_piece <- can[1:4, 4:9]; 
+can_piece_int <- can[>4 && <9];  
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
+Printing takes intensity map optional 
+
+granularity must be same size as intesity for given image. 
+
+intesity map will be a hash table of value.
+
+Some sort of masking, over lay or something 
+
+printing to command line or file
+
+// Select some part of image via filter  
+img5 <- img[>5]; // Some boolean expression in the braces 
+img5 <- img[x1, y2]; 
+
+//Move something up by 5
+img <- img u 5; 
+
+//Printing to a file 
+img(map) -> "test2.txt";
+
+//Printing to console 
+img(map) -> out; 
+or 
+img(map); // Time permitting 
+
+//Drawing on canvas; 
+
+//One point
+img[x1, y1] <- 1;
+
+//Rect Range 
+img[x1:x2, y1:y2] <- 2;
+img[x1:x2, y1] <- 3;
+img[,y1] <- 4;
+
+//Conditionals
+if (bool)
+else if(bool)
+else 
+
+//Looping 
+For i <- 2 | i < 10 | some expressions
+{
+	img[i,i] <- 3; 
+}
+
+img[2:10, 2:10] <- 3; 
+
+//Functions 
+Fun a(x,y)
+{
+	body
+
+	return a; 
+}
+
+Operators +, -, *, /, %, []
+

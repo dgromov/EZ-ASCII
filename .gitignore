@@ -1,5 +1,5 @@
-compiler/*.cmo 
-compiler/*.cmi 
+*.cmo 
+*.cmi 
 compiler/ezac 
 compiler/parser.mli 
 compiler/parser.ml 
