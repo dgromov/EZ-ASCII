@@ -1,5 +1,6 @@
 type token =
-  | INT of (int)
+  | INTLITERAL of (int)
+  | BOOLLITERAL of (bool)
   | ID of (string)
   | CMP of (string)
   | STR of (string)
@@ -49,6 +50,9 @@ type token =
   | LOAD
   | MAP
   | SHIFT
+  | INT
+  | BOOL
+  | CANVAS
 
 val program :
   (Lexing.lexbuf  -> token) -> Lexing.lexbuf -> Ast.program
