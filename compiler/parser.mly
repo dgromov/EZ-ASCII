@@ -34,10 +34,10 @@
 
 %%
 program:
-
-        /* nothing*/                   { [], [] }
-    | program vdecl                    { ($2 :: fst $1), snd $1 }
-	| program fdecl                    { fst $1, ($2 :: snd $1) } 
+      stmt_list EOL                     { $1 }
+        /* nothing                    { [] }  */
+/*    | program vdecl                    { ($2 :: fst $1), snd $1 }
+	| program fdecl                    { fst $1, ($2 :: snd $1) } */
 
 fdecl:
 	ID LPAREN args_opt RPAREN LBRACKET vdecl_list stmt_list RBRACKET
@@ -63,14 +63,15 @@ vdecl:
 
 stmt_list:
 	/* nothing */ 				{ [] }
-	| stmt_list stmt 			{ $2 :: $1 }
+	| stmt_list stmt 			{ List.rev ($2 :: $1) }
 
 stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-	    | IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
-      | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     { If($3, $6, $10) } 
+/*	| IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
+      | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     {
+              If($3, $6, $10) } */
       | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 	    | RETURN expr SEMICOLON          { Return($2) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }

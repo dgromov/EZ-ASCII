@@ -7,6 +7,7 @@ type op = Plus | Minus | Times | Divide | Mod
 type expr =                                 (* Expressions *)
     IntLiteral of int                       (* 42 *)
   | StrLiteral of string                    (* "this is a string" *)
+  | BoolLiteral of bool                     (* true *)
   | Id of string                            (* foo *)
   | Binop of expr * op * expr               (* a + b *)
   | Call of string * expr list              (* foo(1, 25) *)
@@ -18,7 +19,7 @@ type stmt =                                 (* Statements *)
   | Assign of string * expr                 (* foo <- 42 *)
   | OutputC of string                       (* canvas -> out *)
   | OutputF of string                       (* canvas -> "C:\test.png" *)
-  | If of expr * stmt * stmt                      (* if (foo = 42) {} *)
+  | If of expr * stmt                       (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
 
@@ -29,4 +30,4 @@ type func_decl = {
   body : stmt list;
 }
 
-type program = stmt  (* * func_decl list (* global vars, funcs *)  *)
+type program = stmt list (* * func_decl list (* global vars, funcs *)  *)
