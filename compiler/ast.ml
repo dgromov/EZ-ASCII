@@ -14,14 +14,13 @@ type expr =                                 (* Expressions *)
 
 
 type stmt =                                 (* Statements *)
-    Block of stmt list                      (* { ... } *)
-  | Return of expr                          (* return 42; *)
-  | Assign of string * expr                 (* foo <- 42 *)
+    Assign of string * expr                 (* foo <- 42 *)
   | OutputC of expr                         (* canvas -> out *)
   | OutputF of string                       (* canvas -> "C:\test.png" *)
   | If of expr * stmt list                  (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
+  | Return of expr                          (* return 42; *)
 
 type func_decl = {
   fname : string;                           (* Name of the function *)

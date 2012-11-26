@@ -23,17 +23,25 @@ let bool_of_int i =
   if i > 0 then true
   else false
 
+(* =====================================================
+ * eval function
+ *
+ * Takes Ast.expr type and evaluates it, returning a
+ * string value and updated environment pair.
+ * ===================================================== *)
 let rec eval env = function
-    IntLiteral(e1)    -> string_of_int e1, env
-  | StrLiteral(e1)    -> e1, env
-  | BoolLiteral(e1)   -> 
-      if e1 then "1", env
-      else "0", env
-  | Id(var)           -> 
+    IntLiteral(e1)      -> string_of_int e1, env
+  | StrLiteral(e1)      -> e1, env
+  | BoolLiteral(e1)     -> 
+      if e1 then 
+        "1", env
+      else 
+        "0", env
+  | Id(var)             -> 
       if NameMap.mem var env then
         (NameMap.find var env), env
       else raise (Failure (">>> Undefined identifier: " ^ var))
-  | Binop(e1, op, e2) -> 
+  | Binop(e1, op, e2)   -> 
       let v1, env = eval env e1 in
       let v2, env = eval env e2 in
       let boolean i = if i then 1 else 0 in
@@ -52,8 +60,11 @@ let rec eval env = function
             | Geq    -> boolean((int_of_string v1) >= (int_of_string v2))
             | Or     -> boolean((bool_of_int (int_of_string v1)) || (bool_of_int (int_of_string v2)))
             | And    -> boolean((bool_of_int (int_of_string v1)) && (bool_of_int (int_of_string v2)))
+            | Mask   -> 1 (* NEED TO DO *)
         ), env
-
+  | Call(fxn, params)   ->
+      (* No-op, NEED TO DO *)
+      "", env
 
 
 (* =====================================================
@@ -73,8 +84,9 @@ let rec exec env = function
       in 
         print_endline(e_val);
         env;
-(*  | OutputF(s) ->
- *)
+  | OutputF(s) ->
+      (* No-op, NEED TO DO) *)
+      env;
   | If(cond, stmt_lst) ->
       let c1, c_env = eval env cond in
         if (bool_of_int (int_of_string c1)) then
@@ -95,6 +107,9 @@ let rec exec env = function
               loop (exec body_env s2)
           else env
       in loop env
+  | Return(exp) ->
+      (* No-op, NEED TO DO) *)
+      env
 
 
 (* =====================================================
