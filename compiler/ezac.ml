@@ -86,19 +86,15 @@ let rec exec env = function
           List.fold_left (exec) c_env stmt_lst1
         else
           List.fold_left (exec) c_env stmt_lst2
-(*else exec c_env s2*)
-(*
- | For(e1, e2, e3, s) ->
- let _, env = exec env e1 in 
- let rec loop env =
- let v, env = eval env e2 in
- if (bool_of_int (int_of_string v)) then
- let v2, env = exec env e3 in
- let _, env = exec env s in
- loop env
- else
- exec env s
- in loop env*)
+  | For(s1, e1, s2, stmt_lst) ->
+      let env = exec env s1 in 
+      let rec loop env =
+        let v, env = eval env e1 in
+          if (bool_of_int (int_of_string v)) then
+            let body_env = List.fold_left (exec) env stmt_lst in
+              loop (exec body_env s2)
+          else env
+      in loop env
 
 
 (* =====================================================

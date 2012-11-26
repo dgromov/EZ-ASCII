@@ -1,0 +1,12 @@
+// Test basic for loop
+
+i <- "hello";
+i -> out;
+for i <- 1; | i < 12; | i <- i * 2; {
+  i -> out;
+  j <- i + 1;
+  j -> out;
+}
+
+i -> out;
+j -> out;

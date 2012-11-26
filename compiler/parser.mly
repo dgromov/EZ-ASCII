@@ -39,7 +39,7 @@ program:
         /* nothing                    { [] }  */
 /*    | program vdecl                    { ($2 :: fst $1), snd $1 }
 	| program fdecl                    { fst $1, ($2 :: snd $1) } */
-
+/*
 fdecl:
 	ID LPAREN args_opt RPAREN LBRACKET vdecl_list stmt_list RBRACKET
 						{ { fname = $1;
@@ -48,7 +48,7 @@ fdecl:
 							body  = List.rev $7 } }	
 
 args_opt:
-  /* nothing */ 				{ [] }
+   nothing  				{ [] }
 	| args_list 				{ List.rev $1 }
 
 args_list:
@@ -56,27 +56,30 @@ args_list:
 	| args_list COMMA ID  		{ $3 :: $1 }
 
 vdecl_list:
-	/* nothing */				{ [] }
+	 nothing 				{ [] }
 	| vdecl_list vdecl 		    { $2 :: $1 }
 
 vdecl:
 	INT ID SEMICOLON 			{ $2 }
+
+*/
 
 stmt_list:
 	/* nothing */ 				{ [] }
 	| stmt_list stmt                    { $2 :: $1 }
 
 stmt:
-        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
+        stmt_assign                       { $1 }
       | ID OUTPUT STDOUT SEMICOLON     { OutputC(Id($1)) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
-/*	| IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
-      | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     {
-              If($3, $6, $10) } */
-  /*    | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
-	    | RETURN expr SEMICOLON          { Return($2) }*/
+/*	    | RETURN expr SEMICOLON          { Return($2) }*/
       | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
+      | FOR stmt_assign FOR_SEP bool_expr SEMICOLON FOR_SEP stmt LBRACE
+      stmt_list RBRACE   { For($2, $4, $7, List.rev $9) }
+
+stmt_assign:
+        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
 
 cond_body:
         /* If no braces are supplied in a 
@@ -96,21 +99,24 @@ expr:
       | expr TIMES expr                   { Binop($1, Times, $3) }
       | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
       | expr MOD expr                     { Binop($1, Mod, $3) }
-      | expr EQ expr                      { Binop($1, Eq, $3) }
+      | bool_expr                         { $1 }
+    /*  | ID LPAREN actuals_opt RPAREN 	{ Call($1, $3) }*/
+      | LPAREN expr RPAREN 			{ $2 }
+      /*| MINUS expr %prec UMINUS         { "unary minus" }
+      | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
+
+bool_expr:
+        expr EQ expr                      { Binop($1, Eq, $3) }
       | expr NEQ expr                     { Binop($1, Neq, $3) }
       | expr LT expr                      { Binop($1, Lt, $3) }
       | expr GT expr                      { Binop($1, Gt, $3) }
       | expr LEQ expr                     { Binop($1, Leq, $3) }
       | expr GEQ expr                     { Binop($1, Geq, $3) }
-      | expr OR expr                      { Binop($1, Or, $3) }
-      | expr AND expr                     { Binop($1, And, $3) }      
-    /*  | ID LPAREN actuals_opt RPAREN 	{ Call($1, $3) }*/
-      | LPAREN expr RPAREN 			{ $2 }
-      /*| MINUS expr %prec UMINUS         { "unary minus" }
-      | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
-	  
+      | bool_expr OR bool_expr            { Binop($1, Or, $3) }
+      | bool_expr AND bool_expr           { Binop($1, And, $3) }      
+/*	  
 actuals_opt:
-		/* nothing */ { [] }
+		/* nothing  { [] }
 		| actuals_list { List.rev $1 }
 actuals_list:
 		expr { [$1] }
@@ -119,6 +125,7 @@ actuals_list:
 
 include_stmt:
 		| LBRACKET STR RBRACKET     		{"include [filepath]"}
+*/
 /*
 
 select_stmt:
