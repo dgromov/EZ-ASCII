@@ -21,7 +21,7 @@ let strchar   = printable | ' ' | '\t' | esc_char
 
 rule token = parse
         [' ' '\t']                              { token lexbuf }
-      | ['\n' '\r']                             { EOL }
+      | ['\n' '\r']                             { token lexbuf }
       | "//"                                    { comment lexbuf }
       | ","                                     { COMMA }
       | ";"                                     { SEMICOLON }
@@ -70,6 +70,8 @@ rule token = parse
       | "Fun"                                   { FXN }
       | "include"                               { INCLUDE }
       | "return"                                { RETURN }
+        (* remove leading/trailing newlines
+         * for braces *)
       | "{"                                     { LBRACE }
       | "}"                                     { RBRACE }
       | "("                                     { LPAREN }
@@ -88,7 +90,7 @@ rule token = parse
       | digit+ as lit                           { INTLITERAL(int_of_string lit) }
 
       | dblquote strchar* dblquote as str       { STR(str) }
-      | eof                                     { raise Eof }
+      | eof                                     { EOF } (* raise Eof } *)
 
 and comment = parse
       (* end of line marks end of comment *)

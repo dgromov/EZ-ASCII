@@ -10,7 +10,8 @@
 %token <string> CMP
 %token <string> STR
 %token TRUE, FALSE
-%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, LPAREN, RPAREN, EOL
+%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, LPAREN, RPAREN,
+EOL, EOF
 %token LT, GT, EQ, LEQ, GEQ, NEQ, NEGATE
 %token ATTR, MASK, IF, ELSE, FOR, FOR_SEP, INCLUDE, RETURN, LBRACE, RBRACE, FXN 
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
@@ -34,7 +35,7 @@
 
 %%
 program:
-      stmt_list EOL                     { $1 }
+        stmt_list EOF                          { List.rev $1 }
         /* nothing                    { [] }  */
 /*    | program vdecl                    { ($2 :: fst $1), snd $1 }
 	| program fdecl                    { fst $1, ($2 :: snd $1) } */
@@ -63,7 +64,7 @@ vdecl:
 
 stmt_list:
 	/* nothing */ 				{ [] }
-	| stmt_list stmt 			{ List.rev ($2 :: $1) }
+	| stmt_list stmt                    { $2 :: $1 }
 
 stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
@@ -72,20 +73,17 @@ stmt:
 /*	| IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     {
               If($3, $6, $10) } */
-      | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
-	    | RETURN expr SEMICOLON          { Return($2) }
-      | IF LPAREN expr RPAREN LBRACE stmt RBRACE      { If($3, $6) }
+  /*    | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
+	    | RETURN expr SEMICOLON          { Return($2) }*/
+      | IF LPAREN expr RPAREN LBRACE stmt_list RBRACE      { If($3, List.rev $6) }
      /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
 
 expr_opt:
       expr                              { $1 } 
 
-/* stmt_block:
-      stmt_block stmt                     { $2 :: $1 }*/
-
 expr:  
-        INTLITERAL		                      { IntLiteral($1) }
-	    | BOOLLITERAL							  { BoolLiteral($1)}
+        INTLITERAL		            { IntLiteral($1) }
+      | BOOLLITERAL				{ BoolLiteral($1) }
       | STR                               { StrLiteral($1) } 
       | ID                                { Id($1) }
       | expr PLUS expr                    { Binop($1, Plus, $3) }
@@ -101,8 +99,8 @@ expr:
       | expr GEQ expr                     { Binop($1, Geq, $3) }
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }      
-      | ID LPAREN actuals_opt RPAREN 	  { Call($1, $3) }
-	  | LPAREN expr RPAREN 				  { $2 }
+    /*  | ID LPAREN actuals_opt RPAREN 	{ Call($1, $3) }*/
+      | LPAREN expr RPAREN 			{ $2 }
       /*| MINUS expr %prec UMINUS         { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
 	  
