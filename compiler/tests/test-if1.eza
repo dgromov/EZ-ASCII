@@ -1,9 +1,6 @@
-d <- 3 + 4;
-d -> out;
-e <- 4 + 8 / 2 % 7;
-e -> out;
-d <- e + 5;
-d -> out;
+// Tests an else-less if statement with more than one statement in the body (braces present).
+
+d <- 6;
 if (d <= 13) 
 
 

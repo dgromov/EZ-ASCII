@@ -1,0 +1,9 @@
+// Tests if-else statement, with multiple statements in the body (braces present).
+
+if (4 < 3) f <- 7; 
+else {
+   f <- 8;
+   f -> out;
+   f <- f * f;
+   f -> out;
+}

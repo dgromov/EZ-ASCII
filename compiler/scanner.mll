@@ -45,8 +45,8 @@ rule token = parse
       | ">="                                    { GEQ }
       | "~="                                    { NEQ }
       | "~"                                     { NEGATE }
-      | "true"                                  { TRUE }
-      | "false"                                 { FALSE }
+      | "true"                                  { BOOLLITERAL(true) }
+      | "false"                                 { BOOLLITERAL(false) }
 
       (* canvas operators/keywords/constants *)
       | "&"                                     { MASK }

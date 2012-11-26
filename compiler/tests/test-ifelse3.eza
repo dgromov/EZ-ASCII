@@ -1,0 +1,31 @@
+// Tests if-else statement, with multiple statements in both bodies (braces present).
+
+if (2 < 3) 
+{
+  e <- 3;
+  e -> out;  
+
+  z <- "hello world!";
+  z -> out;
+}
+else {
+   f <- 8;
+   f -> out;
+   f <- f * f;
+   f -> out;
+}
+
+if (false) 
+{
+  e <- 3;
+  e -> out;  
+
+  z <- "hello world!";
+  z -> out;
+}
+else {
+   f <- 8;
+   f -> out;
+   f <- f * f;
+   f -> out;
+}

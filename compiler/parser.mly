@@ -75,7 +75,7 @@ stmt:
               If($3, $6, $10) } */
   /*    | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 	    | RETURN expr SEMICOLON          { Return($2) }*/
-      | IF LPAREN expr RPAREN cond_body    { If($3, $5) }
+      | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
 
 cond_body:
@@ -86,9 +86,6 @@ cond_body:
         stmt                              { [$1] }
       | LBRACE stmt_list RBRACE           { List.rev $2 }
       
-expr_opt:
-      expr                              { $1 } 
-
 expr:  
         INTLITERAL		            { IntLiteral($1) }
       | BOOLLITERAL				{ BoolLiteral($1) }

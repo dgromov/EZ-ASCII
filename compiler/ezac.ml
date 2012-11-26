@@ -26,6 +26,9 @@ let bool_of_int i =
 let rec eval env = function
     IntLiteral(e1)    -> string_of_int e1, env
   | StrLiteral(e1)    -> e1, env
+  | BoolLiteral(e1)   -> 
+      if e1 then "1", env
+      else "0", env
   | Id(var)           -> 
       if NameMap.mem var env then
         (NameMap.find var env), env

@@ -1,0 +1,4 @@
+// Tests else-less if statement, with one statement in the body (no braces).
+
+if (1 < 3) f <- 7; 
+f -> out;

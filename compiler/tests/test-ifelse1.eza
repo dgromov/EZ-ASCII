@@ -1,0 +1,5 @@
+// Tests if-else statement, with one statement in the body (no braces).
+
+if (4 < 3) f <- 7; 
+else f <- 8;
+f -> out;
