@@ -63,13 +63,26 @@ let rec exec env = function
     Assign(var, e) ->
       (* update the environment for the expression first *)
       let e_val, e_env = eval env e in
-        print_endline (">>> " ^ var ^ " assigned " ^ e_val);
+        (* print_endline (">>> " ^ var ^ " assigned " ^ e_val); *)
         (NameMap.add var e_val e_env);
+  | OutputC(var) ->
+      let e_val, e_env = eval env var 
+      in 
+        print_endline(e_val);
+        env;
+(*  | OutputF(s) ->
+ *)
   | If(cond, stmt_lst) ->
       let c1, c_env = eval env cond in
         if (bool_of_int (int_of_string c1)) then
           List.fold_left (exec) c_env stmt_lst
         else env
+  | If_else(cond, stmt_lst1, stmt_lst2) ->
+      let c1, c_env = eval env cond in
+        if (bool_of_int (int_of_string c1)) then
+          List.fold_left (exec) c_env stmt_lst1
+        else
+          List.fold_left (exec) c_env stmt_lst2
 (*else exec c_env s2*)
 (*
  | For(e1, e2, e3, s) ->

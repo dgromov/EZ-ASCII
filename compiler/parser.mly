@@ -68,16 +68,24 @@ stmt_list:
 
 stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
-      | ID OUTPUT STDOUT SEMICOLON     { OutputC($1) }
+      | ID OUTPUT STDOUT SEMICOLON     { OutputC(Id($1)) }
       | ID OUTPUT STR SEMICOLON        { OutputF($1) }
 /*	| IF LPAREN expr RPAREN LBRACE stmt RBRACE %prec NOELSE      { If($3, $6, Block([])) }
       | IF LPAREN expr RPAREN LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE     {
               If($3, $6, $10) } */
   /*    | FOR stmt FOR_SEP expr_opt FOR_SEP stmt LBRACE stmt RBRACE   { For($2, $4, $6, $8) }
 	    | RETURN expr SEMICOLON          { Return($2) }*/
-      | IF LPAREN expr RPAREN LBRACE stmt_list RBRACE      { If($3, List.rev $6) }
-     /* | IF LPAREN expr RPAREN stmt ELSE stmt        { If($3, $5, $7) } */
+      | IF LPAREN expr RPAREN cond_body    { If($3, $5) }
+      | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
 
+cond_body:
+        /* If no braces are supplied in a 
+         * conditional body, we expect one statement;
+         * Otherwise, we expect a statement list.
+         */
+        stmt                              { [$1] }
+      | LBRACE stmt_list RBRACE           { List.rev $2 }
+      
 expr_opt:
       expr                              { $1 } 
 

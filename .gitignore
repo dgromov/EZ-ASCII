@@ -4,3 +4,6 @@ compiler/ezac
 compiler/parser.mli 
 compiler/parser.ml 
 compiler/scanner.ml
+compiler/test_ezac.log
+compiler/tests/*.out
+compiler/tests/*.diff

@@ -1,0 +1,14 @@
+d <- 3 + 4;
+d -> out;
+
+e <- 4 + 8 / 2 % 7;
+e -> out;
+
+d <- e + 5;
+d -> out;
+
+d <- "test string";
+d -> out;
+
+d <- "";
+d -> out;
