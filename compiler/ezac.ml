@@ -1,4 +1,5 @@
 open Parser
+open Scanner
 open Ast
 
 module NameMap = 
@@ -78,69 +79,73 @@ let rec exec env = function
 
 
 let _ =
-  try 
-    let lexbuf =
-      if Array.length Sys.argv > 1 then Lexing.from_channel(open_in Sys.argv.(1))
-      else Lexing.from_channel stdin  
-    in
-    let rec parse_stmts lineno env = function
-        [] -> env 
+  let lexbuf =
+    if Array.length Sys.argv > 1 then Lexing.from_channel(open_in Sys.argv.(1))
+    else Lexing.from_channel stdin  
+  in
+  let rec parse_stmts env = function
+      [] -> env 
 
-      | hd :: tail -> 
-          (*      try  *)
-          (* Put function declarations in a symbol table *)
-          (*        let func_decls = List.fold_left
-           (fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
-           NameMap.empty funcs 
-           in*)
-          (*        let rec call fdecl actuals globals =  *)
-          (* eval: evaluates expressions and returns (value, updated env) *)
+    | hd :: tail -> 
+        (*      try  *)
+        (* Put function declarations in a symbol table *)
+        (*        let func_decls = List.fold_left
+         (fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
+         NameMap.empty funcs 
+         in*)
+        (*        let rec call fdecl actuals globals =  *)
+        (* eval: evaluates expressions and returns (value, updated env) *)
 
-          (*
-           | Call("print", [e]) ->
-           let v, env = eval env e in
-           print_endline (string_of_int v);
-           0, env  
-           | Call(f, actuals) ->
-           let fdecl = 
-           try NameMap.find f func_decls
-           with Not_found -> raise (Failure ("undefined function " ^ f))
-           in
-           let ractuals, env = List.fold_left
-           (fun (actuals, env) actual ->
-           let v, env = eval env actual in v :: actuals, env)
-           ([], env) actuals
-           in
-           let (locals, globals) = env in
-           try
-           let globals = call fdecl (List.rev ractuals) globals
-           in 0, (locals, globals)
-           with ReturnException(v, globals) -> v, (locals, globals)							
-           in *)
-          (* execute statements and return updated environments *)                               
-          let (var, updated_env) = 
-            (* read one line of code (input) and output result *)
-            exec env hd 
-          in 
-            match var with
-                "" -> (parse_stmts (lineno + 1) updated_env) tail;
-              | _ -> 
-                  print_endline ("> " ^ var ^ " assigned " ^ (NameMap.find var updated_env));
-                  flush stdout;
-                  (parse_stmts (lineno + 1) updated_env) tail;
-    in 
-    let rec loop env = 
-      let updated_env = parse_stmts 1 env (Parser.program Scanner.token lexbuf)
+        (*
+         | Call("print", [e]) ->
+         let v, env = eval env e in
+         print_endline (string_of_int v);
+         0, env  
+         | Call(f, actuals) ->
+         let fdecl = 
+         try NameMap.find f func_decls
+         with Not_found -> raise (Failure ("undefined function " ^ f))
+         in
+         let ractuals, env = List.fold_left
+         (fun (actuals, env) actual ->
+         let v, env = eval env actual in v :: actuals, env)
+         ([], env) actuals
+         in
+         let (locals, globals) = env in
+         try
+         let globals = call fdecl (List.rev ractuals) globals
+         in 0, (locals, globals)
+         with ReturnException(v, globals) -> v, (locals, globals)							
+         in *)
+        (* execute statements and return updated environments *)                               
+        let (var, updated_env) = 
+          (* read one line of code (input) and output result *)
+          exec env hd 
+  in 
+    match var with
+        "" -> (parse_stmts updated_env) tail;
+      | _ -> 
+          print_endline (">>> " ^ var ^ " assigned " ^ (NameMap.find var updated_env));
+          flush stdout;
+          (parse_stmts updated_env) tail;
+  in
+  (* main loop *) 
+  let rec loop env = 
+    try
+      let updated_env = parse_stmts env (Parser.program Scanner.token lexbuf)
       in loop updated_env
-    in loop NameMap.empty
-
-  (*print_endline ("> " ^ " = " ^ (string_of_int (NameMap.find var
-   * updated_env)));*)
-
-  (*      with Parsing.Parse_error -> 
-   print_endline ("> *** Syntax error at line " ^ string_of_int(lineno) ^ " ***");
-   exit 0; *)
-  with Scanner.Eof -> 
-    exit 0
-
-
+    with 
+        Scanner.Eof -> exit 0
+      | Parsing.Parse_error ->
+          let curr = lexbuf.Lexing.lex_curr_p in
+          let line = curr.Lexing.pos_lnum in
+          let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
+          let tok = Lexing.lexeme lexbuf in 
+            print_endline (">>> Parse error at character " ^ (string_of_int cnum) ^ ": '" ^ tok ^ "'"); 
+            flush stdout;
+            (* discard the input buffer, reset to position 0, and try again *)
+            Lexing.flush_input lexbuf; 
+            loop env;
+  (*with Parsing.Parse_error ->
+   loop env;*)
+  in loop NameMap.empty
