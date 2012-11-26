@@ -18,7 +18,6 @@
 %token MAIN, BLANK, LOAD, INCLUDE, MAP, SHIFT
 %token CANVAS
 
-%nonassoc NOCOMPARE
 %nonassoc NOELSE
 %nonassoc ELSE
 %left PLUS, MINUS        /* lowest precedence */
@@ -75,11 +74,14 @@ stmt:
 /*	    | RETURN expr SEMICOLON          { Return($2) }*/
       | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
-      | FOR stmt_assign FOR_SEP expr SEMICOLON FOR_SEP stmt LBRACE
-      stmt_list RBRACE   { For($2, $4, $7, List.rev $9) }
+      | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
+      stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
 
 stmt_assign:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
+
+stmt_in_for:
+        ID ASSIGN expr          { Assign($1, $3) }
 
 cond_body:
         /* If no braces are supplied in a 

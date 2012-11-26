@@ -82,7 +82,8 @@ let rec exec env = function
   | OutputC(var) ->
       let e_val, e_env = eval env var 
       in 
-        print_endline(e_val);
+        (*print_endline(e_val);*)
+        Printf.printf "%s\n" e_val;
         env;
   | OutputF(s) ->
       (* No-op, NEED TO DO) *)
