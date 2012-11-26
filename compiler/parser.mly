@@ -66,8 +66,10 @@ stmt_list:
 	/* nothing */ 				{ [] }
 	| stmt_list stmt                    { $2 :: $1 }
 
+
+        
 stmt:
-        stmt_assign                       { $1 }
+        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
       | ID OUTPUT STR SEMICOLON           { OutputF($1) }
 /*	    | RETURN expr SEMICOLON          { Return($2) }*/
@@ -76,8 +78,7 @@ stmt:
       | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
       stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
 
-stmt_assign:
-        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
+
 
 stmt_in_for:
         ID ASSIGN expr          { Assign($1, $3) }
