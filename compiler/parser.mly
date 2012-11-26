@@ -10,15 +10,15 @@
 %token <string> CMP
 %token <string> STR
 %token TRUE, FALSE
-%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, LPAREN, RPAREN,
-EOL, EOF
+%token AND, OR, COMMA, SEMICOLON, COLON, LBRACKET, RBRACKET, LPAREN, RPAREN, EOF
 %token LT, GT, EQ, LEQ, GEQ, NEQ, NEGATE
 %token ATTR, MASK, IF, ELSE, FOR, FOR_SEP, INCLUDE, RETURN, LBRACE, RBRACE, FXN 
 %token PLUS, MINUS, TIMES, DIVIDE, MOD
 %token ASSIGN, OUTPUT, ATTR_W, ATTR_H, ATTR_G, STDOUT
 %token MAIN, BLANK, LOAD, INCLUDE, MAP, SHIFT
-%token INT BOOL CANVAS
+%token CANVAS
 
+%nonassoc NOCOMPARE
 %nonassoc NOELSE
 %nonassoc ELSE
 %left PLUS, MINUS        /* lowest precedence */
@@ -70,12 +70,12 @@ stmt_list:
 
 stmt:
         stmt_assign                       { $1 }
-      | ID OUTPUT STDOUT SEMICOLON     { OutputC(Id($1)) }
-      | ID OUTPUT STR SEMICOLON        { OutputF($1) }
+      | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
+      | ID OUTPUT STR SEMICOLON           { OutputF($1) }
 /*	    | RETURN expr SEMICOLON          { Return($2) }*/
       | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
-      | FOR stmt_assign FOR_SEP bool_expr SEMICOLON FOR_SEP stmt LBRACE
+      | FOR stmt_assign FOR_SEP expr SEMICOLON FOR_SEP stmt LBRACE
       stmt_list RBRACE   { For($2, $4, $7, List.rev $9) }
 
 stmt_assign:
@@ -91,7 +91,7 @@ cond_body:
       
 expr:  
         INTLITERAL		            { IntLiteral($1) }
-      | BOOLLITERAL				{ BoolLiteral($1) }
+      | BOOLLITERAL                       { BoolLiteral($1) }
       | STR                               { StrLiteral($1) } 
       | ID                                { Id($1) }
       | expr PLUS expr                    { Binop($1, Plus, $3) }
@@ -99,21 +99,20 @@ expr:
       | expr TIMES expr                   { Binop($1, Times, $3) }
       | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
       | expr MOD expr                     { Binop($1, Mod, $3) }
-      | bool_expr                         { $1 }
-    /*  | ID LPAREN actuals_opt RPAREN 	{ Call($1, $3) }*/
+/*    | ID LPAREN actuals_opt RPAREN 	{ Call($1, $3) }*/
       | LPAREN expr RPAREN 			{ $2 }
-      /*| MINUS expr %prec UMINUS         { "unary minus" }
+/*    | MINUS expr %prec UMINUS         { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
 
-bool_expr:
-        expr EQ expr                      { Binop($1, Eq, $3) }
+      | expr EQ expr                      { Binop($1, Eq, $3) }
       | expr NEQ expr                     { Binop($1, Neq, $3) }
       | expr LT expr                      { Binop($1, Lt, $3) }
       | expr GT expr                      { Binop($1, Gt, $3) }
       | expr LEQ expr                     { Binop($1, Leq, $3) }
       | expr GEQ expr                     { Binop($1, Geq, $3) }
-      | bool_expr OR bool_expr            { Binop($1, Or, $3) }
-      | bool_expr AND bool_expr           { Binop($1, And, $3) }      
+      | expr OR expr                      { Binop($1, Or, $3) }
+      | expr AND expr                     { Binop($1, And, $3) }
+
 /*	  
 actuals_opt:
 		/* nothing  { [] }

@@ -1,0 +1,11 @@
+// Tests if-else statement, with more complex conditionals.
+
+if (2 < 3 && 3 < 4) 
+{
+  e <- 3;
+  e -> out;  
+}
+if (((2 + 3) < 6) && (3 ~= 5)) {
+  f <- 4;
+  f -> out;
+}

@@ -1,0 +1,7 @@
+// Tests if-else statement, with more complex conditionals.
+
+if (((((true)))) || false) 
+{
+  e <- 3;
+  e -> out;  
+}
