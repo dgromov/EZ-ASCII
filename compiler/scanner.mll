@@ -89,8 +89,7 @@ rule token = parse
       | letter (letter | digit | '_')* as id    { ID(id) }
       | digit+ as lit                           { INTLITERAL(int_of_string lit) }
 
-      | dblquote strchar* dblquote as str       { STR(String.sub str 1
-      ((String.length str) - 2)) }
+      | dblquote strchar* dblquote as str       { STR(String.sub str 1 ((String.length str) - 2)) }
       | eof                                     { EOF } (* raise Eof } *)
 
 and comment = parse
