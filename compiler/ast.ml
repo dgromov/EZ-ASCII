@@ -22,11 +22,20 @@ type stmt =                                 (* Statements *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                          (* return 42; *)
 
+(*
+type init = WithoutInit of string
+			|WithInit of string * expr
+			
+type var_decl = init list
+*)
+  
 type func_decl = {
   fname : string;                           (* Name of the function *)
-  args : string list;                       (* Formal argument names *)
+  params : string list;                       (* Formal argument names *)
   locals : string list;                     (* Locally defined variables *)
   body : stmt list;
 }
 
-type program = stmt list (* * func_decl list (* global vars, funcs *)  *)
+type program = 	stmt list (* * func_decl list (* global vars, funcs *)  *)
+
+(*type program = var_decl list * func_decl list*)
