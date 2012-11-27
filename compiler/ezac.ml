@@ -83,7 +83,8 @@ let rec exec env = function
       let e_val, e_env = eval env var 
       in 
         (*print_endline(e_val);*)
-        Printf.printf "%s\n" e_val;
+        
+        Printf.printf "%s\n" (Scanf.unescaped e_val);
         env;
   | OutputF(s) ->
       (* No-op, NEED TO DO) *)
