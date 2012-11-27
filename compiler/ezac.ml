@@ -164,7 +164,7 @@ let _ =
     in
       try
         let init_env = NameMap.empty
-        in (parse_stmts init_env) (Parser.program Scanner.token lexbuf)
+        in (parse_stmts init_env) (fst (Parser.program Scanner.token lexbuf))
       with 
         | Failure(s) -> 
             print_endline s;

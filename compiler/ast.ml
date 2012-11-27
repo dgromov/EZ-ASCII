@@ -32,10 +32,9 @@ type var_decl = init list
 type func_decl = {
   fname : string;                           (* Name of the function *)
   params : string list;                       (* Formal argument names *)
-  locals : string list;                     (* Locally defined variables *)
   body : stmt list;
 }
 
-type program = 	stmt list (* * func_decl list (* global vars, funcs *)  *)
+type program = 	stmt list * func_decl list (* global vars, funcs *)  
 
 (*type program = var_decl list * func_decl list*)

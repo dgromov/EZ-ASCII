@@ -34,32 +34,24 @@
 
 %%
 program:
-        stmt_list EOF                          { List.rev $1 } /*unsure about this part*/
- /*        nothing                   { [] } 
+         /*nothing  */                 { [],[] } 
+   /* | program EOF					{ List.rev (fst $1), List.rev (snd $1)} */
+/*	|  stmt_list EOF           	{ List.rev $1, [] } */  /*unsure about this part*/
+/*	| program funcdecl              { fst $1, (snd $1)@$2 } */
 
-	| program vardecl                    { ($2 :: fst $1), snd $1 }
-	| program funcdecl                    { Funcdef($2)::$1 } */
+| stmt_list program EOF { (List.rev $1) @ (List.rev (fst $2)), [] }
+/*| program funcdecl { fst $1, ($2 :: (snd $1)) }*/
 
-/*funcdecl:
-	 ID LPAREN param_list RPAREN LBRACKET vardecl_list stmt_list RBRACKET
+funcdecl:
+	 ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
 															{ { fname = $1;
-																params = $3;
-																locals= List.rev $6;
-																body  = List.rev $7 } }	
+																params = List.rev $3;
+																body  = List.rev $6 } }	
 
 param_list:
-	nothing							{[]}
+	/*nothing	*/						{ [] }
 	| ID 								{ [$1] }
 	| param_list COMMA ID  				{ $3 :: $1 }
-
-vardecl_list:
-	vardecl								{[$1]}
-	| vardecl_list vardecl				{$2::$1}
-	
-vardecl:
-	stmt_assign							{$1}
-
-*/
 
 
 stmt_list:
