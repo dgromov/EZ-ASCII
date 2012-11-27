@@ -1,0 +1,14 @@
+// Tests scoping. 
+
+x <- 3;
+
+foo();
+bar(5);
+
+Fun foo() {
+   x -> out;  // compiler should look to global scope
+}
+
+Fun bar(x) {
+   x -> out;  // compiler should look to local scope
+}
