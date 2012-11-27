@@ -34,8 +34,9 @@
 
 %%
 program:
-/*         /*nothing                   { [],[] } */
-      stmt_list EOF           { List.rev $1 }
+         /*nothing  */                 { [],[] } 
+	| program stmt			{ 	List.rev($2 :: List.rev(fst $1)), snd $1 }
+	| program funcdecl 		{ List.rev (fst $1), ($2 :: snd $1) }
 
 funcdecl:
 	 ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
@@ -50,7 +51,7 @@ param_list:
 
 
 stmt_list:
-	/* nothing */ 				{ [] }
+	/* nothing */ 						{ [] }
 	| stmt_list stmt                    { $2 :: $1 }
 
 
