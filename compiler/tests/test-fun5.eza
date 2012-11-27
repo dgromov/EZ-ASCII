@@ -1,0 +1,26 @@
+// Tests function calls with multiple parameters, and scoping.
+
+x <- 3;
+y <- 4;
+z <- "blah";
+
+foo(x * 2, y, z);
+
+Fun foo(x, y, w) {
+   x -> out;
+   y -> out;
+   z -> out;
+
+   x <- "x now a string";
+   x -> out;
+
+   y <- 10;
+   y -> out;
+
+   z <- 15;
+   z -> out;
+}
+
+x -> out;
+y -> out;
+z -> out;
