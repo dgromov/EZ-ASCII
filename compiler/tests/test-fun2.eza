@@ -1,0 +1,22 @@
+// Tests basic function calls.
+
+d <- "Statement before function call.";
+d -> out;
+
+// function call with no parameters
+foo();
+
+Fun foo() {
+   e <- "foo";
+   e -> out;
+}
+
+Fun bar(i) {
+   i -> out;
+}
+
+// function call with one parameter
+bar(3);
+
+// function call with an expression
+bar(3 + 5);

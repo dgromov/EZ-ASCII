@@ -53,8 +53,6 @@ stmt_list:
 	/* nothing */ 						{ [] }
 	| stmt_list stmt                    { $2 :: $1 }
 
-
-        
 stmt:
         ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
@@ -64,8 +62,7 @@ stmt:
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
       | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
       stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
-
-
+      | ID LPAREN expr_list RPAREN SEMICOLON { Call($1, List.rev $3) }
 
 stmt_in_for:
         ID ASSIGN expr          { Assign($1, $3) }
@@ -78,6 +75,11 @@ cond_body:
         stmt                              { [$1] }
       | LBRACE stmt_list RBRACE           { List.rev $2 }
       
+expr_list:
+	/* nothing */ 				{ [] }
+      | expr                              { [$1] }
+	| expr_list COMMA expr              { $3 :: $1 }
+
 expr:  
         INTLITERAL		            { IntLiteral($1) }
       | BOOLLITERAL                       { BoolLiteral($1) }

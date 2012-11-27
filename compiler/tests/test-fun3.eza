@@ -1,0 +1,13 @@
+// Tests nested function calls.
+
+foo();
+
+Fun foo() {
+   e <- "foo";
+   e -> out;
+   bar("hello, world!");
+}
+
+Fun bar(s) {
+   s -> out;
+}

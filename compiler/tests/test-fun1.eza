@@ -1,0 +1,24 @@
+// Tests basic function declarations.
+
+d <- 3;
+d -> out;
+
+Fun foo(i) {
+   e <- 3;
+   e -> out;
+}
+
+Fun bar() {
+}
+
+Fun BAZ() {
+   f <- "hello, world!";
+   f -> out;
+}
+
+g <- 9;
+g -> out;
+
+l <- 99;
+l -> out;
+

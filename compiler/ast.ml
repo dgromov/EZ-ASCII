@@ -10,7 +10,6 @@ type expr =                                 (* Expressions *)
   | BoolLiteral of bool                     (* true *)
   | Id of string                            (* foo *)
   | Binop of expr * op * expr               (* a + b *)
-  | Call of string * expr list              (* foo(1, 25) *)
 
 
 type stmt =                                 (* Statements *)
@@ -20,6 +19,7 @@ type stmt =                                 (* Statements *)
   | If of expr * stmt list                  (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
+  | Call of string * expr list              (* foo(1, 25) *)
   | Return of expr                          (* return 42; *)
 
 (*
