@@ -35,14 +35,13 @@
 %%
 program:
          /*nothing  */                 { [],[] } 
-	| program stmt			{ 	List.rev($2 :: List.rev(fst $1)), snd $1 }
-	| program funcdecl 		{ List.rev (fst $1), ($2 :: snd $1) }
+	| program stmt			{ List.rev($2 :: List.rev (fst $1)), snd $1 }
+	| program funcdecl 	{ (fst $1), List.rev ($2 :: List.rev (snd $1)) }
 
 funcdecl:
-	 ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
-															{ { fname = $1;
-																params = List.rev $3;
-																body  = List.rev $6 } }	
+	 FXN ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
+      
+       { { fname = $2; params = List.rev $4; body = List.rev $7 } }	
 
 param_list:
 	/*nothing	*/						{ [] }
