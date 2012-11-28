@@ -54,15 +54,14 @@ stmt_list:
 	| stmt_list stmt                    { $2 :: $1 }
 
 stmt:
-        ID ASSIGN expr SEMICOLON       { Assign($1, $3) }
+        ID ASSIGN expr SEMICOLON          { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
       | ID OUTPUT STR SEMICOLON           { OutputF($1) }
-/*	    | RETURN expr SEMICOLON          { Return($2) }*/
       | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
       | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
       stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
-      | ID LPAREN expr_list RPAREN SEMICOLON { Call($1, List.rev $3) }
+      | RETURN expr SEMICOLON             { Return($2) }
 
 stmt_in_for:
         ID ASSIGN expr          { Assign($1, $3) }
@@ -90,7 +89,7 @@ expr:
       | expr TIMES expr                   { Binop($1, Times, $3) }
       | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
       | expr MOD expr                     { Binop($1, Mod, $3) }
-/*    | ID LPAREN actuals_opt RPAREN 	{ Call($1, $3) }*/
+      | ID LPAREN expr_list RPAREN        { Call($1, List.rev $3) }
       | LPAREN expr RPAREN 			{ $2 }
 /*    | MINUS expr %prec UMINUS         { "unary minus" }
       | ID LBRACKET select_stmt RBRACKET  { $3 } */ 

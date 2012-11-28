@@ -2,8 +2,8 @@
 
 x <- 3;
 
-foo();
-bar(5);
+z <- foo();
+z <- bar(5);
 
 Fun foo() {
    x -> out;  // compiler should look to global scope

@@ -4,7 +4,7 @@ d <- "Statement before function call.";
 d -> out;
 
 // function call with no parameters
-foo();
+z <- foo();
 
 Fun foo() {
    e <- "foo";
@@ -16,7 +16,7 @@ Fun bar(i) {
 }
 
 // function call with one parameter
-bar(3);
+z <- bar(3);
 
 // function call with an expression
-bar(3 + 5);
+z <- bar(3 + 5);

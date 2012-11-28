@@ -4,7 +4,7 @@ x <- 3;
 y <- 4;
 z <- "blah";
 
-foo(x * 2, y, z);
+p <- foo(x * 2, y, z);
 
 Fun foo(x, y, w) {
    x -> out;
@@ -33,5 +33,5 @@ Fun bar()
    x -> out;   
 }
 
-bar();
+p <- bar();
 x -> out;

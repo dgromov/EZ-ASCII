@@ -1,0 +1,12 @@
+// Tests return statement.
+
+p <- foo(3);
+p -> out;
+
+Fun foo(x) {
+   y <- 2;
+   y -> out;
+   return (x * 2);
+   y -> out; // this line should not be executed
+}
+
