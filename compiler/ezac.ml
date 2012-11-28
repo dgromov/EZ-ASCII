@@ -84,12 +84,32 @@ let rec eval env scope = function
  * updated environment.
  * ===================================================== *)
 let rec exec (env, scope, fxnlist) = function
+
     Assign(var, e) ->
       (* update the environment for the expression first *)
       let e_val, e_env = eval env scope e in
-        (* print_endline (">>> " ^ var ^ " assigned " ^ e_val); *)
-      let updated_submap = (NameMap.add var e_val (NameMap.find scope e_env))
-      in (NameMap.add scope updated_submap e_env), scope, fxnlist
+      (* print_endline (">>> " ^ var ^ " assigned " ^ e_val); *)
+      let update_global = function
+          (var, var_val) -> 
+            let updated_submap = (NameMap.add var var_val (NameMap.find "*global*" e_env))
+            in (NameMap.add "*global*" updated_submap e_env)
+      in 
+        if scope = "*global*"
+        then
+            (* If global scope, then just update the global env *) 
+            (update_global (var, e_val)), scope, fxnlist
+        else
+          let local_decls = (NameMap.find scope e_env)
+          in 
+            (* Look for variable in local scope *)
+            if NameMap.mem var local_decls
+            then
+              (* If variable found in local scope, assign to local version;
+               * otherwise, assign it in global scope. *) 
+              let updated_env = (NameMap.add var e_val local_decls)
+              in (NameMap.add scope updated_env e_env), scope, fxnlist
+            else (update_global (var, e_val)), scope, fxnlist
+
   | OutputC(var) ->
       let e_val, e_env = eval env scope var 
       in 
@@ -97,20 +117,24 @@ let rec exec (env, scope, fxnlist) = function
         
         Printf.printf "%s\n" (Scanf.unescaped e_val);
         e_env, scope, fxnlist;
+        
   | OutputF(s) ->
       (* No-op, NEED TO DO) *)
       env, scope, fxnlist;
+
   | If(cond, stmt_lst) ->
       let c1, c_env = eval env scope cond in
         if (bool_of_int (int_of_string c1)) then
           List.fold_left (exec) (c_env, scope, fxnlist) stmt_lst
         else env, scope, fxnlist
+
   | If_else(cond, stmt_lst1, stmt_lst2) ->
       let c1, c_env = eval env scope cond in
         if (bool_of_int (int_of_string c1)) then
           List.fold_left (exec) (c_env, scope, fxnlist) stmt_lst1
         else
           List.fold_left (exec) (c_env, scope, fxnlist) stmt_lst2
+
   | For(s1, e1, s2, stmt_lst) ->
       let (env, scope, fxnlist) = (exec (env, scope, fxnlist)) s1 in 
       let rec loop (env, scope, fxnlist) =
@@ -120,9 +144,11 @@ let rec exec (env, scope, fxnlist) = function
               loop (exec (body_env, body_scope, fxnlist) s2)
           else env, scope, fxnlist
       in loop (env, scope, fxnlist)
+
   | Return(exp) ->
       (* No-op, NEED TO DO) *)
       env, scope, fxnlist
+
   | Call(fxn_name, param_exprs)   ->
       (* Find the target function from the list of function declarations.
        * Target function is as defined in the Ast:
@@ -136,15 +162,7 @@ let rec exec (env, scope, fxnlist) = function
        * an undefined function. *)
       let target_fxn = List.find (fun s -> s.fname = fxn_name) fxnlist
       in
-      (* Initialize the function environment with the function
-       * declaration's parameter list (keys), with empty values.
-       *
-       * Note: This should be moved into the main loop code before 
-       * executing any statements *)
-      let fxn_env = (List.fold_left 
-                       (fun tmp_env param_id -> NameMap.add param_id "" tmp_env)
-                       (NameMap.find fxn_name env) 
-                       target_fxn.params)
+      let fxn_env = NameMap.find fxn_name env 
       in
       (* For every parameter in the function environment,
        * initialize it to the VALUE of the parameter expression
@@ -169,10 +187,12 @@ let rec exec (env, scope, fxnlist) = function
       in
       (* Update the global env with the fxn_env 
        * before executing the function body. *) 
-      let update_env = (NameMap.add target_fxn.fname fxn_env env) in
-        List.fold_left (exec) 
-          (update_env, target_fxn.fname, fxnlist) 
-          target_fxn.body
+      let update_env = (NameMap.add target_fxn.fname fxn_env env) 
+      in
+      let (update_env', fxn_name, fxnlist) = List.fold_left (exec) 
+                                               (update_env, target_fxn.fname, fxnlist) 
+                                               target_fxn.body
+      in update_env', scope, fxnlist
 
 
 (* =====================================================
@@ -189,36 +209,6 @@ let _ =
     let rec parse_stmts env scope fxns_lst = function
         [] -> env 
       | hd :: tail -> 
-          (*      try  *)
-          (* Put function declarations in a symbol table *)
-          (*        let func_decls = List.fold_left
-           (fun funcs fdecl -> NameMap.add fdecl.fname fdecl funcs)
-           NameMap.empty funcs 
-           in*)
-          (*        let rec call fdecl actuals globals =  *)
-          (* eval: evaluates expressions and returns (value, updated env) *)
-
-          (*
-           | Call("print", [e]) ->
-           let v, env = eval env e in
-           print_endline (string_of_int v);
-           0, env  
-           | Call(f, actuals) ->
-           let fdecl = 
-           try NameMap.find f func_decls
-           with Not_found -> raise (Failure ("undefined function " ^ f))
-           in
-           let ractuals, env = List.fold_left
-           (fun (actuals, env) actual ->
-           let v, env = eval env actual in v :: actuals, env)
-           ([], env) actuals
-           in
-           let (locals, globals) = env in
-           try
-           let globals = call fdecl (List.rev ractuals) globals
-           in 0, (locals, globals)
-           with ReturnException(v, globals) -> v, (locals, globals)							
-           in *)
           (* execute statements and return updated environments *)                               
           let (updated_env, scope, fxns_list) = exec (env, scope, fxns_lst) hd 
           in
@@ -228,12 +218,22 @@ let _ =
         let (stmt_lst, fxns_lst) = (Parser.program Scanner.token lexbuf) in
         (* Add every function name to our initial env *)
         let init_env = 
+          (* The initial global NameMap env consists of one key-value 
+           * pair, *global* : NameMap.empty.  Then for every 
+           * function declaration, add a key-value pair where 
+           * the key is the function name, and the value is 
+           * a NameMap initialized with the function parameters
+           * as keys, and empty strings for values.  *) 
           (List.fold_left
-             (fun new_env fxn_decl -> 
-                NameMap.add fxn_decl.fname NameMap.empty new_env)
+             (fun new_env fxn_decl ->
+                let fxn_env = (List.fold_left 
+                                 (fun tmp_env param_id -> NameMap.add param_id "" tmp_env)
+                                 NameMap.empty
+                                 fxn_decl.params)
+                in NameMap.add fxn_decl.fname fxn_env new_env)
              (NameMap.add "*global*" NameMap.empty NameMap.empty) 
-             fxns_lst) in
-          (parse_stmts init_env "*global*" fxns_lst) stmt_lst;
+             fxns_lst)
+        in (parse_stmts init_env "*global*" fxns_lst) stmt_lst
       with 
         | Failure(s) -> 
             print_endline s;

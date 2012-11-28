@@ -4,6 +4,9 @@ blah
 x now a string
 10
 15
-6
+3
 4
-blah
+15
+3
+x back to string
+x back to string

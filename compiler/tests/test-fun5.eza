@@ -24,3 +24,14 @@ Fun foo(x, y, w) {
 x -> out;
 y -> out;
 z -> out;
+
+Fun bar()
+{
+   x -> out;
+   
+   x <- "x back to string";
+   x -> out;   
+}
+
+bar();
+x -> out;
