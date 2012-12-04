@@ -15,7 +15,7 @@ type expr =                                 (* Expressions *)
 type stmt =                                 (* Statements *)
     Assign of string * expr                 (* foo <- 42 *)
   | OutputC of expr                         (* canvas -> out *)
-  | OutputF of expr * string                       (* canvas -> "C:\test.png" *)
+  | OutputF of expr * string                (* canvas -> "C:\test.png" *)
   | If of expr * stmt list                  (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
@@ -57,19 +57,17 @@ let rec string_of_expr = function
       )  
       ^ " " ^
       string_of_expr e2
-  (* | Assign(v, e) ->  v ^ " <- " ^ string_of_expr e *)
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
 
 let rec string_of_stmt = function
-  | expr -> string_of_expr 
-  | Return(expr) -> "return " ^ string_of_expr expr ^ ";\n"
+   Return(expr) -> "return " ^ string_of_expr expr ^ ";\n"
   | If(e, s1) -> "if (" ^ string_of_expr e ^  ")\n
                   {\n"  ^ "string_of_stmt s1" ^ "\n}\n"
   | If_else(e, s1, s2) ->  
     "if (" ^ string_of_expr e  ^ ")\n{\n" ^ "string_of_stmt s1" ^ "\n}\n 
      else\n{\n"  ^ "string_of_stmt s2" ^ "\n}\n"
   | For(s1, e2, s3, s4) ->
-      "for (" ^ string_of_expr e1  ^ " | " ^ string_of_expr e2 ^ " | " ^ string_of_expr e3  ^ ")\n
+      "for (" ^ string_of_stmt s1  ^ " | " ^ string_of_expr e2 ^ " | " ^ string_of_stmt s3  ^ ")\n
       {\n" ^ "string_of_stmt s "^ "\n}\n"
   | OutputC(e) -> 
       string_of_expr e ^ " -> out \n"
@@ -77,17 +75,15 @@ let rec string_of_stmt = function
       string_of_expr e ^ " -> " ^ f ^ "\n"
   | Assign(v, e) -> 
     v ^ " <- " ^ string_of_expr e ^ "\n"
- | If(e, s1) -> "if (" ^ string_of_expr e ^  ")\n
-                  {\n"  ^ string_of_stmt s1 ^ "\n}\n"
+(*  | If(e, s1) -> "if (" ^ string_of_expr e ^  ")\n"
   | If_else(e, s1, s2) ->  
-    "if (" ^ string_of_expr e  ^ ")\n{\n" ^ string_of_stmt s1 ^ "\n}\n 
-     else\n{\n"  ^ string_of_stmt s2 ^ "\n}\n"
-
+    "if (" ^ string_of_expr e  ^ ")\n{\n string_of_stmt s1 \n}\n" 
+ *)
 let string_of_vdecl id = "int " ^ id ^ ";\n"
 
 let string_of_fdecl fdecl =
-  fdecl.fname ^ "(" ^ String.concat ", " fdecl.formals ^ ")\n{\n" ^
-  String.concat "" (List.map string_of_vdecl fdecl.locals) ^
+(*   fdecl.fname ^ "(" ^ String.concat ", " fdecl.formals ^ ")\n{\n" ^
+  String.concat "" (List.map string_of_vdecl fdecl.locals) ^ *)
   String.concat "" (List.map string_of_stmt fdecl.body) ^
   "}\n"
 

@@ -16,11 +16,13 @@ let _ =
   let (action, debug_flag, filepath) =
     let param_count = Array.length Sys.argv in
       if param_count > 2 then
-        let option = (List.assoc Sys.argv.(1) [ ("-a", (Ast, false)); 
-                                                ("-i", (Interpret, false));
-                                                ("-b", (Bytecode, false)); 
-                                                ("-c", (Compile, false));
-                                                ("-cd", (Compile, true)) ])
+        let option = (List.assoc Sys.argv.(1) 
+            [ ("-a", (Ast, false)); 
+              ("-i", (Interpret, false));
+              ("-b", (Bytecode, false)); 
+              ("-c", (Compile, false));
+              ("-cd", (Compile, true)) 
+            ])
         in (fst option), (snd option), Sys.argv.(2)
       else 
         if param_count = 2 then

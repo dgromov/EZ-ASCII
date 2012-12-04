@@ -1,4 +1,4 @@
-OBJS = ast.cmo scanner.cmo parser.cmo bytecode.cmo compiler.cmo execute.cmo top.cmo
+OBJS = ast.cmo scanner.cmo parser.cmo bytecode.cmo compiler.cmo execute.cmo ezac.cmo
 
 top : $(OBJS)
 	ocamlc -o top $(OBJS)
@@ -24,18 +24,18 @@ ast.cmo :
 ast.cmx :
 bytecode.cmo : ast.cmo
 bytecode.cmx : ast.cmx
-compiler.cmo : ezatypes.cmo bytecode.cmo ast.cmo 
+compiler.cmo : ezatypes.cmo bytecode.cmo ast.cmo
 compiler.cmx : ezatypes.cmx bytecode.cmx ast.cmx
 execute.cmo : bytecode.cmo ast.cmo
 execute.cmx : bytecode.cmx ast.cmx
-ezac.cmo : scanner.cmo parser.cmi ast.cmo
-ezac.cmx : scanner.cmx parser.cmx ast.cmx
+ezac.cmo : scanner.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo
+ezac.cmx : scanner.cmx parser.cmx execute.cmx compiler.cmx bytecode.cmx ast.cmx
 ezatypes.cmo :
 ezatypes.cmx :
+interpret.cmo : scanner.cmo parser.cmi ast.cmo
+interpret.cmx : scanner.cmx parser.cmx ast.cmx
 parser.cmo : ast.cmo parser.cmi
 parser.cmx : ast.cmx parser.cmi
 scanner.cmo : parser.cmi
 scanner.cmx : parser.cmx
-top.cmo : scanner.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo
-top.cmx : scanner.cmx parser.cmx execute.cmx compiler.cmx bytecode.cmx ast.cmx
 parser.cmi : ast.cmo

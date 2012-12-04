@@ -56,7 +56,7 @@ stmt_list:
 stmt:
         ID ASSIGN expr SEMICOLON          { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
-      | ID OUTPUT STR SEMICOLON           { OutputF($1) }
+      | ID OUTPUT STR SEMICOLON           { OutputF(Id($1), $3) }
       | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
       | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
@@ -116,7 +116,7 @@ expr:
 canvas_select: 
        ID LBRACKET select_stmt RBRACKET SEMICOLON { } 
 
-*/
+*/ 
 /*	  
 actuals_opt:
 		/* nothing  { [] }
