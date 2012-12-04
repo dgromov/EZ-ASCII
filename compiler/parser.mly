@@ -103,6 +103,20 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
 
+/* select_stmt:
+        INT COMMA INT                     { Select_Point($1, $3) }
+      | INT COLON INT COMMA INT COLON INT { Select_Rect($1, $3, $5, $7) }
+      | INT COMMA INT COLON INT           { "selection by vertical slice" }
+      | INT COLON INT COMMA INT           { "selection by horizontal slice" }
+      | INT COMMA                         { "selection by full vertical slice" }
+      | COMMA INT                         { "selection by full horizontal slice" }
+      | COMMA                             { "selection by all" }
+      | bool_expr                         { $1 } 
+
+canvas_select: 
+       ID LBRACKET select_stmt RBRACKET SEMICOLON { } 
+
+*/
 /*	  
 actuals_opt:
 		/* nothing  { [] }
@@ -116,16 +130,6 @@ include_stmt:
 		| LBRACKET STR RBRACKET     		{"include [filepath]"}
 */
 /*
-
-select_stmt:
-        INT COMMA INT                     { "selection by point" }
-      | INT COLON INT COMMA INT COLON INT { "selection by rectangle" }
-      | INT COMMA INT COLON INT           { "selection by vertical slice" }
-      | INT COLON INT COMMA INT           { "selection by horizontal slice" }
-      | INT COMMA                         { "selection by full vertical slice" }
-      | COMMA INT                         { "selection by full horizontal slice" }
-      | COMMA                             { "selection by all" }
-      | bool_expr                         { $1 }
 
 bool_expr:
         LT INT                            { "selection by bool expression (<)" }

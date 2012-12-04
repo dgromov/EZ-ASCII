@@ -26,19 +26,12 @@ let bool_of_int i =
   else false
 
 
-
-
-(* =====================================================
- * Top-level function
+(* ============================================================
+ * Interpreter main method. Its called in ezac with -i switch.
+ *  
  *
- *
- * ===================================================== *)
-let _ =
-  if Array.length Sys.argv < 2 then
-    raise (Failure ("File path not provided."))
-  else
-    let lexbuf = Lexing.from_channel(open_in Sys.argv.(1))
-    in 
+ * ============================================================ *)
+let run lexbuf=
     let (stmt_lst, fxns_lst) = 
       try 
         (Parser.program Scanner.token lexbuf)
@@ -252,5 +245,6 @@ let _ =
           | Failure(s) -> 
               print_endline s;
               exit 0;
+
 
 
