@@ -57,14 +57,14 @@ let _ =
        * string value and updated environment pair.
        * ===================================================== *)
     let rec eval env scope = function
-          IntLiteral(e1)      -> string_of_int e1, env
-        | StrLiteral(e1)      -> e1, env
-        | BoolLiteral(e1)     -> 
+          Ast.IntLiteral(e1)      -> string_of_int e1, env
+        | Ast.StrLiteral(e1)      -> e1, env
+        | Ast.BoolLiteral(e1)     -> 
             if e1 then 
               "1", env
             else 
               "0", env
-        | Id(var)             -> 
+        | Ast.Id(var)             -> 
             let local_decls = (NameMap.find scope env)
             in
               (* Look for the variable in the function's local scope *)
@@ -78,7 +78,7 @@ let _ =
                   then (NameMap.find var global_decls), env
                   (* Otherwise, error. *)                                                   
                   else raise (Failure (">>> Undefined identifier: " ^ var))
-        | Binop(e1, op, e2)   -> 
+        | Ast.Binop(e1, op, e2)   -> 
             let v1, env = eval env scope e1 in
             let v2, env = eval env scope e2 in
             let boolean i = if i then 1 else 0 in
@@ -100,7 +100,7 @@ let _ =
                   | Mask   -> 1 (* NEED TO DO *)
               ), env
 
-        | Call(fxn_name, param_exprs)   ->
+        | Ast.Call(fxn_name, param_exprs)   ->
             (* Find the target function from the list of function declarations.
              * Target function is as defined in the Ast:
              *   { 
