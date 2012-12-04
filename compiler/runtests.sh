@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP=$(dirname $0)/top
+APP=$(dirname $0)/ezac
 globallog=test_ezac.log
 testdir=tests
 rm -f $globallog
