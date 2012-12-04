@@ -1,31 +1,42 @@
+(*
+ *
+ *
+ *)
+
+open Ast
+open Parser
+open Scanner
+open Bytecode
+open Compiler
+open Execute
+
 type action = Ast | Interpret | Bytecode | Compile
 
 let _ =
-  let action = 
-    if Array.length Sys.argv > 1 then
-      List.assoc Sys.argv.(1) 
-      [ 
-              ("-a", Ast);
-              ("-i", Interpret);
-              ("-b", Bytecode);
-              ("-c", Compile) 
-      ]
-    else Compile in
-  let lexbuf = Lexing.from_channel stdin in
-  (* let program = Parser.program Scanner.token lexbuf in  *)
-  match action with
-    Ast       -> print_string "Running Ast\n";
-  | Interpret -> print_string "Running Interpret\n";
-                 (* Interpret.run lexbuf; *)
-
-  | Bytecode  -> print_string "Running Bytecode\n";
-  | Compile   -> print_string "Running Compile\n";
-  
-      (* Ast -> let listing = Ast.string_of_program program
-           in print_string listing
-  | Interpret -> ignore (Interpret.run program)
-  | Bytecode -> let listing =
-      Bytecode.string_of_prog (Compile.translate program)
-    in print_endline listing
-  | Compile -> Execute.execute_prog (Compile.translate program)
-  *)
+  let (action, debug_flag, filepath) =
+    let param_count = Array.length Sys.argv in
+      if param_count > 2 then
+        let option = (List.assoc Sys.argv.(1) [ ("-a", (Ast, false)); 
+                                                ("-i", (Interpret, false));
+                                                ("-b", (Bytecode, false)); 
+                                                ("-c", (Compile, false));
+                                                ("-cd", (Compile, true)) ])
+        in (fst option), (snd option), Sys.argv.(2)
+      else 
+        if param_count = 2 then
+          (Compile, false, Sys.argv.(1))
+        else raise (Failure ("Invalid number of arguments."))
+  in
+  let lexbuf = Lexing.from_channel (open_in filepath) in
+  let program = Parser.program Scanner.token lexbuf in
+    match action with
+        Ast -> let listing = "AST: nada at the moment" (* let listing = Ast.string_of_program program *)
+        in print_string listing
+      | Interpret -> print_string "Interpret: nada at the moment" (* ignore (Interpret.run program) *)
+      | Bytecode -> 
+          let listing = Bytecode.string_of_prog 
+                          (Compiler.translate program) 
+          in print_endline listing
+      | Compile -> 
+          let program = Compiler.translate program in
+            Execute.execute_prog program debug_flag
