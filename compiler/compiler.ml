@@ -114,7 +114,7 @@ let translate (stmt_lst, func_decls) =
              | Ezatypes.String -> bc @ [Jsr (-2)]
              | Ezatypes.Bool -> bc @ [Jsr (-3)]
              | _ -> bc @ [Jsr (-1)])
-    | Ast.OutputF(var, dest) ->
+    | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->
         []
@@ -125,8 +125,7 @@ let translate (stmt_lst, func_decls) =
     | Ast.Return(e) ->
         fst (expr env e) @ [Rts env.num_formals]  
     
-    | Ast.Expr(e) -> []
-
+    
   
   in let translate env fdecl = 
     (* Bookkeeping: FP offsets for locals and args *)

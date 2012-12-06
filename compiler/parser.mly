@@ -42,9 +42,7 @@ funcdecl:
 	 FXN ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
    {  
     {  
-       fname = $2; 
-       params = List.rev $4; 
-       body = List.rev $7 
+       fname = $2; params = List.rev $4; body = List.rev $7 
     } 
    }	
 
@@ -82,7 +80,7 @@ cond_body:
 expr_list:
 	/* nothing */ 				{ [] }
       | expr                              { [$1] }
-	| expr_list COMMA expr              { $3 :: $1 }
+	    | expr_list COMMA expr              { $3 :: $1 }
 
 expr:  
         INTLITERAL		            { IntLiteral($1) }

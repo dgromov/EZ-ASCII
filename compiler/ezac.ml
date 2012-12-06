@@ -30,15 +30,12 @@ let _ =
         else raise (Failure ("Invalid number of arguments."))
   in
   let lexbuf = Lexing.from_channel (open_in filepath) in
-  let program = Parser.program Scanner.token lexbuf in
+  let program = Parser.program Scanner.token lexbuf
+  in
     match action with
-        Ast -> let listing = Ast.string_of_program program in 
-                print_string listing
+        Ast -> let listing = Ast.string_of_program program in print_string listing
       | Interpret -> print_string "Interpret: nada at the moment" (* ignore (Interpret.run program) *)
-      | Bytecode -> 
-          let listing = Bytecode.string_of_prog 
-                          (Compiler.translate program) 
-          in print_endline listing
-      | Compile -> 
-          let program = Compiler.translate program in
-            Execute.execute_prog program debug_flag
+      | Bytecode -> let listing = Bytecode.string_of_prog (Compiler.translate program) 
+                    in print_endline listing
+      | Compile -> let program = Compiler.translate program
+                   in Execute.execute_prog program debug_flag
