@@ -1,4 +1,4 @@
-OBJS = ast.cmo scanner.cmo parser.cmo bytecode.cmo compiler.cmo execute.cmo ezac.cmo
+OBJS = ast.cmo scanner.cmo parser.cmo interpret.cmo bytecode.cmo compiler.cmo execute.cmo ezac.cmo
 
 ezac : $(OBJS)
 	ocamlc -o ezac $(OBJS)

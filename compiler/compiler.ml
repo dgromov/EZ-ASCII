@@ -114,7 +114,7 @@ let translate (stmt_lst, func_decls) =
              | Ezatypes.String -> bc @ [Jsr (-2)]
              | Ezatypes.Bool -> bc @ [Jsr (-3)]
              | _ -> bc @ [Jsr (-1)])
-    | Ast.OutputF(var, dest) ->
+    | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->
         []

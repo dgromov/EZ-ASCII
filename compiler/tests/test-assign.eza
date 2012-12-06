@@ -4,6 +4,9 @@ d -> out;
 e <- 4 + 8 / 2 % 7;
 e -> out;
 
+q <- "alla";
+q -> out;
+
 d <- e + 5;
 d -> out;
 

@@ -1,8 +1,10 @@
 (* File: Ast.ml   *)
 (*                *)
 
-type op = Plus | Minus | Times | Divide | Mod 
-               | And | Or | Lt | Gt | Eq | Leq | Geq | Neq | Mask
+type op = Plus | Minus | Times | Divide  | Mod
+        | And | Or
+        | Lt  | Gt  | Eq | Leq | Geq | Neq
+        | Mask
 
 type expr =                                 (* Expressions *)
     IntLiteral of int                       (* 42 *)
@@ -20,8 +22,7 @@ type stmt =                                 (* Statements *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                          (* return 42; *)
-  | Expr of expr                            (* blah *)
-
+  | Expr of expr                            (* blah *) 
   
 type func_decl = {
   fname : string;                             (* Name of the function *)
@@ -32,7 +33,7 @@ type func_decl = {
                    
 type program = stmt list * func_decl list (* global vars, funcs *) 
 
-let rec string_of_expr = function
+ let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
   | StrLiteral(l) -> l 
   | BoolLiteral(l) -> if l == true then "true" else "false"
@@ -61,34 +62,31 @@ let rec string_of_expr = function
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
 
 let rec string_of_stmt = function
-    Expr(expr) -> string_of_expr expr ^ ";\n"
-  | Return(expr) -> "return " ^ string_of_expr expr ^ ";\n"
-  | If(e, s1) -> "if (" ^ string_of_expr e ^  ")\n
-                  {\n"  ^ "string_of_stmt s1" ^ "\n}\n"
-  | If_else(e, s1, s2) ->  
-      "if (" ^ string_of_expr e  ^ ")\n{\n" ^ "string_of_stmt s1" ^ "\n}\n 
-      else\n{\n"  ^ "string_of_stmt s2" ^ "\n}\n"
-  | For(s1, e2, s3, s4) ->
+    Expr(expr) -> string_of_expr expr ^ ";" 
+  | Return(expr) -> "return " ^ string_of_expr expr ^ ";"
+  | If(e, sl1) -> "if (" ^ string_of_expr e ^  ")
+                  {\n"  ^ String.concat "\n" (List.map string_of_stmt sl1)  ^ "\n}"
+  | If_else(e, sl1, sl2) ->  
+      "if (" ^ string_of_expr e  
+      ^ "){\n" ^ String.concat "\n" (List.map string_of_stmt sl1)  
+      ^ "\n}\nelse{\n"  
+      ^ String.concat "\n" (List.map string_of_stmt sl2)  ^ "\n}"
+  | For(s1, e2, s3, sl4) ->
       "for (" ^ string_of_stmt s1  ^ " | " ^ string_of_expr e2 ^ " | " ^ string_of_stmt s3  ^ ")\n
-      {\n" ^ "string_of_stmt s "^ "\n}\n"
+      {\n" ^ String.concat "\n" (List.map string_of_stmt sl4)  ^ "\n}"
   | OutputC(e) -> 
-      string_of_expr e ^ " -> out \n"
+      string_of_expr e ^ " -> out"
   | OutputF(e, f) -> 
-      string_of_expr e ^ " -> " ^ f ^ "\n"
+      string_of_expr e ^ " -> " ^ f 
   | Assign(v, e) -> 
-      v ^ " <- " ^ string_of_expr e ^ "\n"
-
-let string_of_vdecl id = "int " ^ id ^ ";\n"
+      v ^ " <- " ^ string_of_expr e
 
 let string_of_fdecl fdecl =
   fdecl.fname ^ "(" ^ String.concat ", " fdecl.params ^ ")\n{\n" 
-              ^ String.concat "" (List.map string_of_stmt fdecl.body) 
-              ^ "}\n"
-
-  (* String.concat "" (List.map string_of_vdecl fdecl.locals) ^ *)
+              ^ String.concat "\n" (List.map string_of_stmt fdecl.body) 
+              ^ "\n}\n"
 
 let string_of_program (vars, funcs) =
-  (* String.concat (List.map vars) ^ "\n" ^ *)
-  (* String.concat "\n" (List.map string_of_fdecl funcs) *)
-  "meow"
-
+  String.concat "\n" (List.map string_of_stmt vars) ^ "\n\n" ^
+  String.concat "\n" (List.map string_of_fdecl funcs)
+  
