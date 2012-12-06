@@ -22,7 +22,6 @@ type stmt =                                 (* Statements *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                          (* return 42; *)
-  | Expr of expr                            (* blah *) 
   
 type func_decl = {
   fname : string;                             (* Name of the function *)
@@ -62,7 +61,6 @@ type program = stmt list * func_decl list (* global vars, funcs *)
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
 
 let rec string_of_stmt = function
-    Expr(expr) -> string_of_expr expr ^ ";" 
   | Return(expr) -> "return " ^ string_of_expr expr ^ ";"
   | If(e, sl1) -> "if (" ^ string_of_expr e ^  ")
                   {\n"  ^ String.concat "\n" (List.map string_of_stmt sl1)  ^ "\n}"
