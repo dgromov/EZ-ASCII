@@ -40,8 +40,13 @@ program:
 
 funcdecl:
 	 FXN ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
-      
-       { { fname = $2; params = List.rev $4; body = List.rev $7 } }	
+   {  
+    {  
+       fname = $2; 
+       params = List.rev $4; 
+       body = List.rev $7 
+    } 
+   }	
 
 param_list:
 	/*nothing	*/						{ [] }
@@ -56,7 +61,7 @@ stmt_list:
 stmt:
         ID ASSIGN expr SEMICOLON          { Assign($1, $3) }
       | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
-      | ID OUTPUT STR SEMICOLON           { OutputF($1) }
+      | ID OUTPUT STR SEMICOLON           { OutputF(Id($1), $3) }
       | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
       | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
       | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
@@ -103,6 +108,20 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
 
+/* select_stmt:
+        INT COMMA INT                     { Select_Point($1, $3) }
+      | INT COLON INT COMMA INT COLON INT { Select_Rect($1, $3, $5, $7) }
+      | INT COMMA INT COLON INT           { "selection by vertical slice" }
+      | INT COLON INT COMMA INT           { "selection by horizontal slice" }
+      | INT COMMA                         { "selection by full vertical slice" }
+      | COMMA INT                         { "selection by full horizontal slice" }
+      | COMMA                             { "selection by all" }
+      | bool_expr                         { $1 } 
+
+canvas_select: 
+       ID LBRACKET select_stmt RBRACKET SEMICOLON { } 
+
+*/ 
 /*	  
 actuals_opt:
 		/* nothing  { [] }
@@ -116,16 +135,6 @@ include_stmt:
 		| LBRACKET STR RBRACKET     		{"include [filepath]"}
 */
 /*
-
-select_stmt:
-        INT COMMA INT                     { "selection by point" }
-      | INT COLON INT COMMA INT COLON INT { "selection by rectangle" }
-      | INT COMMA INT COLON INT           { "selection by vertical slice" }
-      | INT COLON INT COMMA INT           { "selection by horizontal slice" }
-      | INT COMMA                         { "selection by full vertical slice" }
-      | COMMA INT                         { "selection by full horizontal slice" }
-      | COMMA                             { "selection by all" }
-      | bool_expr                         { $1 }
 
 bool_expr:
         LT INT                            { "selection by bool expression (<)" }
