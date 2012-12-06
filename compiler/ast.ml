@@ -6,13 +6,21 @@ type op = Plus | Minus | Times | Divide  | Mod
         | Lt  | Gt  | Eq | Leq | Geq | Neq
         | Mask
 
-type expr =                                 (* Expressions *)
-    IntLiteral of int                       (* 42 *)
-  | StrLiteral of string                    (* "this is a string" *)
-  | BoolLiteral of bool                     (* true *)
-  | Id of string                            (* foo *)
-  | Binop of expr * op * expr               (* a + b *)
-  | Call of string * expr list              (* foo(1, 25) *)
+type expr = 
+    IntLiteral of int                            (* 42 *)
+  | StrLiteral of string                         (* "this is a string" *)
+  | BoolLiteral of bool                          (* true *)
+  | Id of string                                 (* foo *)
+  | Binop of expr * op * expr                    (* a + b *)
+  | Call of string * expr list                   (* foo(1, 25) *)
+  | Select_Point  of expr * expr                 (* [1,2] *)
+  | Select_Rect   of expr * expr * expr * expr   (* [1:2, 3:4] *)
+  | Select_VSlice of expr * expr * expr          (* [1, 3:4] *)
+  | Select_HSlice of expr * expr * expr          (* [1:2, 3] *)
+  | Select_VSliceAll of expr                     (* [3, ] *) 
+  | Select_HSliceAll of expr                     (* [, 3] *) 
+  | Select_All                                   (* [,] *)       
+  | Select of string * expr                      (* canv[...] *)
 
 type stmt =                                 (* Statements *)
     Assign of string * expr                 (* foo <- 42 *)
@@ -22,6 +30,7 @@ type stmt =                                 (* Statements *)
   | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                          (* return 42; *)
+  | Include of string                       (* include super_awesome.eza *)
   
 type func_decl = {
   fname : string;                             (* Name of the function *)
@@ -29,7 +38,6 @@ type func_decl = {
   body : stmt list;
 }
 
-                   
 type program = stmt list * func_decl list (* global vars, funcs *) 
 
  let rec string_of_expr = function
@@ -59,6 +67,17 @@ type program = stmt list * func_decl list (* global vars, funcs *)
       ^ " " ^
       string_of_expr e2
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
+  | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "]"
+  | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 
+                                         ^ string_of_expr y1 ^  ":" ^  string_of_expr y2 ^ "]"
+  | Select_VSlice (x1, y1, y2)  ->  "[" ^ string_of_expr x1 ^ ", " 
+                                        ^ string_of_expr y1 ^ ":" ^ string_of_expr y2 ^ "]"
+  | Select_HSlice (x1, x2, y1) ->  "[" ^ string_of_expr x1 ^ ":" ^ string_of_expr x2 
+                                       ^ ", " ^ string_of_expr y1 ^ "]"
+  | Select_VSliceAll x1 -> "[" ^ string_of_expr x1 ^ ",]" 
+  | Select_HSliceAll y1 -> "[," ^ string_of_expr y1 ^ "]"
+  | Select_All -> "[,]"
+  | Select (canv, selection) -> canv ^ string_of_expr selection  
 
 let rec string_of_stmt = function
   | Return(expr) -> "return " ^ string_of_expr expr ^ ";"
@@ -78,6 +97,8 @@ let rec string_of_stmt = function
       string_of_expr e ^ " -> " ^ f 
   | Assign(v, e) -> 
       v ^ " <- " ^ string_of_expr e
+  | Include(str) ->
+     "include " ^ str
 
 let string_of_fdecl fdecl =
   fdecl.fname ^ "(" ^ String.concat ", " fdecl.params ^ ")\n{\n" 

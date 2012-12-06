@@ -57,17 +57,40 @@ stmt_list:
 	| stmt_list stmt                    { $2 :: $1 }
 
 stmt:
-        ID ASSIGN expr SEMICOLON          { Assign($1, $3) }
-      | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
-      | ID OUTPUT STR SEMICOLON           { OutputF(Id($1), $3) }
-      | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
-      | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
-      | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
-      stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
-      | RETURN expr SEMICOLON             { Return($2) }
+    ID ASSIGN expr SEMICOLON          { Assign($1, $3) }
+  | ID OUTPUT STDOUT SEMICOLON        { OutputC(Id($1)) }
+  | ID OUTPUT STR SEMICOLON           { OutputF(Id($1), $3) }
+  | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
+  | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
+  | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE
+  stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
+  | RETURN expr SEMICOLON             { Return($2) }
+  | INCLUDE STR SEMICOLON             { Include($2) }
 
 stmt_in_for:
-        ID ASSIGN expr          { Assign($1, $3) }
+  ID ASSIGN expr          { Assign($1, $3) }
+
+/* 
+bool_expr:
+    LT expr                           { "selection by bool expression (<)" }
+  | GT expr                           { "selection by bool expression (>)" }
+  | EQ expr                           { "selection by bool expression (=)" }
+  | LEQ expr                          { "selection by bool expression (<=)" }
+  | GEQ expr                          { "selection by bool expression (>=)" }
+  | NEQ expr                          { "selection by bool expression (~=)" }
+  | bool_expr AND bool_expr           { $1, $3 }
+  | bool_expr OR bool_expr            { $1, $3 }
+*/
+
+select_expr:
+    expr COMMA expr                       { Select_Point($1, $3) }
+  | expr COLON expr COMMA expr COLON expr { Select_Rect($1, $3, $5, $7) }
+  | expr COMMA expr COLON expr            { Select_VSlice($1, $3, $5) }
+  | expr COLON expr COMMA expr            { Select_HSlice($1, $3, $5) }
+  | expr COMMA                            { Select_VSliceAll($1) }
+  | COMMA expr                            { Select_HSliceAll($2) }
+  | COMMA                                 { Select_All }
+/*  | bool_expr                             { Select } */ 
 
 cond_body:
         /* If no braces are supplied in a 
@@ -94,9 +117,8 @@ expr:
       | expr MOD expr                     { Binop($1, Mod, $3) }
       | ID LPAREN expr_list RPAREN        { Call($1, List.rev $3) }
       | LPAREN expr RPAREN 			{ $2 }
-/*    | MINUS expr %prec UMINUS         { "unary minus" }
-      | ID LBRACKET select_stmt RBRACKET  { $3 } */ 
-
+/*    | MINUS expr %prec UMINUS         { "unary minus" } */ 
+      | ID LBRACKET select_expr RBRACKET  { Select($1, $3) } 
       | expr EQ expr                      { Binop($1, Eq, $3) }
       | expr NEQ expr                     { Binop($1, Neq, $3) }
       | expr LT expr                      { Binop($1, Lt, $3) }
@@ -106,20 +128,8 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
 
-/* select_stmt:
-        INT COMMA INT                     { Select_Point($1, $3) }
-      | INT COLON INT COMMA INT COLON INT { Select_Rect($1, $3, $5, $7) }
-      | INT COMMA INT COLON INT           { "selection by vertical slice" }
-      | INT COLON INT COMMA INT           { "selection by horizontal slice" }
-      | INT COMMA                         { "selection by full vertical slice" }
-      | COMMA INT                         { "selection by full horizontal slice" }
-      | COMMA                             { "selection by all" }
-      | bool_expr                         { $1 } 
 
-canvas_select: 
-       ID LBRACKET select_stmt RBRACKET SEMICOLON { } 
 
-*/ 
 /*	  
 actuals_opt:
 		/* nothing  { [] }
@@ -127,21 +137,4 @@ actuals_opt:
 actuals_list:
 		expr { [$1] }
 		| actuals_list COMMA expr { $3 :: $1 }
-		
-
-include_stmt:
-		| LBRACKET STR RBRACKET     		{"include [filepath]"}
 */
-/*
-
-bool_expr:
-        LT INT                            { "selection by bool expression (<)" }
-      | GT INT                            { "selection by bool expression (>)" }
-      | EQ INT                            { "selection by bool expression (=)" }
-      | LEQ INT                           { "selection by bool expression (<=)" }
-      | GEQ INT                           { "selection by bool expression (>=)" }
-      | NEQ INT                           { "selection by bool expression (~=)" }
-      | bool_expr AND bool_expr           { $3 }
-      | bool_expr OR bool_expr            { $3 }
-
-      */

@@ -93,7 +93,19 @@ let translate (stmt_lst, func_decls) =
            ((List.concat (List.map fst res)) @ [Jsr (StringMap.find fname env.function_idx)]), Ezatypes.Void
          with Not_found ->
            raise (Failure ("Undefined function: " ^ fname)))
+    | Ast.Select_Point (x, y) -> [Lit 1], Ezatypes.Int 
+    | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1], Ezatypes.Int
+                                   
+    | Ast.Select_VSlice (x1, y1, y2)  -> [Lit 1], Ezatypes.Int
+                                    
+    | Ast.Select_HSlice (x1, x2, y1) -> [Lit 1], Ezatypes.Int
+                                     
+    | Ast.Select_VSliceAll x -> [Lit 1], Ezatypes.Int;
+    | Ast.Select_HSliceAll y -> [Lit 1], Ezatypes.Int;
+    | Ast.Select_All -> [Lit (-1)], Ezatypes.Int;
+    | Ast.Select (canv, selection)-> [Lit (-16)], Ezatypes.Int;
 
+   
   in let rec stmt env = function
       (* need to update assign later *)
       Ast.Assign(var, e) -> 
@@ -124,6 +136,9 @@ let translate (stmt_lst, func_decls) =
         []
     | Ast.Return(e) ->
         fst (expr env e) @ [Rts env.num_formals]  
+    | Ast.Include(str) -> 
+        []
+    
     
     
   
