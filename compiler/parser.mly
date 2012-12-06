@@ -40,8 +40,13 @@ program:
 
 funcdecl:
 	 FXN ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
-      
-       { { fname = $2; params = List.rev $4; body = List.rev $7 } }	
+   {  
+    {  
+       fname = $2; 
+       params = List.rev $4; 
+       body = List.rev $7 
+    } 
+   }	
 
 param_list:
 	/*nothing	*/						{ [] }

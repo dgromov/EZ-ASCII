@@ -178,7 +178,7 @@ let run lexbuf=
         | OutputC(var) ->
             let e_val, e_env = eval env scope var 
             in 
-              (*print_endline(e_val);*)
+              (* print_endline(e_val); *)
 
               Printf.printf "%s\n" (Scanf.unescaped e_val);
               e_env, scope;

@@ -124,6 +124,9 @@ let translate (stmt_lst, func_decls) =
         []
     | Ast.Return(e) ->
         fst (expr env e) @ [Rts env.num_formals]  
+    
+    | Ast.Expr(e) -> []
+
   
   in let translate env fdecl = 
     (* Bookkeeping: FP offsets for locals and args *)
