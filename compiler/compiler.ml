@@ -6,11 +6,11 @@ module StringMap = Map.Make(String)
 
 (* Translation environment *)
 type env = {
-  function_idx          : int StringMap.t;   (* Index for each function *)
+  function_idx          : int StringMap.t;                  (* Index for each function *)
   mutable global_idx    : (int * Ezatypes.t) StringMap.t;   (* "Address" for global vars *)
   (* need to add typing for locals *)
-  local_idx             : int StringMap.t;   (* FP offset for args, locals *)
-  num_formals           : int;               (* Number of parameters *)
+  mutable local_idx     : int StringMap.t;                  (* FP offset for args, locals *)
+  num_formals           : int;                              (* Number of parameters *)
 }
 
 let explode s =
@@ -46,8 +46,7 @@ let translate (stmt_lst, func_decls) =
       | hd :: tl -> 
           (bif_helper (StringMap.add hd (counter) map) (counter-1)) tl
     (* add built-in functions here *)
-    (* reserve -1, -2, and -3 for printing ints, strings, and bools respectively
-     *)
+    (* reserve -1, -2, and -3 for printing ints, strings, and bools respectively *)
     in (bif_helper StringMap.empty (-4)) ["load"; "blank"; "main"]
   in  
 
@@ -63,12 +62,12 @@ let translate (stmt_lst, func_decls) =
         let ints_list = (List.map Char.code (explode s)) in
         let size = (List.length ints_list) in
         let rec add_int_lits accum i =
-          if i > size
+          if i >= size
           then accum
           else
-            add_int_lits ([Lit (List.nth ints_list (i-1))] @ accum) (i+1)
+            add_int_lits ([Lit (List.nth ints_list i)] @ accum) (i+1)
         in 
-          ((List.rev (add_int_lits [] 1)) @ [Lit size]), Ezatypes.String
+          ((List.rev (add_int_lits [] 0)) @ [Lit size]), Ezatypes.String
 
     | Ast.BoolLiteral(b) -> if b then ([Lit 1], Ezatypes.Bool) else ([Lit 0], Ezatypes.Bool)
     | Ast.Id(s) ->
@@ -89,8 +88,10 @@ let translate (stmt_lst, func_decls) =
         ((fst ev1) @ (fst ev2) @ [Bin op]), (snd ev1)
     | Ast.Call(fname, actuals) ->
         (try
-           let res = (List.map (expr env) (List.rev actuals)) in
-           ((List.concat (List.map fst res)) @ [Jsr (StringMap.find fname env.function_idx)]), Ezatypes.Void
+           (* first evaluate the actuals *)
+           let res = (List.map (expr env) (List.rev actuals)) 
+           in
+             ((List.concat (List.map fst res)) @ [Jsr (StringMap.find fname env.function_idx)]), Ezatypes.Void
          with Not_found ->
            raise (Failure ("Undefined function: " ^ fname)))
     | Ast.Select_Point (x, y) -> [Lit 1], Ezatypes.Int 
@@ -106,19 +107,38 @@ let translate (stmt_lst, func_decls) =
     | Ast.Select (canv, selection)-> [Lit (-16)], Ezatypes.Int;
 
    
-  in let rec stmt env = function
+  in let rec stmt env scope = function
       (* need to update assign later *)
       Ast.Assign(var, e) -> 
         let ev = (expr env e) in
           fst ev @
-          [Str
-             (if (StringMap.mem var env.global_idx) 
-              then fst (StringMap.find var env.global_idx) 
-              else 
-                (let new_global_idx = (List.length (StringMap.bindings env.global_idx))
-                 in 
-                   env.global_idx <- (StringMap.add var (new_global_idx, (snd ev)) env.global_idx);
-                   new_global_idx))] 
+          if scope = "*local*"
+          then 
+            [Sfp
+               (if (StringMap.mem var env.local_idx) 
+                then 
+                  let exis_local_idx = StringMap.find var env.local_idx (*fst*) in
+                     env.local_idx <- (StringMap.add var exis_local_idx env.local_idx);
+                     exis_local_idx 
+                else 
+                  let new_local_idx = (List.length (StringMap.bindings env.local_idx))
+                   in 
+                     (* side effect: modify env.local_idx *)
+                     env.local_idx <- (StringMap.add var new_local_idx env.local_idx);
+                     new_local_idx)] 
+          else 
+            [Str
+               (if (StringMap.mem var env.global_idx) 
+                then 
+                  let exis_global_idx = fst (StringMap.find var env.global_idx) in
+                     env.global_idx <- (StringMap.add var (exis_global_idx, (snd ev)) env.global_idx);
+                     exis_global_idx 
+                else 
+                  let new_global_idx = (List.length (StringMap.bindings env.global_idx))
+                   in 
+                     (* side effect: modify env.global_idx *)
+                     env.global_idx <- (StringMap.add var (new_global_idx, (snd ev)) env.global_idx);
+                     new_global_idx)] 
     | Ast.OutputC(var) ->
         let (bc, typ) = (expr env var) in
           (match typ with
@@ -129,19 +149,38 @@ let translate (stmt_lst, func_decls) =
     | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->
-        []
+        let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst))
+        in 
+          (fst (expr env cond)) @
+          [Beq (1 + List.length t_stmts)] @
+          t_stmts
     | Ast.If_else(cond, stmt_lst1, stmt_lst2) ->
-        []
+        let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst1))
+        and f_stmts = (List.concat (List.map (stmt env scope) stmt_lst2))
+        in 
+          (fst (expr env cond)) @
+          [Beq (2 + List.length t_stmts)] @
+          t_stmts @
+          [Bra (1 + List.length f_stmts)] @
+          f_stmts
     | Ast.For(s1, e1, s2, stmt_lst) ->
-        []
+        let for_body_stmts = (List.concat (List.map (stmt env scope) stmt_lst)) @ (stmt env scope s2)
+        and e1' = fst (expr env e1)
+        in
+          (stmt env scope s1) @
+          [Bra (1 + List.length for_body_stmts)] @
+          for_body_stmts @
+          e1' @
+          [Bne (-(List.length for_body_stmts + List.length e1'))]
     | Ast.Return(e) ->
         fst (expr env e) @ [Rts env.num_formals]  
     | Ast.Include(str) -> 
         []
     
     
-    
-  
+  (* 
+   * Translates a function 
+   *)  
   in let translate env fdecl = 
     (* Bookkeeping: FP offsets for locals and args *)
     let num_formals = List.length fdecl.params
@@ -154,6 +193,7 @@ let translate (stmt_lst, func_decls) =
     let env = { env with local_idx = string_map_pairs StringMap.empty formal_offsets;
                          num_formals = num_formals } 
 
+    (* debug function to inspect environment *)
     in let env_to_str m =
       let bindings = StringMap.bindings m in
       let rec print_map_helper s = function
@@ -163,7 +203,7 @@ let translate (stmt_lst, func_decls) =
 
     in (* print_endline (env_to_str env.local_idx);  *)
       [Ent num_locals] @                                   (* Entry: allocate space for locals *) 
-       (List.concat (List.map (stmt env) fdecl.body)) @           (* Body *) 
+       (List.concat (List.map (stmt env "*local*") fdecl.body)) @           (* Body *) 
        [Lit 0; Rts num_formals]                             (* Default - return 0 *)
 
   in let env = { 
@@ -174,15 +214,14 @@ let translate (stmt_lst, func_decls) =
   } in
 
   (* we will stick top-level global statements in a psuedo-function at Jsr 1
-   * still need to handle an actual main() function later
-   *)
+   * still need to handle an actual main() function later *)
   (* let entry_function = 
      [Jsr 1; Hlt] in*)
 
   (* Compile the global statement list *)
-  let glob_stmts = (List.concat (List.map (stmt env) stmt_lst)) in
+  let glob_stmts = (List.concat (List.map (stmt env "*global*") stmt_lst)) in
 
-  (* Compile the functions *)
+  (* Compile the functions, and prepend compiled global statements and Hlt *)
   let func_bodies = glob_stmts :: [Hlt] :: List.map (translate env) func_decls in
 
   (* Calculate function entry points by adding their lengths *)

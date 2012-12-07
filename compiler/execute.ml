@@ -67,7 +67,8 @@ let execute_prog prog debug_flag =
             stack.(fp+i) <- stack.(sp-1); 
             debug ("DEBUG: Sfp " ^ string_of_int i);
             exec fp sp (pc+1) 
-        (* here Jsr -1 refers to the OutputC functionality *)
+        (* here Jsr -1, -2, -3 refer to the OutputC functionality 
+         * for ints/strings/bools, respectively *)
         | Jsr(-1) ->
             debug ("Jsr -1");
             print_endline (string_of_int stack.(sp-1));
@@ -76,14 +77,18 @@ let execute_prog prog debug_flag =
             debug ("Jsr -2");
             let size = stack.(sp-1) in
             let rec load_ints_list accum counter = 
-                if counter > size+1 
-                then accum
-                else load_ints_list (stack.(sp-1-counter) :: accum) (counter+1)
+              if counter > size
+              then accum
+              else load_ints_list (stack.(sp-2-counter) :: accum) (counter+1)
             in 
-            let res = load_ints_list [] 1 in
-              (if (List.length res) > 1 
-               then print_endline (implode (List.map Char.chr res))
-               else print_endline (string_of_int (List.nth res 0)));
+            let res = 
+              (* check for empty string *)
+              if size = 0
+              then []
+              else load_ints_list [] 1 in
+              (if (List.length res) = 0 
+               then print_endline "" 
+               else print_endline (implode (List.map Char.chr res)));
               exec fp sp (pc+1)
         | Jsr(-3) ->
             debug ("Jsr -3");

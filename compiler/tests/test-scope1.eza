@@ -1,0 +1,28 @@
+// Tests local and global scoping.
+
+g <- "hello";
+g -> out; 
+
+d <- 3;
+d -> out;
+
+e <- 5;
+e -> out;
+
+e <- d * 2;
+e -> out;
+
+Fun foo(i) {
+  i <- i + 1;   // i is a local parameter, should not affect what was passed in (e)
+  i -> out;
+
+  e -> out;     // should read global e
+  e <- e + 755; // should create new local e by adding 755 to value of global e
+  e -> out;     // should now output local e
+  return i;
+}
+
+f <- foo(e);
+f -> out;
+
+e -> out; // e should be unchanged

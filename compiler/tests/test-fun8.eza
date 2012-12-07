@@ -1,0 +1,14 @@
+// Tests recursion, but with the recursive call first in the return statement.
+
+a <- factorial(6);
+a -> out;
+
+Fun factorial(x) {
+   if(x <= 1)
+   {
+  	return 1;
+   }
+   else
+	return factorial(x - 1) * x; 
+}
+
