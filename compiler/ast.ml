@@ -21,6 +21,8 @@ type expr =
   | Select_HSliceAll of expr                     (* [, 3] *) 
   | Select_All                                   (* [,] *)       
   | Select of string * expr                      (* canv[...] *)
+  | Select_Binop of op * expr                    (* canv[<5] *)
+  | Select_Bool of expr                          (* <5 *)
 
 type stmt =                                 (* Statements *)
     Assign of string * expr                 (* foo <- 42 *)
@@ -67,16 +69,32 @@ type program = stmt list * func_decl list (* global vars, funcs *)
       ^ " " ^
       string_of_expr e2
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
-  | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "]"
+  | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "] -- point select"
   | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 
-                                         ^ string_of_expr y1 ^  ":" ^  string_of_expr y2 ^ "]"
+                                         ^ string_of_expr y1 ^  ":" ^  string_of_expr y2 ^ "] -- rect select"
   | Select_VSlice (x1, y1, y2)  ->  "[" ^ string_of_expr x1 ^ ", " 
-                                        ^ string_of_expr y1 ^ ":" ^ string_of_expr y2 ^ "]"
+                                        ^ string_of_expr y1 ^ ":" ^ string_of_expr y2 ^ "] -- vslice"
   | Select_HSlice (x1, x2, y1) ->  "[" ^ string_of_expr x1 ^ ":" ^ string_of_expr x2 
-                                       ^ ", " ^ string_of_expr y1 ^ "]"
-  | Select_VSliceAll x1 -> "[" ^ string_of_expr x1 ^ ",]" 
-  | Select_HSliceAll y1 -> "[," ^ string_of_expr y1 ^ "]"
-  | Select_All -> "[,]"
+                                       ^ ", " ^ string_of_expr y1 ^ "] -hslice"
+  | Select_VSliceAll x1 -> "[" ^ string_of_expr x1 ^ ",] - vslice_all" 
+  | Select_HSliceAll y1 -> "[," ^ string_of_expr y1 ^ "] - hslice all"
+  | Select_All -> "[,] - select all"
+  | Select_Binop(o, e2) -> "i " ^
+      (
+        match o with
+       | And -> "&&"
+       | Or -> "||"   
+       | Eq -> "=="       
+       | Neq -> "!="     
+       | Lt -> "<"        
+       | Leq -> "<="      
+       | Gt -> ">"        
+       | Geq -> ">=" 
+       | _ -> "error"
+       )  
+      ^ " " ^
+      string_of_expr e2
+  | Select_Bool(e1) -> "[" ^ string_of_expr e1  ^ "] "
   | Select (canv, selection) -> canv ^ string_of_expr selection  
 
 let rec string_of_stmt = function

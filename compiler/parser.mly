@@ -34,8 +34,8 @@
 
 %%
 program:
-      /* nothing */                             { [],[] } 
-	| program stmt                            { List.rev($2 :: List.rev (fst $1)), snd $1 }
+      /* nothing */                     { [],[] } 
+	| program stmt                        { List.rev($2 :: List.rev (fst $1)), snd $1 }
 	| program funcdecl 	                  { (fst $1), List.rev ($2 :: List.rev (snd $1)) }
 
 funcdecl:
@@ -72,17 +72,17 @@ stmt:
 stmt_in_for:
   ID ASSIGN expr          { Assign($1, $3) }
 
-/* 
-bool_expr:
-    LT expr                           { "selection by bool expression (<)" }
-  | GT expr                           { "selection by bool expression (>)" }
-  | EQ expr                           { "selection by bool expression (=)" }
-  | LEQ expr                          { "selection by bool expression (<=)" }
-  | GEQ expr                          { "selection by bool expression (>=)" }
-  | NEQ expr                          { "selection by bool expression (~=)" }
-  | bool_expr AND bool_expr           { $1, $3 }
-  | bool_expr OR bool_expr            { $1, $3 }
-*/
+ 
+select_bool_expr:
+    LT expr                           { Select_Binop (Lt, $2) }
+  | GT expr                           { Select_Binop (Gt, $2) }
+  | EQ expr                           { Select_Binop (Eq, $2) }
+  | LEQ expr                          { Select_Binop (Leq, $2) }
+  | GEQ expr                          { Select_Binop (Geq, $2) }
+  | NEQ expr                          { Select_Binop (Neq, $2) }
+/*   | bool_expr AND bool_expr           { $1, $3 }
+  | bool_expr OR bool_expr            { $1, $3 } */
+
 
 select_expr:
     expr COMMA expr                       { Select_Point($1, $3) }
@@ -92,7 +92,7 @@ select_expr:
   | expr COMMA                            { Select_VSliceAll($1) }
   | COMMA expr                            { Select_HSliceAll($2) }
   | COMMA                                 { Select_All }
-/*  | bool_expr                             { Select } */ 
+  | select_bool_expr                      { Select_Bool($1) } 
 
 cond_body:
         /* If no braces are supplied in a 

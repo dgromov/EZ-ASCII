@@ -5,4 +5,3 @@ type t =
   | Char 
   | String 
   | Canvas of int array
-

@@ -9,6 +9,7 @@ open Scanner
 open Bytecode
 open Compiler
 open Execute
+open Preprocess 
 
 type action = Ast | Interpret | Bytecode | Compile
 
@@ -29,8 +30,19 @@ let _ =
           (Compile, false, Sys.argv.(1))
         else raise (Failure ("Invalid number of arguments."))
   in
-  let lexbuf = Lexing.from_channel (open_in filepath) in
-  let program = Parser.program Scanner.token lexbuf
+
+
+  let preprocessed = Preprocess.run (open_in filepath) in 
+  let lexbuf = Lexing.from_string preprocessed in
+  let program = try 
+        (Parser.program Scanner.token lexbuf)
+      with Parsing.Parse_error ->
+        let curr = lexbuf.Lexing.lex_curr_p in
+        let line = curr.Lexing.pos_lnum in
+        let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
+        let tok = Lexing.lexeme lexbuf in 
+          print_endline (">>> Parse error at line " ^ (string_of_int line) ^ ", character " ^ (string_of_int cnum) ^ ": '" ^ tok ^ "'");
+          exit 0;
   in
     match action with
         Ast -> let listing = Ast.string_of_program program in print_string listing

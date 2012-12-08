@@ -1,4 +1,4 @@
-OBJS = ast.cmo scanner.cmo parser.cmo  bytecode.cmo compiler.cmo execute.cmo ezac.cmo
+OBJS = ast.cmo scanner.cmo parser.cmo preprocess.cmo bytecode.cmo compiler.cmo execute.cmo ezac.cmo
 
 ezac : $(OBJS)
 	ocamlc -o ezac $(OBJS)
@@ -28,8 +28,8 @@ compiler.cmo : ezatypes.cmo bytecode.cmo ast.cmo
 compiler.cmx : ezatypes.cmx bytecode.cmx ast.cmx
 execute.cmo : bytecode.cmo ast.cmo
 execute.cmx : bytecode.cmx ast.cmx
-ezac.cmo : scanner.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo
-ezac.cmx : scanner.cmx parser.cmx execute.cmx compiler.cmx bytecode.cmx ast.cmx
+ezac.cmo : scanner.cmo preprocess.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo
+ezac.cmx : scanner.cmx preprocess.cmx parser.cmx execute.cmx compiler.cmx bytecode.cmx ast.cmx
 ezatypes.cmo :
 ezatypes.cmx :
 interpret.cmo : scanner.cmo parser.cmi ast.cmo

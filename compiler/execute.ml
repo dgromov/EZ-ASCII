@@ -11,6 +11,7 @@ let implode lst =
 
 let execute_prog prog debug_flag =
   let stack = Array.make 1024 0
+  and canv_env = Array.make 100 []
   and globals = Array.make prog.num_globals 0 
   and debug s =
    if debug_flag then print_endline s
@@ -27,7 +28,8 @@ let execute_prog prog debug_flag =
             exec fp (sp-1) (pc+1)
         | Bin op ->
             debug ("DEBUG: Bin ");
-            let op1 = stack.(sp-2) and op2 = stack.(sp-1) in
+            let op1 = stack.(sp-2) 
+            and op2 = stack.(sp-1) in
               stack.(sp-2) <- 
               (let boolean b = if b then 1 else 0 
                and bool_of_int i = if i > 0 then true else false
@@ -97,6 +99,8 @@ let execute_prog prog debug_flag =
                then print_endline "true"
                else print_endline "false");
               exec fp sp (pc+1)
+
+           
         | Jsr i -> 
             stack.(sp) <- pc + 1; 
             debug ("DEBUG: Jsr " ^ string_of_int i);
@@ -122,6 +126,7 @@ let execute_prog prog debug_flag =
         | Bra i -> 
             debug ("DEBUG: Bra " ^ string_of_int i);
             exec fp sp (pc+i)
+        | Lcv i -> ()
         | Hlt -> ()
       in exec 0 0 0 
     with e -> (* catch all exceptions *)
