@@ -8,8 +8,7 @@ module StringMap = Map.Make(String)
 type env = {
   function_idx          : int StringMap.t;                  (* Index for each function *)
   mutable global_idx    : (int * Ezatypes.t) StringMap.t;   (* "Address" for global vars *)
-  (* need to add typing for locals *)
-  mutable local_idx     : int StringMap.t;                  (* FP offset for args, locals *)
+  mutable local_idx     : (int * Ezatypes.t) StringMap.t;   (* FP offset for args, locals *)
   num_formals           : int;                              (* Number of parameters *)
 }
 
@@ -73,9 +72,7 @@ let translate (stmt_lst, func_decls) =
     | Ast.Id(s) ->
         (try 
            let search_local = (StringMap.find s env.local_idx) in
-             (* NEED TO ADD TYPE, currently returns Void every time *)
-             (* [Lfp (fst search_local)], snd search_local *)
-             [Lfp search_local], Ezatypes.Void
+             [Lfp (fst search_local)], snd search_local 
          with Not_found -> 
            try
              let search_global = StringMap.find s env.global_idx in
@@ -91,6 +88,7 @@ let translate (stmt_lst, func_decls) =
            (* first evaluate the actuals *)
            let res = (List.map (expr env) (List.rev actuals)) 
            in
+             (* return type is Void by default *)
              ((List.concat (List.map fst res)) @ [Jsr (StringMap.find fname env.function_idx)]), Ezatypes.Void
          with Not_found ->
            raise (Failure ("Undefined function: " ^ fname)))
@@ -117,14 +115,14 @@ let translate (stmt_lst, func_decls) =
             [Sfp
                (if (StringMap.mem var env.local_idx) 
                 then 
-                  let exis_local_idx = StringMap.find var env.local_idx (*fst*) in
-                     env.local_idx <- (StringMap.add var exis_local_idx env.local_idx);
+                  let exis_local_idx = fst (StringMap.find var env.local_idx) in
+                     env.local_idx <- (StringMap.add var (exis_local_idx, (snd ev)) env.local_idx);
                      exis_local_idx 
                 else 
                   let new_local_idx = (List.length (StringMap.bindings env.local_idx))
                    in 
                      (* side effect: modify env.local_idx *)
-                     env.local_idx <- (StringMap.add var new_local_idx env.local_idx);
+                     env.local_idx <- (StringMap.add var (new_local_idx, (snd ev)) env.local_idx);
                      new_local_idx)] 
           else 
             [Str
@@ -164,14 +162,21 @@ let translate (stmt_lst, func_decls) =
           [Bra (1 + List.length f_stmts)] @
           f_stmts
     | Ast.For(s1, e1, s2, stmt_lst) ->
-        let for_body_stmts = (List.concat (List.map (stmt env scope) stmt_lst)) @ (stmt env scope s2)
+        (* note: order of executing statements and evaluating expressions here
+         * matters since the environment can be updated on each
+         * execution/evaluation
+         *)
+        let s1' = (stmt env scope s1)
         and e1' = fst (expr env e1)
-        in
-          (stmt env scope s1) @
-          [Bra (1 + List.length for_body_stmts)] @
-          for_body_stmts @
-          e1' @
-          [Bne (-(List.length for_body_stmts + List.length e1'))]
+        and for_body_stmts = (List.concat (List.map (stmt env scope) stmt_lst)) @ (stmt env scope s2)
+        in 
+         let 
+          for_body_length = (List.length for_body_stmts) in
+           s1' @
+           [Bra (1 + for_body_length)] @
+           for_body_stmts @
+           e1' @
+           [Bne (-(for_body_length + List.length e1'))]
     | Ast.Return(e) ->
         fst (expr env e) @ [Rts env.num_formals]  
     | Ast.Include(str) -> 
@@ -188,9 +193,11 @@ let translate (stmt_lst, func_decls) =
     (* we don't currently have locals...*)
     and num_locals = 0 (* List.length *)
 
-    and formal_offsets = (enum (-1) (-2) fdecl.params)
+    and formal_offsets = (enum (-1) (-2) fdecl.params) 
     in
-    let env = { env with local_idx = string_map_pairs StringMap.empty formal_offsets;
+    let formal_offsets' = (List.map (fun (i, s) -> ((i, Ezatypes.Void), s)) formal_offsets)
+    in
+    let env = { env with local_idx = string_map_pairs StringMap.empty formal_offsets';
                          num_formals = num_formals } 
 
     (* debug function to inspect environment *)
