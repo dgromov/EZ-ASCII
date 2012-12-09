@@ -46,7 +46,7 @@ let translate (stmt_lst, func_decls) =
           (bif_helper (StringMap.add hd (counter) map) (counter-1)) tl
     (* add built-in functions here *)
     (* reserve -1, -2, and -3 for printing ints, strings, and bools respectively *)
-    in (bif_helper StringMap.empty (-4)) ["load"; "blank"; "main"]
+    in (bif_helper StringMap.empty (-2)) ["load"; "blank"; "main"]
   in  
 
   let function_indexes = string_map_pairs built_in_functions
@@ -58,6 +58,7 @@ let translate (stmt_lst, func_decls) =
   let rec expr env = function
       Ast.IntLiteral(i) -> [Lit i], Ezatypes.Int
     | Ast.StrLiteral(s) -> 
+(*
         let ints_list = (List.map Char.code (explode s)) in
         let size = (List.length ints_list) in
         let rec add_int_lits accum i =
@@ -67,18 +68,23 @@ let translate (stmt_lst, func_decls) =
             add_int_lits ([Lit (List.nth ints_list i)] @ accum) (i+1)
         in 
           ((List.rev (add_int_lits [] 0)) @ [Lit size]), Ezatypes.String
-
-    | Ast.BoolLiteral(b) -> if b then ([Lit 1], Ezatypes.Bool) else ([Lit 0], Ezatypes.Bool)
+ *)
+        [Stl s], Ezatypes.String
+    | Ast.BoolLiteral(b) -> 
+(*
+        if b then ([Lit 1], Ezatypes.Bool) else ([Lit 0], Ezatypes.Bool)
+ *)
+        [Boo b], Ezatypes.Bool
     | Ast.Id(s) ->
         (try 
            let search_local = (StringMap.find s env.local_idx) in
              [Lfp (fst search_local)], snd search_local 
          with Not_found -> 
-           try
-             let search_global = StringMap.find s env.global_idx in
-             [Lod (fst search_global)], snd search_global
-           with Not_found ->
-             raise (Failure ("Undeclared variable " ^ s)))
+           (try
+              let search_global = StringMap.find s env.global_idx in
+                [Lod (fst search_global)], snd search_global
+            with Not_found ->
+              raise (Failure ("Undeclared variable " ^ s))))
     | Ast.Binop(e1, op, e2) ->
         let ev1 = (expr env) e1
         and ev2 = (expr env) e2 in
@@ -102,7 +108,7 @@ let translate (stmt_lst, func_decls) =
     | Ast.Select_VSliceAll x -> [Lit 1], Ezatypes.Int;
     | Ast.Select_HSliceAll y -> [Lit 1], Ezatypes.Int;
     | Ast.Select_All -> [Lit (-1)], Ezatypes.Int;
-    | Ast.Select (canv, selection)-> [Lit (-16)], Ezatypes.Int;
+    | Ast.Select (canv, selection) -> [Lit (-16)], Ezatypes.Int;
 
    
   in let rec stmt env scope = function
@@ -116,34 +122,32 @@ let translate (stmt_lst, func_decls) =
                (if (StringMap.mem var env.local_idx) 
                 then 
                   let exis_local_idx = fst (StringMap.find var env.local_idx) in
-                     env.local_idx <- (StringMap.add var (exis_local_idx, (snd ev)) env.local_idx);
-                     exis_local_idx 
-                else 
-                  let new_local_idx = (List.length (StringMap.bindings env.local_idx))
-                   in 
-                     (* side effect: modify env.local_idx *)
-                     env.local_idx <- (StringMap.add var (new_local_idx, (snd ev)) env.local_idx);
-                     new_local_idx)] 
+                    (* side effect: modify env.local_idx *)
+                    env.local_idx <- (StringMap.add var (exis_local_idx, (snd ev)) env.local_idx);
+                    exis_local_idx 
+                    else 
+                      (* note the +1 for the next available local idx *)
+                      let new_local_idx = (List.length (StringMap.bindings env.local_idx)) + 1
+                      in 
+                        (* side effect: modify env.local_idx *)
+                        env.local_idx <- (StringMap.add var (new_local_idx, (snd ev)) env.local_idx);
+                        new_local_idx)] 
           else 
             [Str
                (if (StringMap.mem var env.global_idx) 
                 then 
                   let exis_global_idx = fst (StringMap.find var env.global_idx) in
-                     env.global_idx <- (StringMap.add var (exis_global_idx, (snd ev)) env.global_idx);
-                     exis_global_idx 
-                else 
-                  let new_global_idx = (List.length (StringMap.bindings env.global_idx))
-                   in 
-                     (* side effect: modify env.global_idx *)
-                     env.global_idx <- (StringMap.add var (new_global_idx, (snd ev)) env.global_idx);
-                     new_global_idx)] 
+                    env.global_idx <- (StringMap.add var (exis_global_idx, (snd ev)) env.global_idx);
+                    exis_global_idx 
+                    else 
+                      let new_global_idx = (List.length (StringMap.bindings env.global_idx))
+                      in 
+                        (* side effect: modify env.global_idx *)
+                        env.global_idx <- (StringMap.add var (new_global_idx, (snd ev)) env.global_idx);
+                        new_global_idx)] 
     | Ast.OutputC(var) ->
         let (bc, typ) = (expr env var) in
-          (match typ with
-               Ezatypes.Int -> bc @ [Jsr (-1)]
-             | Ezatypes.String -> bc @ [Jsr (-2)]
-             | Ezatypes.Bool -> bc @ [Jsr (-3)]
-             | _ -> bc @ [Jsr (-1)])
+          bc @ [Jsr (-1)]
     | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->

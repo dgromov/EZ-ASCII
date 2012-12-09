@@ -2,6 +2,8 @@ open Ast
 
 type bstmt =
     Lit of int          (* Push a literal *)
+  | Stl of string       (* Push a string literal *)
+  | Boo of bool         (* Push a bool literal *)
   | Drp                 (* Discard a value *)
   | Bin of Ast.op       (* Perform arithmetic on top of stack *)
   | Lod of int          (* Fetch global variable *)
@@ -29,11 +31,13 @@ let string_of_prog prog =
         let s = 
           match hd with
               Lit(i)      -> s ^ "Lit " ^ string_of_int i ^ "\n"
+            | Stl(st)     -> s ^ "Stl " ^ st ^ "\n"
+            | Boo(b)      -> s ^ "Boo " ^ string_of_bool b ^ "\n"
             | Drp         -> s ^ "Drp\n"
             | Bin(op)     -> s ^ "Bin\n"
             | Lod(i)      -> s ^ "Lod " ^ string_of_int i ^ "\n"
             | Str(i)      -> s ^ "Str " ^ string_of_int i ^ "\n"
-            | Lfp(i)      -> s ^ "Str " ^ string_of_int i ^ "\n"
+            | Lfp(i)      -> s ^ "Lfp " ^ string_of_int i ^ "\n"
             | Sfp(i)      -> s ^ "Sfp " ^ string_of_int i ^ "\n"
             | Jsr(i)      -> s ^ "Jsr " ^ string_of_int i ^ "\n"
             | Ent(i)      -> s ^ "Ent " ^ string_of_int i ^ "\n"
