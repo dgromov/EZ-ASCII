@@ -1,6 +1,8 @@
 open Ast
 open Bytecode
 
+(* add hash maps, global and local cache *)
+
 type lit = 
     Int of int
   | String of string
@@ -155,7 +157,8 @@ let execute_prog prog debug_flag =
         | Bra i -> 
             debug ("DEBUG: Bra " ^ string_of_int i);
             exec fp sp (pc+i)
-        | Lcv i -> ()
+        | Lct i -> ()
+        | Sct i -> ()
         | Hlt -> ()
       in exec 0 0 0 
     with e -> (* catch all exceptions *)

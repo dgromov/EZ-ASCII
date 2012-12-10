@@ -16,7 +16,8 @@ type bstmt =
   | Beq of int          (* Branch relative if top-of-stack is zero *)
   | Bne of int          (* Branch relative if top-of-stack is non-zero *)
   | Bra of int          (* Branch relative *)
-  | Lcv of int          (* Load canvas by absolute address *)
+  | Lct of int          (* Load complex type by absolute address *)
+  | Sct of int          (* Store complex type by absolute address *)
   | Hlt                 (* Terminate *)
 
 type prog = {
@@ -45,7 +46,8 @@ let string_of_prog prog =
             | Beq(i)      -> s ^ "Beq " ^ string_of_int i ^ "\n"
             | Bne(i)      -> s ^ "Bne " ^ string_of_int i ^ "\n"
             | Bra(i)      -> s ^ "Bra " ^ string_of_int i ^ "\n"
-            | Lcv(i)      -> s ^ "Lcv " ^ string_of_int i ^ "\n"    
+            | Lct(i)      -> s ^ "Lcv " ^ string_of_int i ^ "\n"    
+            | Sct(i)      -> s ^ "Sct " ^ string_of_int i ^ "\n"    
             | Hlt         -> s ^ "Hlt\n"
         in string_of_prog_helper s tail
   in string_of_prog_helper "" (Array.to_list prog.text) 
