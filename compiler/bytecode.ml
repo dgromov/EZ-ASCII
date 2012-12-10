@@ -45,7 +45,7 @@ let string_of_prog prog =
             | Beq(i)      -> s ^ "Beq " ^ string_of_int i ^ "\n"
             | Bne(i)      -> s ^ "Bne " ^ string_of_int i ^ "\n"
             | Bra(i)      -> s ^ "Bra " ^ string_of_int i ^ "\n"
-            | Lcv(i)      -> s ^ "Bra " ^ string_of_int i ^ "\n"    
+            | Lcv(i)      -> s ^ "Lcv " ^ string_of_int i ^ "\n"    
             | Hlt         -> s ^ "Hlt\n"
         in string_of_prog_helper s tail
   in string_of_prog_helper "" (Array.to_list prog.text) 
