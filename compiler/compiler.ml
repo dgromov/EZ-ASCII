@@ -118,20 +118,33 @@ let translate (stmt_lst, func_decls) =
           fst ev @
           if scope = "*local*"
           then 
-            [Sfp
-               (if (StringMap.mem var env.local_idx) 
+            (*
+             * if we are in a function, variable lookup proceeds as:
+             * 1) Check if the variable is a formal (parameter)
+             * 2) Check if the variable is declared globally
+             * 3) Finally if both 1 and 2 don't hold, create a new local
+             *)
+            if (StringMap.mem var env.local_idx) 
+            then 
+              let exis_local_idx = fst (StringMap.find var env.local_idx)
+              in
+                (* side effect: update env.local_idx *)
+                env.local_idx <- (StringMap.add var (exis_local_idx, (snd ev)) env.local_idx);
+                [Sfp exis_local_idx] 
+            else 
+              if (StringMap.mem var env.global_idx) 
                 then 
-                  let exis_local_idx = fst (StringMap.find var env.local_idx) in
-                    (* side effect: modify env.local_idx *)
-                    env.local_idx <- (StringMap.add var (exis_local_idx, (snd ev)) env.local_idx);
-                    exis_local_idx 
-                    else 
-                      (* note the +1 for the next available local idx *)
-                      let new_local_idx = (List.length (StringMap.bindings env.local_idx)) + 1
-                      in 
-                        (* side effect: modify env.local_idx *)
-                        env.local_idx <- (StringMap.add var (new_local_idx, (snd ev)) env.local_idx);
-                        new_local_idx)] 
+                let exis_global_idx = fst (StringMap.find var env.global_idx) in
+                  (* side effect: update env.global_idx *)
+                  env.global_idx <- (StringMap.add var (exis_global_idx, (snd ev)) env.global_idx);
+                  [Str exis_global_idx]
+              else 
+                (* note the +1 for the next available local idx *)
+                let new_local_idx = (List.length (StringMap.bindings env.local_idx)) + 1
+                in 
+                  (* side effect: modify env.local_idx *)
+                  env.local_idx <- (StringMap.add var (new_local_idx, (snd ev)) env.local_idx);
+                  [Sfp new_local_idx] 
           else 
             [Str
                (if (StringMap.mem var env.global_idx) 
