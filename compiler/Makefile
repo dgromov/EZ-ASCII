@@ -1,7 +1,7 @@
 OBJS = ast.cmo scanner.cmo parser.cmo preprocess.cmo bytecode.cmo compiler.cmo execute.cmo ezac.cmo
 
 ezac : $(OBJS)
-	ocamlc -o ezac $(OBJS)
+	ocamlc -o ezac  str.cma $(OBJS)
 
 scanner.ml : scanner.mll
 	ocamllex scanner.mll

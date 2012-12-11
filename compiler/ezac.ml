@@ -32,7 +32,7 @@ let _ =
   in
 
 
-  let preprocessed = Preprocess.run (open_in filepath) in 
+  let preprocessed = Preprocess.run (filepath) in 
   let lexbuf = Lexing.from_string preprocessed in
   let program = try 
         (Parser.program Scanner.token lexbuf)
