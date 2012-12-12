@@ -4,5 +4,6 @@ this is a string
 string with newline
 'stringwithsinglequote
 "stringwithdoublequote
-\stringwithblackslash
+\stringwithbackslash
 /stringwithforwardslash
+this // comment keyword should not take effect

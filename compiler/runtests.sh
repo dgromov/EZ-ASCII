@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# FILENAME :  runtests.sh
+# AUTHOR(S):  Joe Lee (jyl2157)
+# PURPOSE  :  Shell script to run tests on executable.
+#             Each test in the tests dir is run on the executable
+#             with its standard out piped to a .out file.  The .out
+#             file is compared with a corresponding .gs (gold standard)
+#             file for each test.  If the test fails (output differs),
+#             a .diff file is created for developer use.
+
 APP=$(dirname $0)/ezac
 globallog=test_ezac.log
 testdir=tests

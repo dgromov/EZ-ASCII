@@ -1,0 +1,22 @@
+// Another recursion test with gcd algorithm
+
+Fun gcd(m, n) {
+  if(m = n) 
+	return m;
+  else {
+    	if (m > n) return gcd(m-n, n);
+	else return gcd(m, n-m);
+  }
+}
+
+test <- gcd(16, 40);
+test -> out;
+
+test <- gcd(468, 24);
+test -> out;
+
+test <- gcd(135, 19);
+test -> out;
+
+test <- gcd(6, 4);
+test -> out;

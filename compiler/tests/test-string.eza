@@ -18,5 +18,8 @@ t -> out;
 t <- "\\stringwithbackslash";
 t -> out;
 
-t <- "\/stringwithforwardslash";
+t <- "/stringwithforwardslash";
 t -> out;
+
+t <- "this // comment keyword should not take effect"; // t <- "this should";
+t -> out; 

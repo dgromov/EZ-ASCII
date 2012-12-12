@@ -1,3 +1,8 @@
+(* FILENAME :  interpret.ml
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720)
+ * PURPOSE  :  Interpreter for EZ-ASCII.
+ *)
+
 open Parser
 open Scanner
 open Ast

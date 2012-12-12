@@ -1,6 +1,20 @@
+(* FILENAME :  compiler.ml
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720)
+ * PURPOSE  :  Translate abstract syntax tree to bytecode.
+ *)
+
 open Ast
 open Bytecode
 open Ezatypes
+open Hashtypes
+
+(* global hash table
+ * keys are absolute integer addresses
+ * values are of type Hashtypes.ct *)
+let glob_ht = Hashtbl.create 2048
+
+(* initialize hash counter to keep track of next available key *)
+let hash_counter = ref 0;
 
 module StringMap = Map.Make(String)
 
@@ -12,11 +26,6 @@ type env = {
   num_formals           : int;                              (* Number of parameters *)
 }
 
-let explode s =
-  let rec exp i l =
-    if i < 0 then l else exp (i - 1) (s.[i] :: l) in
-    exp (String.length s - 1) []
-      
 (* enum : int -> 'a list -> (int * 'a) list *)
 let rec enum stride n = function
     [] -> []
@@ -69,12 +78,15 @@ let translate (stmt_lst, func_decls) =
         in 
           ((List.rev (add_int_lits [] 0)) @ [Lit size]), Ezatypes.String
  *)
-        [Stl s], Ezatypes.String
+        Hashtbl.add glob_ht !hash_counter (Hashtypes.String s);
+        let ret_val = [Lct !hash_counter], Ezatypes.String in
+          hash_counter := !hash_counter+1; (* incr value of hash_counter ref *)
+          ret_val
     | Ast.BoolLiteral(b) -> 
-(*
-        if b then ([Lit 1], Ezatypes.Bool) else ([Lit 0], Ezatypes.Bool)
- *)
-        [Boo b], Ezatypes.Bool
+        Hashtbl.add glob_ht !hash_counter (Hashtypes.Bool b);
+        let ret_val = [Lct !hash_counter], Ezatypes.Bool in
+          hash_counter := !hash_counter+1; (* incr hash_counter in-place *)
+          ret_val
     | Ast.Id(s) ->
         (try 
            let search_local = (StringMap.find s env.local_idx) in
@@ -109,7 +121,8 @@ let translate (stmt_lst, func_decls) =
     | Ast.Select_HSliceAll y -> [Lit 1], Ezatypes.Int;
     | Ast.Select_All -> [Lit (-1)], Ezatypes.Int;
     | Ast.Select (canv, selection) -> [Lit (-16)], Ezatypes.Int;
-
+    | Ast.Select_Binop(op, e) -> [Lit 1], Ezatypes.Int;
+    | Ast.Select_Bool(e) -> [Lit 1], Ezatypes.Int;
    
   in let rec stmt env scope = function
       (* need to update assign later *)
@@ -217,15 +230,7 @@ let translate (stmt_lst, func_decls) =
     let env = { env with local_idx = string_map_pairs StringMap.empty formal_offsets';
                          num_formals = num_formals } 
 
-    (* debug function to inspect environment *)
-    in let env_to_str m =
-      let bindings = StringMap.bindings m in
-      let rec print_map_helper s = function
-          [] -> s
-        | hd :: tl -> print_map_helper ((fst hd) ^ " = " ^ (string_of_int (snd hd)) ^ "\n" ^ s) tl
-      in print_map_helper "" bindings
-
-    in (* print_endline (env_to_str env.local_idx);  *)
+    in 
       [Ent num_locals] @                                   (* Entry: allocate space for locals *) 
        (List.concat (List.map (stmt env "*local*") fdecl.body)) @           (* Body *) 
        [Lit 0; Rts num_formals]                             (* Default - return 0 *)
@@ -263,7 +268,9 @@ let translate (stmt_lst, func_decls) =
                (List.map (function Jsr i when i > 0 ->
                             Jsr func_offset.(i)
                             | _ as s -> s) 
-                  (List.concat func_bodies))
+                  (List.concat func_bodies));
+      glob_hash = glob_ht;
+      glob_hash_counter = hash_counter;
     }
 
 

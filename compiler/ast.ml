@@ -1,5 +1,8 @@
-(* File: Ast.ml   *)
-(*                *)
+(* FILENAME :  ast.ml
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720), 
+ *             Yilei Wang (yw2493), Peter Ye (xy2190)
+ * PURPOSE  :  Define abstract syntax tree for EZ-ASCII.
+ *)
 
 type op = Plus | Minus | Times | Divide  | Mod
         | And | Or
@@ -24,23 +27,23 @@ type expr =
   | Select_Binop of op * expr                    (* canv[<5] *)
   | Select_Bool of expr                          (* <5 *)
 
-type stmt =                                 (* Statements *)
-    Assign of string * expr                 (* foo <- 42 *)
-  | OutputC of expr                         (* canvas -> out *)
-  | OutputF of expr * string                (* canvas -> "C:\test.png" *)
-  | If of expr * stmt list                  (* if (foo = 42) {} *)
-  | If_else of expr * stmt list * stmt list (* if (foo = 42) {} else {} *)
-  | For of stmt * expr * stmt * stmt list   (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
-  | Return of expr                          (* return 42; *)
-  | Include of string                       (* include super_awesome.eza *)
+type stmt =                                      (* Statements *)
+    Assign of string * expr                      (* foo <- 42 *)
+  | OutputC of expr                              (* canvas -> out *)
+  | OutputF of expr * string                     (* canvas -> "C:\test.png" *)
+  | If of expr * stmt list                       (* if (foo = 42) {} *)
+  | If_else of expr * stmt list * stmt list      (* if (foo = 42) {} else {} *)
+  | For of stmt * expr * stmt * stmt list        (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
+  | Return of expr                               (* return 42; *)
+  | Include of string                            (* include super_awesome.eza *)
   
 type func_decl = {
-  fname : string;                             (* Name of the function *)
-  params : string list;                       (* Formal argument names *)
+  fname : string;                                (* Name of the function *)
+  params : string list;                          (* Formal argument names *)
   body : stmt list;
 }
 
-type program = stmt list * func_decl list (* global vars, funcs *) 
+type program = stmt list * func_decl list        (* global vars, fxn declarations *) 
 
  let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l

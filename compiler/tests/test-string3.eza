@@ -1,0 +1,12 @@
+// Tests string concatenation.
+
+a <- "hello";
+a <- a + " world!";
+a -> out;
+
+a <- a + " append more";
+a -> out;
+
+b <- a + "...and even more";
+b -> out;
+a -> out;

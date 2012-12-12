@@ -1,0 +1,26 @@
+// Tests ~=, &&, || functionality.
+
+if(2 ~= 3) {
+  d13 <- "2 ~= 3";
+  d13 -> out;
+}
+
+if((2 ~= 3) && (3 < 4)) {
+  d13 <- "and works";
+  d13 -> out;
+}
+
+if((4 < 5) && (5 < 4)) {
+  d13 <- "this should not print";
+  d13 -> out;
+}
+
+if((2 = 3) || (3 < 5)) {
+  d14 <- "or works";
+  d14 -> out;
+}
+
+if((2 = 3) || (4 ~= 4)) {
+  d14 <- "this should not print";
+  d14 -> out;
+}

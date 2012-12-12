@@ -1,0 +1,30 @@
+// tests hashing of string values
+
+a <- "hi";
+a -> out;
+
+b <- a;
+b -> out;  // should be "hi"
+
+a -> out;  // should be "hi"
+
+Fun foo111bar(s) {
+  s -> out;
+  
+  s <- "in foo111bar";
+  s -> out;
+ 
+  t <- s;    // t is new local, assigned value of local s
+  t -> out;
+
+  a <- "update global";
+  a -> out;
+ 
+  s <- "updated s";
+  s -> out;
+
+}
+
+g <- foo111bar("call fxn");
+g -> out;  // fxns with no return value return 0 by default
+a -> out;

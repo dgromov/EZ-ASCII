@@ -1,9 +1,15 @@
+(* FILENAME :  bytecode.ml
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720)
+ * PURPOSE  :  Specify assembly operators, type definition of prog
+ *             which is returned by Compiler.translate, and a string
+ *             representation (string_of_prog).
+ *)
+
 open Ast
+open Hashtypes
 
 type bstmt =
     Lit of int          (* Push a literal *)
-  | Stl of string       (* Push a string literal *)
-  | Boo of bool         (* Push a bool literal *)
   | Drp                 (* Discard a value *)
   | Bin of Ast.op       (* Perform arithmetic on top of stack *)
   | Lod of int          (* Fetch global variable *)
@@ -17,12 +23,14 @@ type bstmt =
   | Bne of int          (* Branch relative if top-of-stack is non-zero *)
   | Bra of int          (* Branch relative *)
   | Lct of int          (* Load complex type by absolute address *)
-  | Sct of int          (* Store complex type by absolute address *)
   | Hlt                 (* Terminate *)
 
 type prog = {
   num_globals : int;    (* Number of global variables *) 
   text : bstmt array;   (* Code for all the functions *)
+  (* global hash table initially populated by compiler *)
+  glob_hash : (int, Hashtypes.ct) Hashtbl.t;
+  glob_hash_counter : int ref;  
 }
 
 let string_of_prog prog =
@@ -32,8 +40,6 @@ let string_of_prog prog =
         let s = 
           match hd with
               Lit(i)      -> s ^ "Lit " ^ string_of_int i ^ "\n"
-            | Stl(st)     -> s ^ "Stl " ^ st ^ "\n"
-            | Boo(b)      -> s ^ "Boo " ^ string_of_bool b ^ "\n"
             | Drp         -> s ^ "Drp\n"
             | Bin(op)     -> s ^ "Bin\n"
             | Lod(i)      -> s ^ "Lod " ^ string_of_int i ^ "\n"
@@ -47,7 +53,6 @@ let string_of_prog prog =
             | Bne(i)      -> s ^ "Bne " ^ string_of_int i ^ "\n"
             | Bra(i)      -> s ^ "Bra " ^ string_of_int i ^ "\n"
             | Lct(i)      -> s ^ "Lcv " ^ string_of_int i ^ "\n"    
-            | Sct(i)      -> s ^ "Sct " ^ string_of_int i ^ "\n"    
             | Hlt         -> s ^ "Hlt\n"
         in string_of_prog_helper s tail
   in string_of_prog_helper "" (Array.to_list prog.text) 
