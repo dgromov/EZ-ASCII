@@ -1,6 +1,8 @@
-/* File parser.mly      */
-/*                      */
-/*                      */
+/* FILENAME :  parser.mly
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720), 
+ *             Yilei Wang (yw2493), Peter Ye (xy2190), Feifei Zhong (fz2185)
+ * PURPOSE  :  Parser definition for EZ-ASCII.
+ */
 
 %{ open Ast %}
 

@@ -1,3 +1,8 @@
+(* FILENAME :  preprocess.ml
+ * AUTHOR(S):  Dmitriy Gromov (dg2720)
+ * PURPOSE  : 
+ *) 
+
 open Str
 
 let read_file fname = 

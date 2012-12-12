@@ -1,4 +1,9 @@
-(* FILE:  scanner.mll *)
+(* FILENAME :  scanner.mll
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720), 
+ *             Yilei Wang (yw2493), Peter Ye (xy2190), Feifei Zhong (fz2185)
+ * PURPOSE  :  Scanner definition for EZ-ASCII.
+ *)
+
 {
         open Parser
         exception Eof 
@@ -12,7 +17,7 @@ let dblquote  = '"'
 let printable = ['!' '#'-'.' '0'-'~']
 
 (* escape sequences: newline, horiz tab, single/double quote, back/forw slash *)
-let esc_char  = "\\n" | "\\t" | "\\\"" | "\\\'" | "\\/" | "\\"
+let esc_char  = "\\n" | "\\t" | "\\\"" | "\\\'" | "\\" | "/"
 
 let comment = "//" _* ['\r' '\n']
 

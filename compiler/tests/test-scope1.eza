@@ -16,13 +16,16 @@ Fun foo(i) {
   i <- i + 1;   // i is a local parameter, should not affect what was passed in (e)
   i -> out;
 
+  m <- "blah";  // m is a new local variable
+  m -> out;
+
   e -> out;     // should read global e
-  e <- e + 755; // should create new local e by adding 755 to value of global e
-  e -> out;     // should now output local e
+  e <- e + 755; // should update global e
+  e -> out;      
   return i;
 }
 
 f <- foo(e);
 f -> out;
 
-e -> out; // e should be unchanged
+e -> out; // e should be updated from the function 

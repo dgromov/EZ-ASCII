@@ -1,6 +1,7 @@
-(*
- *
- *
+(* FILENAME :  ezac.ml
+ * AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720)
+ * PURPOSE  :  Top-level file providing command-line interface to
+ *             bytecode executor, compiler, interpreter. 
  *)
 
 open Ast
