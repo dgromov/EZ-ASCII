@@ -26,16 +26,6 @@ let execute_prog prog debug_flag =
             stack.(sp) <- IntValue i; 
             debug ("DEBUG: Lit " ^ string_of_int i);
             exec fp (sp+1) (pc+1)
-(*
-        | Stl s -> 
-            stack.(sp) <- String s; 
-            debug ("DEBUG: Stl " ^ s);
-            exec fp (sp+1) (pc+1)
-        | Boo b -> 
-            stack.(sp) <- Bool b; 
-            debug ("DEBUG: Boo " ^ string_of_bool b);
-            exec fp (sp+1) (pc+1)
- *)
         | Lct i ->
             stack.(sp) <- Address i;
             debug ("DEBUG: Lct " ^ string_of_int i);
@@ -133,7 +123,7 @@ let execute_prog prog debug_flag =
                                 raise (Failure ("Binop not supported for boolean types."))
                          )
                      | (_, _) ->
-                         raise (Failure ("Binop not supported."))
+                         raise (Failure ("Binop not supported with input operand types."))
                   ))); 
                   exec fp (sp-1) (pc+1)
         | Lod i -> 
@@ -144,12 +134,28 @@ let execute_prog prog debug_flag =
                       | Address(j) -> "Pointer to address " ^ string_of_int j 
                    ));
             exec fp (sp+1) (pc+1) 
-        | Str i -> 
-            globals.(i) <- stack.(sp-1); 
+        | Str i ->
+            (match (stack.(sp-1), globals.(i)) with
+                 Address(j), Address(k) ->
+                   if j != k then
+                     (* if assigning a different pointer to a hash pair, no
+                      * longer need the old hash pair, so remove it *)
+                     Hashtbl.remove prog.glob_hash k;
+                   globals.(i) <- stack.(sp-1)
+               | _ ->
+                   globals.(i) <- stack.(sp-1)); 
             debug ("DEBUG: Str " ^ string_of_int i); 
             exec fp sp (pc+1) 
         | Lfp i -> 
-            stack.(sp) <- stack.(fp+i);
+            (match (stack.(fp+i), stack.(sp)) with
+                 Address(j), Address(k) ->
+                   if j != k then
+                     (* if assigning a different pointer to a hash pair, no
+                      * longer need the old hash pair, so remove it *)
+                     Hashtbl.remove prog.glob_hash k;
+                   stack.(sp) <- stack.(fp+i)
+               | _ ->
+                   stack.(sp) <- stack.(fp+i));
             debug ("DEBUG: Lfp " ^ string_of_int i);
             exec fp (sp+1) (pc+1) 
         | Sfp i -> 
