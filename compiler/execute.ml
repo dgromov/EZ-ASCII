@@ -92,7 +92,8 @@ let execute_prog prog debug_flag =
                             | And        -> 
                                 debug("Bin &&: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
                                 IntValue (boolean ((bool_of_int i) && (bool_of_int j)))
-                            | Mask       -> IntValue 1 (* need to do *)  )
+                            | Mask       -> IntValue 1 (* need to do *)  
+                         )
                      | (Hashtypes.Bool(b1), Hashtypes.Bool(b2)) ->
                          (match op with
                               Eq ->
@@ -121,6 +122,19 @@ let execute_prog prog debug_flag =
                                   ret_val
                             | _ ->
                                 raise (Failure ("Binop not supported for boolean types."))
+                         )
+                     | (Hashtypes.String(s1), Hashtypes.String(s2)) ->
+                         (match op with
+                              Plus ->
+                                (* + operator for string operands is a
+                                 * concatenation *)
+                                debug("Bin +: string1=" ^ s1 ^ " string2=" ^ s2);
+                                Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.String (s1 ^ s2));
+                                let ret_val = Address !(prog.glob_hash_counter) in
+                                  prog.glob_hash_counter := !(prog.glob_hash_counter) + 1;
+                                  ret_val
+                            | _ ->
+                                raise (Failure ("Binop not supported for string types."))
                          )
                      | (_, _) ->
                          raise (Failure ("Binop not supported with input operand types."))
