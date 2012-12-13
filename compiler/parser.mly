@@ -132,6 +132,7 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
       | LOAD LPAREN expr COMMA expr RPAREN { Load($3, $5) } 
+      | BLANK LPAREN expr COMMA expr COMMA expr RPAREN { Blank ($3, $5, $7 )}
 
 
 

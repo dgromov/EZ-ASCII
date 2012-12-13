@@ -59,10 +59,10 @@ rule token = parse
       | "]"                                     { RBRACKET }
       | ":"                                     { COLON }
       | "out"                                   { STDOUT }
-      (*| "SHIFT_UP"                              { INT(0) }
-      | "SHIFT_LEFT"                            { INT(1) }
-      | "SHIFT_DOWN"                            { INT(2) }
-      | "SHIFT_RIGHT"                           { INT(3) }*)
+      | "SHIFT_UP"                              { INTLITERAL(0) }
+      | "SHIFT_LEFT"                            { INTLITERAL(1) }
+      | "SHIFT_DOWN"                            { INTLITERAL(2) }
+      | "SHIFT_RIGHT"                           { INTLITERAL(3) }
       | "$w"                                    { ATTR_W }
       | "$h"                                    { ATTR_H }
       | "$g"                                    { ATTR_G }

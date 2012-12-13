@@ -9,6 +9,7 @@ type op = Plus | Minus | Times | Divide  | Mod
         | Lt  | Gt  | Eq | Leq | Geq | Neq
         | Mask
 
+
 type expr = 
     IntLiteral of int                            (* 42 *)
   | StrLiteral of string                         (* "this is a string" *)
@@ -16,7 +17,8 @@ type expr =
   | Id of string                                 (* foo *)
   | Binop of expr * op * expr                    (* a + b *)
   | Call of string * expr list                   (* foo(1, 25) *)
-  | Load of expr * expr 
+  | Load of expr * expr                          (* load("filename", 10) *)
+  | Blank of expr * expr * expr                  (* blank(x, y, g) *)
   | Select_Point  of expr * expr                 (* [1,2] *)
   | Select_Rect   of expr * expr * expr * expr   (* [1:2, 3:4] *)
   | Select_VSlice of expr * expr * expr          (* [1, 3:4] *)
@@ -73,7 +75,8 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
       ^ " " ^
       string_of_expr e2
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
-   (* add load here *)
+  | Load(e1, gran) -> "Load(" ^ string_of_expr e1 ^ ", " ^ string_of_expr gran ^ ")"
+  | Blank(e1, e2, e3) -> "Load(" ^ string_of_expr e1 ^ ", " ^  string_of_expr e2 ^ ", " ^ string_of_expr e3 ^ ")"
   | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "] -- point select"
   | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 
                                          ^ string_of_expr y1 ^  ":" ^  string_of_expr y2 ^ "] -- rect select"
