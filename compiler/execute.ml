@@ -6,29 +6,12 @@
 open Ast
 open Bytecode
 open Hashtypes
+open Canvas
 
 (* stack type can be either Int (value) or Address (pointer) *)
 type stack_t =
     IntValue of int
   | Address of int
-
-(* returns int array array *)
-let load_canvas fname = 
-  let ic = open_in fname in 
-    let n = in_channel_length ic in
-      let s = String.create n in 
-        really_input ic s 0 n; 
-        close_in ic;
-    let lines = Str.split (Str.regexp("\n")) s  in
-    let canvas = Array.make_matrix (List.length lines) (String.length (List.hd lines)) 0 in
-      let x = ref 0 in  
-      List.iter (
-                  fun line -> 
-                    let row = Str.split (Str.regexp(" ")) line in 
-                      canvas.(!x) <- (Array.of_list (List.map int_of_string row)); 
-                      x := !x+1
-                ) lines; 
-    (canvas);;
 
 let execute_prog prog debug_flag =
   let stack = Array.make 1024 (IntValue 0)
@@ -212,16 +195,12 @@ let execute_prog prog debug_flag =
               (match stack.(sp-2) with
                    Address(j) ->
                      match (Hashtbl.find prog.glob_hash j) with
-                        Hashtypes.String(s) -> s
-                 | _ ->
-                     raise (Failure("Jsr -2 expected address for file path string but got IntValue."))
+                         Hashtypes.String(s) -> s
+                       | _ ->
+                           raise (Failure("Jsr -2 expected address for file path string but got IntValue."))
               )
             in
-(*
-            let a = (load_canvas path) in
-              print_endline(Hashtypes.string_of_canvas a (Hashtypes.make_map ['.'; '-'; '+'; 'X'; '@']) true); 
- *)
-              Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (load_canvas path));
+              Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (Canvas.load_canvas path));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
