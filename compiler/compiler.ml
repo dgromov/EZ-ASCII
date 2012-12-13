@@ -5,7 +5,7 @@
 
 open Ast
 open Bytecode
-open Ezatypes
+(*open Ezatypes*)
 open Hashtypes
 
 (* global hash table
@@ -20,10 +20,10 @@ module StringMap = Map.Make(String)
 
 (* Translation environment *)
 type env = {
-  function_idx          : int StringMap.t;                  (* Index for each function *)
-  mutable global_idx    : (int * Ezatypes.t) StringMap.t;   (* "Address" for global vars *)
-  mutable local_idx     : (int * Ezatypes.t) StringMap.t;   (* FP offset for args, locals *)
-  num_formals           : int;                              (* Number of parameters *)
+  function_idx          : int StringMap.t;   (* Index for each function *)
+  mutable global_idx    : int StringMap.t;   (* "Address" for global vars *)
+  mutable local_idx     : int StringMap.t;   (* FP offset for args, locals *)
+  num_formals           : int;               (* Number of parameters *)
 }
 
 (* enum : int -> 'a list -> (int * 'a) list *)
@@ -65,74 +65,59 @@ let translate (stmt_lst, func_decls) =
 
   (* Translate an expr *)
   let rec expr env = function
-      Ast.IntLiteral(i) -> [Lit i], Ezatypes.Int
+      Ast.IntLiteral(i) -> [Lit i]
     | Ast.StrLiteral(s) -> 
-(*
-        let ints_list = (List.map Char.code (explode s)) in
-        let size = (List.length ints_list) in
-        let rec add_int_lits accum i =
-          if i >= size
-          then accum
-          else
-            add_int_lits ([Lit (List.nth ints_list i)] @ accum) (i+1)
-        in 
-          ((List.rev (add_int_lits [] 0)) @ [Lit size]), Ezatypes.String
- *)
         Hashtbl.add glob_ht !hash_counter (Hashtypes.String s);
-        let ret_val = [Lct !hash_counter], Ezatypes.String in
+        let ret_val = [Lct !hash_counter] in
           hash_counter := !hash_counter+1; (* incr value of hash_counter ref *)
           ret_val
     | Ast.BoolLiteral(b) -> 
         Hashtbl.add glob_ht !hash_counter (Hashtypes.Bool b);
-        let ret_val = [Lct !hash_counter], Ezatypes.Bool in
+        let ret_val = [Lct !hash_counter] in
           hash_counter := !hash_counter+1; (* incr hash_counter in-place *)
           ret_val
     | Ast.Id(s) ->
         (try 
            let search_local = (StringMap.find s env.local_idx) in
-             [Lfp (fst search_local)], snd search_local 
+             [Lfp search_local]
          with Not_found -> 
            (try
               let search_global = StringMap.find s env.global_idx in
-                [Lod (fst search_global)], snd search_global
+                [Lod search_global]
             with Not_found ->
               raise (Failure ("Undeclared variable " ^ s))))
     | Ast.Binop(e1, op, e2) ->
         let ev1 = (expr env) e1
         and ev2 = (expr env) e2 in
-        ((fst ev1) @ (fst ev2) @ [Bin op]), (snd ev1)
+        ev1 @ ev2 @ [Bin op]
     | Ast.Call(fname, actuals) ->
         (try
            (* first evaluate the actuals *)
            let res = (List.map (expr env) (List.rev actuals)) 
            in
-             (* return type is Void by default *)
-             ((List.concat (List.map fst res)) @ [Jsr (StringMap.find fname env.function_idx)]), Ezatypes.Void
+             (List.concat res) @ [Jsr (StringMap.find fname env.function_idx)]
          with Not_found ->
            raise (Failure ("Undefined function: " ^ fname)))
     | Ast.Load(filepath_expr, gran_expr) ->
-        let (ev1_val, ev1_typ) = (expr env) filepath_expr
-        and (ev2_val, ev2_typ) = (expr env) gran_expr in
-          ev1_val @ ev2_val @ [Jsr (-2)], Ezatypes.Canvas
-    | Ast.Select_Point (x, y) -> [Lit 1], Ezatypes.Int 
-    | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1], Ezatypes.Int
-                                   
-    | Ast.Select_VSlice (x1, y1, y2)  -> [Lit 1], Ezatypes.Int
-                                    
-    | Ast.Select_HSlice (x1, x2, y1) -> [Lit 1], Ezatypes.Int
-                                     
-    | Ast.Select_VSliceAll x -> [Lit 1], Ezatypes.Int;
-    | Ast.Select_HSliceAll y -> [Lit 1], Ezatypes.Int;
-    | Ast.Select_All -> [Lit (-1)], Ezatypes.Int;
-    | Ast.Select (canv, selection) -> [Lit (-16)], Ezatypes.Int;
-    | Ast.Select_Binop(op, e) -> [Lit 1], Ezatypes.Int;
-    | Ast.Select_Bool(e) -> [Lit 1], Ezatypes.Int;
+        let ev1_val = (expr env) filepath_expr
+        and ev2_val = (expr env) gran_expr in
+          ev1_val @ ev2_val @ [Jsr (-2)]
+    | Ast.Select_Point (x, y) -> [Lit 1]
+    | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1]
+    | Ast.Select_VSlice (x1, y1, y2)  -> [Lit 1]
+    | Ast.Select_HSlice (x1, x2, y1) -> [Lit 1]
+    | Ast.Select_VSliceAll x -> [Lit 1]
+    | Ast.Select_HSliceAll y -> [Lit 1]
+    | Ast.Select_All -> [Lit (-1)]
+    | Ast.Select (canv, selection) -> [Lit (-16)]
+    | Ast.Select_Binop(op, e) -> [Lit 1]
+    | Ast.Select_Bool(e) -> [Lit 1]
    
   in let rec stmt env scope = function
       (* need to update assign later *)
       Ast.Assign(var, e) -> 
         let ev = (expr env e) in
-          fst ev @
+          ev @
           if scope = "*local*"
           then 
             (*
@@ -143,54 +128,53 @@ let translate (stmt_lst, func_decls) =
              *)
             if (StringMap.mem var env.local_idx) 
             then 
-              let exis_local_idx = fst (StringMap.find var env.local_idx)
-              in
+              let exis_local_idx = StringMap.find var env.local_idx in
                 (* side effect: update env.local_idx *)
-                env.local_idx <- (StringMap.add var (exis_local_idx, (snd ev)) env.local_idx);
+                env.local_idx <- (StringMap.add var exis_local_idx env.local_idx);
                 [Sfp exis_local_idx] 
             else 
               if (StringMap.mem var env.global_idx) 
                 then 
-                let exis_global_idx = fst (StringMap.find var env.global_idx) in
+                let exis_global_idx = StringMap.find var env.global_idx in
                   (* side effect: update env.global_idx *)
-                  env.global_idx <- (StringMap.add var (exis_global_idx, (snd ev)) env.global_idx);
+                  env.global_idx <- (StringMap.add var exis_global_idx env.global_idx);
                   [Str exis_global_idx]
               else 
                 (* note the +1 for the next available local idx *)
                 let new_local_idx = (List.length (StringMap.bindings env.local_idx)) + 1
                 in 
                   (* side effect: modify env.local_idx *)
-                  env.local_idx <- (StringMap.add var (new_local_idx, (snd ev)) env.local_idx);
+                  env.local_idx <- (StringMap.add var new_local_idx env.local_idx);
                   [Sfp new_local_idx] 
           else 
             [Str
                (if (StringMap.mem var env.global_idx) 
                 then 
-                  let exis_global_idx = fst (StringMap.find var env.global_idx) in
-                    env.global_idx <- (StringMap.add var (exis_global_idx, (snd ev)) env.global_idx);
+                  let exis_global_idx = StringMap.find var env.global_idx in
+                    env.global_idx <- (StringMap.add var exis_global_idx env.global_idx);
                     exis_global_idx 
                     else 
                       let new_global_idx = (List.length (StringMap.bindings env.global_idx))
                       in 
                         (* side effect: modify env.global_idx *)
-                        env.global_idx <- (StringMap.add var (new_global_idx, (snd ev)) env.global_idx);
+                        env.global_idx <- (StringMap.add var new_global_idx env.global_idx);
                         new_global_idx)] 
     | Ast.OutputC(var) ->
-        let (bc, typ) = (expr env var) in
+        let bc = (expr env var) in
           bc @ [Jsr (-1)]
     | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->
         let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst))
         in 
-          (fst (expr env cond)) @
+          (expr env cond) @
           [Beq (1 + List.length t_stmts)] @
           t_stmts
     | Ast.If_else(cond, stmt_lst1, stmt_lst2) ->
         let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst1))
         and f_stmts = (List.concat (List.map (stmt env scope) stmt_lst2))
         in 
-          (fst (expr env cond)) @
+          (expr env cond) @
           [Beq (2 + List.length t_stmts)] @
           t_stmts @
           [Bra (1 + List.length f_stmts)] @
@@ -201,7 +185,7 @@ let translate (stmt_lst, func_decls) =
          * execution/evaluation
          *)
         let s1' = (stmt env scope s1)
-        and e1' = fst (expr env e1)
+        and e1' = (expr env e1)
         and for_body_stmts = (List.concat (List.map (stmt env scope) stmt_lst)) @ (stmt env scope s2)
         in 
          let 
@@ -212,7 +196,7 @@ let translate (stmt_lst, func_decls) =
            e1' @
            [Bne (-(for_body_length + List.length e1'))]
     | Ast.Return(e) ->
-        fst (expr env e) @ [Rts env.num_formals]  
+        (expr env e) @ [Rts env.num_formals]  
     | Ast.Include(str) -> 
         []
     
@@ -229,7 +213,7 @@ let translate (stmt_lst, func_decls) =
 
     and formal_offsets = (enum (-1) (-2) fdecl.params) 
     in
-    let formal_offsets' = (List.map (fun (i, s) -> ((i, Ezatypes.Void), s)) formal_offsets)
+    let formal_offsets' = (List.map (fun (i, s) -> (i, s)) formal_offsets)
     in
     let env = { env with local_idx = string_map_pairs StringMap.empty formal_offsets';
                          num_formals = num_formals } 
