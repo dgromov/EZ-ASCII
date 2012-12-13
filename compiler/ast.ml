@@ -16,6 +16,7 @@ type expr =
   | Id of string                                 (* foo *)
   | Binop of expr * op * expr                    (* a + b *)
   | Call of string * expr list                   (* foo(1, 25) *)
+  | Load of expr * expr 
   | Select_Point  of expr * expr                 (* [1,2] *)
   | Select_Rect   of expr * expr * expr * expr   (* [1:2, 3:4] *)
   | Select_VSlice of expr * expr * expr          (* [1, 3:4] *)
@@ -72,6 +73,7 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
       ^ " " ^
       string_of_expr e2
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
+   (* add load here *)
   | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "] -- point select"
   | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 
                                          ^ string_of_expr y1 ^  ":" ^  string_of_expr y2 ^ "] -- rect select"

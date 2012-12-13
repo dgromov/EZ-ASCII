@@ -54,7 +54,7 @@ let translate (stmt_lst, func_decls) =
       | hd :: tl -> 
           (bif_helper (StringMap.add hd (counter) map) (counter-1)) tl
     (* add built-in functions here *)
-    (* reserve -1, -2, and -3 for printing ints, strings, and bools respectively *)
+    (* reserve -1 for printing *)
     in (bif_helper StringMap.empty (-2)) ["load"; "blank"; "main"]
   in  
 
@@ -110,6 +110,10 @@ let translate (stmt_lst, func_decls) =
              ((List.concat (List.map fst res)) @ [Jsr (StringMap.find fname env.function_idx)]), Ezatypes.Void
          with Not_found ->
            raise (Failure ("Undefined function: " ^ fname)))
+    | Ast.Load(filepath_expr, gran_expr) ->
+        let (ev1_val, ev1_typ) = (expr env) filepath_expr
+        and (ev2_val, ev2_typ) = (expr env) gran_expr in
+          ev1_val @ ev2_val @ [Jsr (-2)], Ezatypes.Canvas
     | Ast.Select_Point (x, y) -> [Lit 1], Ezatypes.Int 
     | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1], Ezatypes.Int
                                    

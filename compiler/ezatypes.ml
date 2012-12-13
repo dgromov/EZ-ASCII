@@ -9,4 +9,4 @@ type t =
   | Bool
   | Char 
   | String 
-  | Canvas of int array
+  | Canvas
