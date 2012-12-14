@@ -158,7 +158,7 @@ let semantic_checker (stmt_lst, func_decls) =
         in
           (match (t1, t2, t3) with
                (Int, Int, Int) ->
-                 Sast.Canvas(height, width, granularity), Canvas
+                 Sast.Canvas, Canvas
              | (_, Int, Int) ->
                  raise(TypeException(height, Ast.Blank(height, width, granularity), Int, t1))
              | (Int, _, Int) ->
@@ -169,7 +169,15 @@ let semantic_checker (stmt_lst, func_decls) =
                  raise(TypeException(height, Ast.Blank(height, width, granularity), Int, t1))
           )
     | Ast.Select_Point (x, y) -> 
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) x
+        and (v2, t2) = (expr env scope) y
+        in
+          (match (t1, t2) with
+               (Int, Int) ->
+                 Sast.Canvas, Canvas
+             | (_, _) ->
+                 raise(TypeException(x, Ast.Select_Point(x, y), Int, t1))
+          )
     | Ast.Select_Rect (x1, x2, y1, y2) -> 
         Sast.IntLiteral(1), Canvas 
     | Ast.Select_VSlice (x1, y1, y2)  -> 
@@ -183,7 +191,15 @@ let semantic_checker (stmt_lst, func_decls) =
     | Ast.Select_All -> 
         Sast.IntLiteral(1), Canvas 
     | Ast.Select (canv, selection) -> 
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) canv 
+        and (v2, t2) = (expr env scope) selection 
+        in
+          (match (t1, t2) with
+               (Canvas, Canvas) ->
+                 Sast.Canvas, Canvas
+             | (_, _) ->
+                 raise(TypeException(canv, Ast.Select(canv, selection), Canvas, t1))
+          )
     | Ast.Select_Binop(op, e) -> 
         Sast.IntLiteral(1), Canvas 
     | Ast.Select_Bool(e) -> 

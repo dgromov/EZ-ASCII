@@ -23,7 +23,7 @@ let execute_prog prog debug_flag =
     debug ("DEBUG: num_globals is " ^ string_of_int prog.num_globals);
     try
       let rec exec fp sp pc = 
-        print_string("DEBUG: fp=" ^ (string_of_int fp) ^ ", sp=" ^ (string_of_int sp) ^ ", pc=" ^ (string_of_int pc) ^ ":  ");
+        debug ("DEBUG: fp=" ^ (string_of_int fp) ^ ", sp=" ^ (string_of_int sp) ^ ", pc=" ^ (string_of_int pc) ^ ":  ");
         match prog.text.(pc) with 
           Lit i -> 
             stack.(sp) <- IntValue i; 

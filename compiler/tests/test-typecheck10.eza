@@ -1,0 +1,4 @@
+// tests static semantic analysis
+
+d <- blank(3, "asfd", 4); // type error
+d -> out;
