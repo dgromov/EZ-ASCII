@@ -209,6 +209,21 @@ let execute_prog prog debug_flag =
             print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
+            debug ("Jsr -1");
+            let lookup =
+              (match stack.(sp-1) with
+                   IntValue(i) -> Hashtypes.Int(i)
+                 | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
+              ) in 
+            let render = 
+              (match stack.(sp-2) with 
+                  IntValue(i) -> raise (Failure ("Render should be a boolean"))
+                | Address(i) -> match (Hashtbl.find prog.glob_hash i) with 
+                                Hashtypes.Bool(b) -> b (* add error handling *)
+              ) in
+            print_endline (Hashtypes.string_of_ct render lookup);
+            exec fp sp (pc+1) 
+        | Jsr(-3) ->
             (* CANVAS LOADING *)
             debug ("Jsr -2");
             let gran = stack.(sp-1)
@@ -251,7 +266,7 @@ let execute_prog prog debug_flag =
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
-        | Jsr(-3) ->
+        | Jsr(-4) ->
             (* BLANK *)
             debug ("Jsr -3"); 
             let height =  stack.(sp-3)
@@ -278,11 +293,11 @@ let execute_prog prog debug_flag =
               stack.(sp-1) <- ret_val;
               exec fp sp (pc+1)
 
-        | Jsr (-4) -> 
+        | Jsr (-5) -> 
             (* ATTRIBUTE *)
             debug ("Jsr -4: - Canvas Attr");
             exec fp sp (pc+1 )
-        | Jsr (-5) -> 
+        | Jsr (-6) -> 
             (* SELECT *)
             debug ("Jsr -5: - Select Piece of Canvas");
             let existing = match stack.(sp-1) with 
@@ -331,10 +346,6 @@ let execute_prog prog debug_flag =
               stack.(sp-1) <- ret_val;
               exec fp sp (pc+1)
 
-        | Jsr (-6) -> 
-            (* MASK *)
-            debug ("Jsr -6: - Mask ");
-            exec fp sp (pc+1)
         | Jsr (-7) ->
             (* SET POINT *)
             debug ("Jsr -7: - Set point");
