@@ -182,7 +182,7 @@ let execute_prog prog debug_flag =
             debug ("Jsr -1");
             let lookup =
               (match stack.(sp-1) with
-                   IntValue(i)     -> Hashtypes.Int(i)
+                   IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
             print_endline (Hashtypes.string_of_ct lookup);
@@ -216,16 +216,21 @@ let execute_prog prog debug_flag =
             let comm = "Python util/load_img.py " ^ path ^ " " ^ granularity in 
             let _ = Sys.command (comm) in
             let filename_parts = Str.split (Str.regexp "/") path in 
-            let filename = List.hd (List.rev filename_parts) in 
+            let filename = 
+              match Str.string_match (Str.regexp ".i$")  (List.hd (List.rev filename_parts)) 0 with 
+                  true -> 
+                    "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" 
+                | false -> 
+                    path
+            in 
 
               Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
-                (Hashtypes.Canvas ((Canvas.load_canvas ("../tmp/" ^ filename ^ ".i")), gran_val));
+                (Hashtypes.Canvas (Canvas.load_canvas filename  gran_val));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
-
-        | Jsr(-3) -> 
+        | Jsr(-3) ->
             (* BLANK *)
             debug ("JSR -3"); 
             let height =  stack.(sp-3)
@@ -246,11 +251,64 @@ let execute_prog prog debug_flag =
                 | Address(g) -> raise(Failure("Jsr -3 expected an integer for granularity but got an address."))
             in 
               Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
-                (Hashtypes.Canvas ((Canvas.blank h_val w_val), g_val));
+                (Hashtypes.Canvas (Canvas.blank h_val w_val g_val));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
+        | Jsr (-4) -> 
+            (* ATTRIBUTE *)
+            debug ("JSR -4: - Canvas Attr");
+            exec fp sp (pc+1 )
+        | Jsr (-5) -> 
+            (* SELECT *)
+            debug ("JSR -5: - Select Piece of Canvas");
+            let existing = match stack.(sp-1) with 
+              Address(j) ->
+                match (Hashtbl.find prog.glob_hash j) with
+                  Hashtypes.Canvas(c) -> c
+            in 
+              (* print_endline (Hashtypes.string_of_ct (Hashtypes.Canvas(existing ))); *)
+            (* Make blank but the same *)
+              (* print_endline (Hashtypes.string_of_ct  (Hashtypes.Canvas(blank_slate)));  *)
+
+            let sel_type =  match stack.(sp-2) with 
+                              IntValue(t) -> t in 
+            let selected = 
+              (* This match should be on some sort of enum *)
+              match sel_type with 
+                  1 -> 
+                    let x =  match stack.(sp-4) with IntValue(t) -> t 
+                    and y =  match stack.(sp-3) with IntValue(t) -> t in 
+                    Canvas.select_point x y existing        
+                | 2 -> 
+                    let x1 =  match stack.(sp-6) with IntValue(t) -> t 
+                    and x2 =  match stack.(sp-5) with IntValue(t) -> t 
+                    and y1 =  match stack.(sp-4) with IntValue(t) -> t 
+                    and y2 =  match stack.(sp-3) with IntValue(t) -> t in 
+                    Canvas.select_rect x1 x2 y1 y2 existing 
+                (* 
+                | 3 -> print_endline ("Select vslice" );
+                | 4 -> print_endline ("Select hslice" );
+                | 5 -> print_endline ("Select allv" );
+                | 6 -> print_endline ("Select allh" );
+                | 7 -> print_endline ("Select all" );  *)
+            in 
+
+            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
+            let ret_val = Address !(prog.glob_hash_counter) in
+              prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+              stack.(sp-1) <- ret_val;
+              exec fp sp (pc+1)
+
+        | Jsr (-6) -> 
+            (* MASK *)
+            debug ("JSR -6: - Mask ");
+            exec fp sp (pc+1)
+        | Jsr (-7) ->
+            (* SET POINT *)
+            debug ("JSR -7: - Set point");
+            exec fp sp (pc + 1)
         | Jsr i -> 
             stack.(sp) <- IntValue (pc + 1); 
             debug ("DEBUG: Jsr " ^ string_of_int i);

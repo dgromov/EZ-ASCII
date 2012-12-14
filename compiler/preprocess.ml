@@ -23,13 +23,13 @@ let run fname =
     ^ white_sp ^ "*" ^ ";" ^ white_sp ^ "*";
   ) in (* Possible space between end of string and semi-colon *)
 
-  let comm_regex = Str.regexp (
+(*   let comm_regex = Str.regexp (
     "//.*" (* Two slashes followed by anything until new line. *)
   ) in 
   let remove_comments text = 
     let q = Str.global_replace comm_regex "" text in 
       (q)
-  in 
+  in  *)
 
   let rec replace_include text = 
     let find_include text = 
@@ -49,6 +49,7 @@ let run fname =
           replace_include ( q )
           else 
             text 
-  in replace_include (remove_comments prog_text)
+  (* in replace_include (remove_comments prog_text) *)
+in replace_include prog_text
 
 

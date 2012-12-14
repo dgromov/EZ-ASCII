@@ -27,7 +27,7 @@ type expr =
   | Select_VSliceAll of expr                     (* [3, ] *) 
   | Select_HSliceAll of expr                     (* [, 3] *) 
   | Select_All                                   (* [,] *)       
-  | Select of string * expr                      (* canv[...] *)
+  | Select of expr * expr                      (* canv[...] *)
   | Select_Binop of op * expr                    (* canv[<5] *)
   | Select_Bool of expr                          (* <5 *)
 
@@ -107,7 +107,7 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
       ^ " " ^
       string_of_expr e2
   | Select_Bool(e1) -> "[" ^ string_of_expr e1  ^ "] "
-  | Select (canv, selection) -> canv ^ string_of_expr selection  
+  | Select (canv, selection) -> string_of_expr canv ^ string_of_expr selection  
 
 let rec string_of_stmt = function
   | Return(expr) -> "return " ^ string_of_expr expr ^ ";"

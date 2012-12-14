@@ -6,19 +6,22 @@
 
 open Canvas
 
+
+
+
 type ct =
     (* Note: The compiler will not add any int types to the hash map 
      * but the bytecode executor might during binop operations *)
     Int of int
   | String of string
   | Bool of bool
-  | Canvas of int array array * int 
+  | Canvas of Canvas.canvas
 
 let string_of_ct = function
     Int(i) -> string_of_int i
-  | String(s) -> (Scanf.unescaped s)
+  | String(s) -> ( Scanf.unescaped s )
   | Bool(b) -> string_of_bool b
-  | Canvas(c, g) -> ("Granularity = " ^ string_of_int g 
+  | Canvas(c) -> ("Granularity = " ^ string_of_int c.gran 
                                                     ^ "\n"  
                                                     ^ Canvas.string_of_canvas c (make_map ['.'; '-'; '+'; 'X'; '@']) false)
 
