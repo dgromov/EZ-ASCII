@@ -102,7 +102,20 @@ let translate (stmt_lst, func_decls) =
         let ev1_val = (expr env) filepath_expr
         and ev2_val = (expr env) gran_expr in
           ev1_val @ ev2_val @ [Jsr (-2)]
-    | Ast.Select_Point (x, y) -> [Lit 1]
+    
+    | Ast.Blank(height, width, granularity) -> 
+        let ev1_val = (expr env) height
+        and ev2_val = (expr env) width 
+        and ev3_val = (expr env) granularity in 
+          ev1_val @ ev2_val @ ev3_val @ [Jsr (-3)]
+
+    | Ast.Select_Point (x, y) -> 
+      (*   let ev1_val = (expr env) x 
+        and ev2_val = (expr env) y 
+          ev1_val @ ev2_val @ [Lit 1] @ [Jsr(-4)] *)
+        stmt Assign("monkey" Ast.expr(4))
+        (* stmt env "*global*"  *)
+
     | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1]
     | Ast.Select_VSlice (x1, y1, y2)  -> [Lit 1]
     | Ast.Select_HSlice (x1, x2, y1) -> [Lit 1]
@@ -112,8 +125,8 @@ let translate (stmt_lst, func_decls) =
     | Ast.Select (canv, selection) -> [Lit (-16)]
     | Ast.Select_Binop(op, e) -> [Lit 1]
     | Ast.Select_Bool(e) -> [Lit 1]
-   
-  in let rec stmt env scope = function
+  (* *) 
+  and  stmt env scope = function
       (* need to update assign later *)
       Ast.Assign(var, e) -> 
         let ev = (expr env e) in

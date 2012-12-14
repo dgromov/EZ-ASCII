@@ -19,6 +19,7 @@ type expr =
   | Call of string * expr list                   (* foo(1, 25) *)
   | Load of expr * expr                          (* load("filename", 10) *)
   | Blank of expr * expr * expr                  (* blank(x, y, g) *)
+  | Shift of string * int * expr
   | Select_Point  of expr * expr                 (* [1,2] *)
   | Select_Rect   of expr * expr * expr * expr   (* [1:2, 3:4] *)
   | Select_VSlice of expr * expr * expr          (* [1, 3:4] *)
@@ -48,6 +49,7 @@ type func_decl = {
 
 type program = stmt list * func_decl list        (* global vars, fxn declarations *) 
 
+
  let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
   | StrLiteral(l) -> l 
@@ -76,7 +78,9 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
       string_of_expr e2
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Load(e1, gran) -> "Load(" ^ string_of_expr e1 ^ ", " ^ string_of_expr gran ^ ")"
-  | Blank(e1, e2, e3) -> "Load(" ^ string_of_expr e1 ^ ", " ^  string_of_expr e2 ^ ", " ^ string_of_expr e3 ^ ")"
+  | Blank(e1, e2, e3) -> "Blank(" ^ string_of_expr e1 ^ ", " ^  string_of_expr e2 ^ ", " ^ string_of_expr e3 ^ ")"
+  | Shift(e1, dir, e3) -> "Shift(" ^ e1 ^ ", " ^  string_of_int dir ^ ", " ^ string_of_expr e3 ^ ")"
+
   | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "] -- point select"
   | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 
                                          ^ string_of_expr y1 ^  ":" ^  string_of_expr y2 ^ "] -- rect select"

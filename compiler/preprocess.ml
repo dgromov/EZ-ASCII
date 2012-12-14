@@ -13,8 +13,6 @@ let read_file fname =
     close_in ic; 
     (s) ;; 
 
-
-
 let run fname = 
   let prog_text = read_file fname in 
   let white_sp = "[\r\n\t ]" in

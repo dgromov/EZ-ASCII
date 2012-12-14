@@ -110,7 +110,7 @@ expr_list:
       | expr_list COMMA expr              { $3 :: $1 }
 
 expr:  
-        INTLITERAL		            { IntLiteral($1) }
+        INTLITERAL		                    { IntLiteral($1) }
       | BOOLLITERAL                       { BoolLiteral($1) }
       | STR                               { StrLiteral($1) } 
       | ID                                { Id($1) }
@@ -132,7 +132,9 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
       | LOAD LPAREN expr COMMA expr RPAREN { Load($3, $5) } 
-      | BLANK LPAREN expr COMMA expr COMMA expr RPAREN { Blank ($3, $5, $7 )}
+      | BLANK LPAREN expr COMMA expr COMMA expr RPAREN { Blank ($3, $5, $7 ) }
+      | SHIFT LPAREN ID COMMA INTLITERAL COMMA expr RPAREN { Shift ($3, $5, $7 ) }
+
 
 
 
