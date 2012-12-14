@@ -36,25 +36,20 @@
 
 %%
 program:
-      /* nothing */                     { [],[] } 
-	| program stmt                        { List.rev($2 :: List.rev (fst $1)), snd $1 }
-	| program funcdecl 	                  { (fst $1), List.rev ($2 :: List.rev (snd $1)) }
+      /* nothing */                       { [], [] } 
+	| program stmt                      { List.rev($2 :: List.rev (fst $1)), snd $1 }
+	| program funcdecl 	            { (fst $1), List.rev ($2 :: List.rev (snd $1)) }
 
 funcdecl:
-      FXN ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
-      {  
-            {  
-                  fname = $2; 
-                  params = List.rev $4; 
-                  body = List.rev $7 
-            } 
-      }	
+        FXN ID LPAREN param_list RPAREN LBRACE stmt_list RBRACE
+        { { fname = $2; params = List.rev $4; body = List.rev $7 } }	
+      | FXN MAIN LPAREN RPAREN LBRACE stmt_list RBRACE 
+        { { fname = "main"; params = []; body = List.rev $6 } }	
 
 param_list:
 	/* nothing */						{ [] }
 	| ID 								{ [$1] }
 	| param_list COMMA ID  				      { $3 :: $1 }
-
 
 stmt_list:
 	/* nothing */ 						{ [] }

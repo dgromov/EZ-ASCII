@@ -1,0 +1,11 @@
+// tests main function
+
+d <- "before main";
+d -> out;
+
+Fun main() {
+  d <- "in main";
+  d -> out;
+}
+
+d -> out;

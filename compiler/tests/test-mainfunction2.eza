@@ -1,0 +1,13 @@
+// tests main function
+
+d <- "before main";
+d -> out;
+
+// main is case-sensitive, so the following
+// function should not be called
+Fun Main() {
+  d <- "in main";
+  d -> out;
+}
+
+d -> out;  // d should be unchanged

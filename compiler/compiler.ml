@@ -48,7 +48,7 @@ let translate (stmt_lst, func_decls) =
           (bif_helper (StringMap.add hd (counter) map) (counter-1)) tl
     (* add built-in functions here *)
     (* reserve -1 for printing *)
-    in (bif_helper StringMap.empty (-2)) ["load"; "blank"; "main"]
+    in (bif_helper StringMap.empty (-2)) ["load"; "blank"]
   in  
 
   let function_indexes = string_map_pairs built_in_functions
@@ -263,13 +263,17 @@ let translate (stmt_lst, func_decls) =
 
   (* Compile the global statement list *)
   let glob_stmts = (List.concat (List.map (stmt env "*global*") stmt_lst)) in
-
+  let main_func_call = 
+    try
+      [Jsr (StringMap.find "main" function_indexes)]
+    with Not_found -> []
+  in
   (* Compile the functions, and prepend compiled global statements and Hlt *)
-  let func_bodies = glob_stmts :: [Hlt] :: List.map (translate env) func_decls in
+  let func_bodies = (glob_stmts @ main_func_call) :: [Hlt] :: List.map (translate env) func_decls in
 
   (* Calculate function entry points by adding their lengths *)
   let (fun_offset_list, _) = List.fold_left
-                               (fun (l,i) f -> (i :: l, (i + List.length f))) 
+                               (fun (l, i) f -> (i :: l, (i + List.length f))) 
                                ([], 0)
                                func_bodies in
   let func_offset = Array.of_list (List.rev fun_offset_list) 

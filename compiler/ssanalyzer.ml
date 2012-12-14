@@ -112,10 +112,10 @@ let semantic_checker (stmt_lst, func_decls) =
         (* no need to execute recursive calls *)
         if (scope <> "*global*") && (fname = scope)
         then
-         (try 
-            let fxn_env_lookup = (StringMap.find fname env.fxn_envs) in
-              fxn_env_lookup.ret_type
-          with Not_found ->
+          (try 
+             let fxn_env_lookup = (StringMap.find fname env.fxn_envs) in
+               fxn_env_lookup.ret_type
+           with Not_found ->
              raise (UndefinedFxnException (fname, Ast.Call(fname, actuals))))
         else
           (try
@@ -133,10 +133,10 @@ let semantic_checker (stmt_lst, func_decls) =
                (* execute the function_body, which will eventually
                 * update the return type *)
                let _ = List.map (stmt env fxn_env_lookup.fxn_name) fxn_env_lookup.fxn_body
-               in 
-                 (* finally, return the possibly updated return type
-                  *  (it is already initialized to (IntLiteral(0), Int)) *)
-                 fxn_env_lookup.ret_type
+  in 
+    (* finally, return the possibly updated return type
+     *  (it is already initialized to (IntLiteral(0), Int)) *)
+    fxn_env_lookup.ret_type
            with Not_found ->
              raise (UndefinedFxnException (fname, Ast.Call(fname, actuals))))
     | Ast.Load(filepath_expr, gran_expr) ->
@@ -219,9 +219,11 @@ let semantic_checker (stmt_lst, func_decls) =
           else 
               env.global_env <- (StringMap.add var ev env.global_env)
     | Ast.OutputC(var) ->
-        (); (* nothing to check *)
+        let (var_val, var_typ) = expr env scope var
+        in ();
     | Ast.OutputF(var, oc) ->
-        (); (* nothing to check *)
+        let (var_val, var_typ) = expr env scope var
+        in ();
     | Ast.If(cond, stmt_lst) ->
         let (cond_val, cond_typ) = expr env scope cond in
           (match cond_typ with

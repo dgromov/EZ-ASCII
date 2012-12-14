@@ -1,0 +1,12 @@
+// tests main function
+
+d <- "before main";
+d -> out;
+
+Fun main() {
+  e <- "new local";
+  e -> out;
+}
+
+g <- main(); // error, main can't be called
+
