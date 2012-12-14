@@ -1,6 +1,6 @@
 // Tests if-else statement, with more complex conditionals.
 
-if (2 < 3 && 3 < 4) 
+if ((2 < 3) && (3 < 4)) 
 {
   e <- 3;
   e -> out;  

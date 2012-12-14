@@ -1,0 +1,10 @@
+// tests static semantic checker
+
+d <- "hello";
+d -> out;
+
+d <- d + " world!";
+d -> out;  // outputs (string concat)
+
+d <- d + 1; // ssanalyzer should throw error
+d -> out;
