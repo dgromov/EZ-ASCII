@@ -194,17 +194,14 @@ let translate (stmt_lst, func_decls) =
 
     | Ast.OutputC(var, rend) ->
         let var_val = (expr env var) in
-
-        let rend_int = 
-              ( match rend with
-                  Ast.BoolLiteral(b) -> if b then 1 else 0
-                | _ -> 0 (* Should be handled by sast *) ) in 
-        [Lit rend_int] @ var_val @ [Jsr (-1)]
+        let rend_val = (expr env rend) in 
+        rend_val @ var_val @ [Jsr (-1)]
 
     | Ast.OutputCR(var, rend) ->
       let bc = (expr env var) in
       let ren_bc = (expr env rend) in 
           ren_bc @ bc @ [Jsr (-1)]
+
     | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->

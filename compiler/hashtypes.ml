@@ -17,11 +17,11 @@ type ct =
   | Bool of bool
   | Canvas of Canvas.canvas
 
-let string_of_ct  = function
+let string_of_ct render = function
     Int(i) -> string_of_int i
   | String(s) -> ( Scanf.unescaped s )
   | Bool(b) -> string_of_bool b
-  | Canvas(c) -> (Canvas.string_of_canvas c (make_map [' '; '-'; '+'; 'X'; '@']) true)
+  | Canvas(c) -> (Canvas.string_of_canvas c (make_map [' '; '-'; '+'; 'X'; '@']) render)
 
 
 

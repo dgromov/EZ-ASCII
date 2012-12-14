@@ -1,5 +1,15 @@
 // tests canvas loading
 
-c <- load("~/Desktop/lena.jpg", 4);
-c -> out;
+c <- load("~/Desktop/edwards.jpeg", 4);
+
+Fun to_Render()
+{
+	b <- true; 
+	return b; 
+}
+
+
+q <- to_Render();
+q -> out;
+c -> out, to_Render();
 

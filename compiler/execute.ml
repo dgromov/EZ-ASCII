@@ -140,8 +140,8 @@ let execute_prog prog debug_flag =
                       | (Hashtypes.Canvas(c1), Hashtypes.Canvas(c2)) ->
                         ( match op with 
                           Mask -> 
-                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct (Hashtypes.Canvas(c1))  ));
-                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct (Hashtypes.Canvas(c2)) ));
+                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c1))   ));
+                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c2)) ));
                             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (Canvas.mask c1 c2));
                             let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
@@ -200,7 +200,13 @@ let execute_prog prog debug_flag =
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
-            print_endline (Hashtypes.string_of_ct lookup);
+            let render = 
+              (match stack.(sp-2) with 
+                  IntValue(i) -> raise (Failure ("Render should be a boolean"))
+                | Address(i) -> match (Hashtbl.find prog.glob_hash i) with 
+                                Hashtypes.Bool(b) -> b (* add error handling *)
+              ) in
+            print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
             (* CANVAS LOADING *)

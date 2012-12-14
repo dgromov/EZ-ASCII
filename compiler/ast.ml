@@ -127,7 +127,7 @@ let rec string_of_stmt = function
       "for (" ^ string_of_stmt s1  ^ " | " ^ string_of_expr e2 ^ " | " ^ string_of_stmt s3  ^ ")\n
       {\n" ^ String.concat "\n" (List.map string_of_stmt sl4)  ^ "\n}"
   | OutputC(e, render_expr) -> 
-      string_of_expr e ^ string_of_expr render_expr ^ " -> out"
+      string_of_expr e ^ ", " ^ string_of_expr render_expr ^ " -> out"
   | OutputF(e, f) -> 
       string_of_expr e ^ " -> " ^ f 
   | Assign(v, e) -> 
