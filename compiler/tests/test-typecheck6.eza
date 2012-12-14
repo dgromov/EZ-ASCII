@@ -1,0 +1,10 @@
+// tests static semantic analysis
+
+
+d <- 3;
+
+Fun foo(i) {
+  return i + 5;
+}
+
+d <- foo(5) + "hello"; // type error

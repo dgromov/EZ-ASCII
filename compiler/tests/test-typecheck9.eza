@@ -1,0 +1,8 @@
+// tests static semantic analysis
+
+d <- 3;
+
+for i <- 3 | "hello" | i <- i + 1 { // type error 
+  e <- 4;
+  e -> out;
+}

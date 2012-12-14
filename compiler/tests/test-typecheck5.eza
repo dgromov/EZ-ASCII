@@ -1,0 +1,4 @@
+// tests static semantic analysis
+
+d <- e + 4; // undefined var error
+d -> out;
