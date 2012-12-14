@@ -281,12 +281,12 @@ let execute_prog prog debug_flag =
                     and y1 =  match stack.(sp-4) with IntValue(t) -> t 
                     and y2 =  match stack.(sp-3) with IntValue(t) -> t in 
                     Canvas.select_rect x1 x2 y1 y2 existing 
-                
+                (* 
                 | 3 -> print_endline ("Select vslice" );
                 | 4 -> print_endline ("Select hslice" );
                 | 5 -> print_endline ("Select allv" );
                 | 6 -> print_endline ("Select allh" );
-                | 7 -> print_endline ("Select all" ); *)
+                | 7 -> print_endline ("Select all" );  *)
             in 
 
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
