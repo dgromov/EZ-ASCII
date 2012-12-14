@@ -9,6 +9,7 @@ type op = Plus | Minus | Times | Divide  | Mod
         | Lt  | Gt  | Eq | Leq | Geq | Neq
         | Mask
 
+type attr = W | H | G 
 
 type expr = 
     IntLiteral of int                            (* 42 *)
@@ -30,6 +31,7 @@ type expr =
   | Select of expr * expr                      (* canv[...] *)
   | Select_Binop of op * expr                    (* canv[<5] *)
   | Select_Bool of expr                          (* <5 *)
+  | GetAttr of string * attr                        (* canv$w *)
 
 type stmt =                                      (* Statements *)
     Assign of string * expr                      (* foo <- 42 *)
