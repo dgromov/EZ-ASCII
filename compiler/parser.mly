@@ -59,8 +59,8 @@ stmt:
     ID ASSIGN expr SEMICOLON                  { Assign($1, $3) }
   | ID OUTPUT STDOUT SEMICOLON                { OutputC(Id($1), BoolLiteral(false)) }
   | ID OUTPUT STDOUT COMMA expr SEMICOLON     { OutputC(Id($1), $5)} 
-  | ID OUTPUT STR SEMICOLON                   { OutputF(Id($1), $3) }
-  /* | ID OUTPUT STR COMMA expr SEMICOLON        { OutputFR(Id($1), $3, $5)} */
+  | ID OUTPUT expr SEMICOLON                   { OutputF(Id($1), $3, BoolLiteral(false)) }
+  | ID OUTPUT expr COMMA expr SEMICOLON        { OutputF(Id($1), $3, $5) }
 
   | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
   | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }

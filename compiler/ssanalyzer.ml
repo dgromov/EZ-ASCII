@@ -251,9 +251,10 @@ let semantic_checker (stmt_lst, func_decls) =
                  raise(TypeException(var_rend, var_rend, Bool, var_rend_typ))
           );
 
-    | Ast.OutputF(var, oc) ->
+    | Ast.OutputF(var, oc, exp) ->
         let (var_val, var_typ) = expr env scope var
         in ();
+        
     | Ast.If(cond, stmt_lst) ->
         let (cond_val, cond_typ) = expr env scope cond in
           (match cond_typ with

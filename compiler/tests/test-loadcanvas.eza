@@ -8,8 +8,7 @@ Fun to_Render()
 	return b; 
 }
 
-
 q <- to_Render();
 q -> out;
-c -> out, to_Render();
+c -> "out", to_Render();
 

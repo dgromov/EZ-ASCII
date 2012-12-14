@@ -15,6 +15,39 @@ type canvas =
   gran: int; 
 };; 
 
+type stypes = 
+  POINT
+| RECT  
+| VSLICE 
+| HSLICE  
+| VSLICE_ALL 
+| HSLICE_ALL  
+| ALL
+
+let select_type = function 
+  POINT -> 1
+| RECT -> 2
+| VSLICE -> 3
+| HSLICE -> 4 
+| VSLICE_ALL -> 5  
+| HSLICE_ALL -> 6 
+| ALL -> 7 
+
+
+type dir =
+   UP
+ | DOWN 
+ | LEFT 
+ | RIGHT
+
+let get_dir = function 
+  0 -> (UP)
+ | 1 -> (DOWN)
+ | 2 -> (LEFT)
+ | 3 -> (RIGHT)
+;;
+
+
 (* Blank Function  *)
 let blank height width granularity default= 
   { 
@@ -121,8 +154,22 @@ let select_all can =
 (* END SELECT *)
 
 let mask can1 can2 =
-  set_rect_can 0 ((width can2)-1) 0 ((height can2)-1) can2 can1 
-   
+  let blank_slate = create_blank_from_existing can1 (-1) in 
+  let cp_can1 = set_rect_can 0 ((width can2)-1) 0 ((height can2)-1) blank_slate can1 in 
+    set_rect_can 0 ((width can2)-1) 0 ((height can2)-1) blank_slate can2 
+
+let shift can1 dir steps = 
+  let blank_slate = create_blank_from_existing can1 (-1) in 
+  match dir with 
+    UP -> 
+       set_rect_can 0 ((width can1)-1) 0 ((height can1) - (1+steps) ) blank_slate can1
+  | DOWN ->
+       set_rect_can 0 ((width can1)-1) steps ((height can1)-1) blank_slate can1
+  | LEFT -> 
+       set_rect_can 0 ((width can1)- (1+steps)) 0 ((height can1)-1) blank_slate can1
+  | RIGHT ->
+       set_rect_can steps ((width can1)-1) 0 ((height can1)-1) blank_slate can1
+
 
 
 
