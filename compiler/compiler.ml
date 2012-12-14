@@ -113,8 +113,9 @@ let translate (stmt_lst, func_decls) =
       (*   let ev1_val = (expr env) x 
         and ev2_val = (expr env) y 
           ev1_val @ ev2_val @ [Lit 1] @ [Jsr(-4)] *)
-        stmt Assign("monkey" Ast.expr(4))
+(*        stmt Assign("monkey" Ast.expr(4)) *)
         (* stmt env "*global*"  *)
+       [Lit 1] 
 
     | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1]
     | Ast.Select_VSlice (x1, y1, y2)  -> [Lit 1]
