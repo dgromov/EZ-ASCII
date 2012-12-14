@@ -193,8 +193,8 @@ let translate (stmt_lst, func_decls) =
 
 
     | Ast.OutputC(var) ->
-        let bc = (expr env var) in
-          [Lit 0] @ bc @ [Jsr (-1)]
+        let var_val = (expr env var) in
+          [Lit 666] @ var_val @ [Jsr (-1)]
     | Ast.OutputCR(var, rend) ->
       let bc = (expr env var) in
       let ren_bc = (expr env rend) in 

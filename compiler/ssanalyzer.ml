@@ -133,10 +133,10 @@ let semantic_checker (stmt_lst, func_decls) =
                (* execute the function_body, which will eventually
                 * update the return type *)
                let _ = List.map (stmt env fxn_env_lookup.fxn_name) fxn_env_lookup.fxn_body
-  in 
-    (* finally, return the possibly updated return type
-     *  (it is already initialized to (IntLiteral(0), Int)) *)
-    fxn_env_lookup.ret_type
+               in 
+                 (* finally, return the possibly updated return type
+                  *  (it is already initialized to (IntLiteral(0), Int)) *)
+                 fxn_env_lookup.ret_type
            with Not_found ->
              raise (UndefinedFxnException (fname, Ast.Call(fname, actuals))))
     | Ast.Load(filepath_expr, gran_expr) ->

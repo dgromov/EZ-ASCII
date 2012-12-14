@@ -174,9 +174,12 @@ let execute_prog prog debug_flag =
             debug ("DEBUG: Str " ^ string_of_int i); 
             exec fp sp (pc+1) 
         | Lfp i -> 
+            debug("LFP: fp is " ^ (string_of_int fp));
+            debug("LFP: sp is " ^ (string_of_int sp));
             (match (stack.(fp+i), stack.(sp)) with
                  Address(j), Address(k) ->
                    if j != k then
+                     (* if over-writing a local... *)
                      (* if assigning a different pointer to a hash pair, no
                       * longer need the old hash pair, so remove it *)
                      Hashtbl.remove prog.glob_hash k;
@@ -187,8 +190,7 @@ let execute_prog prog debug_flag =
             exec fp (sp+1) (pc+1) 
         | Sfp i -> 
             stack.(fp+i) <- stack.(sp-1); 
-            debug ("DEBUG: Sfp " ^ string_of_int i);
-            exec fp sp (pc+1) 
+            exec fp (sp+1) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
         | Jsr(-1) ->
             debug ("Jsr -1");
