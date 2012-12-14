@@ -1,5 +1,5 @@
 // tests canvas loading
 
-c <- load("~/Desktop/edwards.jpeg", 4);
+c <- load("~/Desktop/lena.jpg", 4);
 c -> out;
 

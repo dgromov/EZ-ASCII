@@ -190,9 +190,15 @@ let translate (stmt_lst, func_decls) =
                         (* side effect: modify env.global_idx *)
                         env.global_idx <- (StringMap.add var new_global_idx env.global_idx);
                         new_global_idx)] 
+
+
     | Ast.OutputC(var) ->
         let bc = (expr env var) in
-          bc @ [Jsr (-1)]
+          [Lit 0] @ bc @ [Jsr (-1)]
+    | Ast.OutputCR(var, rend) ->
+      let bc = (expr env var) in
+      let ren_bc = (expr env rend) in 
+          ren_bc @ bc @ [Jsr (-1)]
     | Ast.OutputF(var, oc) ->
         []
     | Ast.If(cond, stmt_lst) ->
@@ -227,7 +233,8 @@ let translate (stmt_lst, func_decls) =
            e1' @
            [Bne (-(for_body_length + List.length e1'))]
     | Ast.Return(e) ->
-        (expr env e) @ [Rts env.num_formals]  
+        (expr env e) @ [Rts env.num_formals] 
+
     | Ast.Include(str) -> 
         []
     

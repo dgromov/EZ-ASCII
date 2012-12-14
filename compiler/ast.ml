@@ -9,6 +9,7 @@ type op = Plus | Minus | Times | Divide  | Mod
         | Lt  | Gt  | Eq | Leq | Geq | Neq
         | Mask
 
+type attr = W | H | G 
 
 type expr = 
     IntLiteral of int                            (* 42 *)
@@ -30,16 +31,20 @@ type expr =
   | Select of expr * expr                      (* canv[...] *)
   | Select_Binop of op * expr                    (* canv[<5] *)
   | Select_Bool of expr                          (* <5 *)
+  | GetAttr of string * attr                        (* canv$w *)
 
 type stmt =                                      (* Statements *)
     Assign of string * expr                      (* foo <- 42 *)
   | OutputC of expr                              (* canvas -> out *)
+  | OutputCR of expr * expr                      (* canvas -> out, render *)
   | OutputF of expr * string                     (* canvas -> "C:\test.png" *)
+  | OutputFR of expr * string * expr           (* canvas -> "C:\test.png", render *)
   | If of expr * stmt list                       (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list      (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list        (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                               (* return 42; *)
   | Include of string                            (* include super_awesome.eza *)
+  | CanSet of string * expr * expr               (* can[..] <- 1 *)
   
 type func_decl = {
   fname : string;                                (* Name of the function *)

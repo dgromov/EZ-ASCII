@@ -74,7 +74,7 @@ let load_canvas fname =
    
 
 let _ = 
-  let can = load_canvas "../tmp/edwards.jpeg.i" in 
+  let can = load_canvas "../tmp/lena.jpg.i" in 
   let the_map = make_map ['.'; '-'; '+' ;'X'; '@'] in 
     print_canvas_out can true  the_map; 
     print_string "\n"

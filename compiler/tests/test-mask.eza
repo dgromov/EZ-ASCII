@@ -1,0 +1,14 @@
+new_line <- "";
+c <- load("~/Desktop/lena.jpg", 4);
+b <- blank(100,100,10);
+
+// v -> out;
+
+
+// Horizontal Slice_ALL
+can1 <- c[25:90, 4:96];
+can1 -> out;
+new_line -> out;
+
+can3 <- b & can1;
+can3 -> out;
