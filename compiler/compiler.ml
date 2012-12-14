@@ -35,13 +35,6 @@ let rec enum stride n = function
 let string_map_pairs map pairs =
   List.fold_left (fun m (i, n) -> StringMap.add n i m) map pairs
 
-(* object representing an environment *)
-(* type trans_env = {
-  
-  return_type = Eatypes.t;
-  scope = symbol_table;
-} *)
-
 (* Translate a program in AST form into a bytecode program.
  * Throw an exception if something is wrong, (e.g. reference
  * to an unknown var or function.
@@ -268,11 +261,6 @@ let translate (stmt_lst, func_decls) =
     num_formals   = 0
   } in
 
-  (* we will stick top-level global statements in a psuedo-function at Jsr 1
-   * still need to handle an actual main() function later *)
-  (* let entry_function = 
-     [Jsr 1; Hlt] in*)
-
   (* Compile the global statement list *)
   let glob_stmts = (List.concat (List.map (stmt env "*global*") stmt_lst)) in
 
@@ -298,6 +286,4 @@ let translate (stmt_lst, func_decls) =
       glob_hash = glob_ht;
       glob_hash_counter = hash_counter;
     }
-
-
 

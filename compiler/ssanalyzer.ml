@@ -1,6 +1,6 @@
 (* FILENAME :  ssanalyzer.ml
  * AUTHOR(s):  Joe Lee (jyl2157)
- * PURPOSE  :  Converts ast to sast.  
+ * PURPOSE  :  Checks for type errors, undefined var/fxn errors, converts ast to sast.  
  *)
 
 open Ast
@@ -190,9 +190,9 @@ let semantic_checker (stmt_lst, func_decls) =
         Sast.IntLiteral(1), Canvas 
     | Ast.Shift(canv, dir, count) ->
         Sast.IntLiteral(1), Canvas 
-   
+  
+  (* execute statement *)                              
   and stmt env scope = function
-      (* need to update assign later *)
       Ast.Assign(var, e) -> 
         let ev = (expr env scope e) in
           if scope <> "*global*"
@@ -219,9 +219,9 @@ let semantic_checker (stmt_lst, func_decls) =
           else 
               env.global_env <- (StringMap.add var ev env.global_env)
     | Ast.OutputC(var) ->
-        ();
+        (); (* nothing to check *)
     | Ast.OutputF(var, oc) ->
-        (); 
+        (); (* nothing to check *)
     | Ast.If(cond, stmt_lst) ->
         let (cond_val, cond_typ) = expr env scope cond in
           (match cond_typ with
@@ -244,10 +244,6 @@ let semantic_checker (stmt_lst, func_decls) =
           List.iter (stmt env scope) stmt_lst2;
           ();
     | Ast.For(s1, e1, s2, stmt_lst) ->
-        (* note: order of executing statements and evaluating expressions here
-         * matters since the environment can be updated on each
-         * execution/evaluation
-         *)
         (stmt env scope s1);
         let (e1_val, e1_typ) = (expr env scope e1)
         in 
@@ -265,8 +261,7 @@ let semantic_checker (stmt_lst, func_decls) =
         in
           fxn_env_lookup.ret_type <- (v, typ);
     | Ast.Include(str) -> 
-        (* no type checking needed since we know it's already a string *)
-        (); 
+        (); (* no type checking needed since we know it's already a string *)
   
   (************************ 
    * start main code here 
