@@ -1,5 +1,4 @@
-(* FILENAME :  canvas.ml
- * AUTHOR(S):  Dmitriy Gromov (dg2720), Joe Lee (jyl2157) 
+ (* AUTHOR(S):  Dmitriy Gromov (dg2720), Joe Lee (jyl2157) 
  * PURPOSE  :  Canvas functions (loading, preprocessing, blank,
  *             string_of_canvas, etc...).
  *)
@@ -17,9 +16,9 @@ type canvas =
 };; 
 
 (* Blank Function  *)
-let blank height width granularity = 
+let blank height width granularity default= 
   { 
-    data = Array.make_matrix height width 0; 
+    data = Array.make_matrix height width default; 
     gran = granularity
   }
 
@@ -34,7 +33,9 @@ let make_name name render =
 let string_of_row row render the_map =
   match render with
       false -> String.concat " " (Array.to_list (Array.map string_of_int row ))
-    | true ->  String.concat "" (Array.to_list (Array.map (fun x -> Char.escaped (IntMap.find x the_map)) row))
+    | true ->  String.concat "" (Array.to_list (Array.map (fun x ->   match x with 
+                                                                      (-1) -> " "
+                                                                      | _ ->  Char.escaped (IntMap.find x the_map)) row))
 
 let make_map vals =
   let rec add_val the_map = function
@@ -58,8 +59,8 @@ let granularity can =
 
 (* END CANVAS ATTRIBUTES *)
 
-let create_blank_from_existing existing = 
-   blank (width existing) (height existing) (granularity existing)
+let create_blank_from_existing existing default = 
+   blank (width existing) (height existing) (granularity existing) default 
 
 
 (* SELECT *)
@@ -70,30 +71,58 @@ let get x y can =
 let set x y intensity can = 
   can.data.(x).(y) <- intensity
 
-let select_point x y can = 
-  let blank_slate = create_blank_from_existing can in 
-    let selected = get x y can in 
-      set x y selected blank_slate;
-  blank_slate
+
+
+let set_rect_int x1 x2 y1 y2 can intensity = 
+  for i = x1 to x2 do 
+      for j = y1 to y2 do 
+          set i j intensity can;
+      done; 
+    done;
+;;
+
+let set_rect_can x1 x2 y1 y2 old_can new_can = 
+  for i = x1 to x2 do 
+      for j = y1 to y2 do 
+        let selected = get i j old_can in 
+          match selected >= 0 with 
+            true -> set i j selected new_can;
+            | false -> ();
+      done; 
+    done;
+
+    (new_can)
+;;
+
 
 let select_rect x1 x2 y1 y2 can = 
-   let blank_slate = create_blank_from_existing can in 
-   print_endline (string_of_int x2) ;
-          
-      for i = x1 to x2 do 
-        for j = y1 to y2 do 
-          let selected = get i j can in 
-            set i j selected blank_slate;
-        done; 
-      done;
+   let blank_slate = create_blank_from_existing can (-1) in 
+    set_rect_can x1 x2 y1 y2 can blank_slate;
+  (blank_slate)
 
-    (blank_slate)
+let select_point x y can = 
+  select_rect x x y y can 
 
+let select_hslice x y1 y2 can = 
+  select_rect x x y1 y2 can 
+
+let select_vslice x1 x2 y can = 
+  select_rect x1 x2 y y can 
+
+let select_hslice_all x can = 
+  select_rect x x 0 ((height can)-1) can 
+
+let select_vslice_all y can = 
+  select_rect 0 ((width can)-1) y y can 
+
+let select_all can = 
+  select_rect 0 ((width can)-1) 0 ((height can)-1) can 
 
 (* END SELECT *)
 
-
-
+let mask can1 can2 =
+  set_rect_can 0 ((width can2)-1) 0 ((height can2)-1) can2 can1 
+   
 
 
 

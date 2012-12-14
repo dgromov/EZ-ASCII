@@ -1,0 +1,2 @@
+can <- blank(6, 10, 5);
+can -> out;

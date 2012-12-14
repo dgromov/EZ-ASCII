@@ -93,7 +93,6 @@ let execute_prog prog debug_flag =
                             | And        -> 
                                 debug("Bin &&: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
                                 IntValue (boolean ((bool_of_int i) && (bool_of_int j)))
-                            | Mask       -> IntValue 1 (* need to do *)  
                          )
                      | (Hashtypes.Bool(b1), Hashtypes.Bool(b2)) ->
                          (match op with
@@ -137,8 +136,21 @@ let execute_prog prog debug_flag =
                             | _ ->
                                 raise (Failure ("Binop not supported for string types."))
                          )
-                     | (_, _) ->
-                         raise (Failure ("Binop not supported with input operand types."))
+                      | (Hashtypes.Canvas(c1), Hashtypes.Canvas(c2)) ->
+                        ( match op with 
+                          Mask -> 
+                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct (Hashtypes.Canvas(c1))  ));
+                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct (Hashtypes.Canvas(c2)) ));
+                            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (Canvas.mask c1 c2));
+                            let ret_val = Address !(prog.glob_hash_counter) in
+                                  prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                                  ret_val
+                         | _ ->
+                              raise (Failure ("Binop not supported for canvas types."))
+                        )
+
+                (* ?     | (_, _) -> *)
+                         (* raise (Failure ("Binop not supported with input operand types.")) *)
                   ))); 
                   exec fp (sp-1) (pc+1)
         | Lod i -> 
@@ -185,6 +197,8 @@ let execute_prog prog debug_flag =
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
+
+              
             print_endline (Hashtypes.string_of_ct lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
@@ -210,17 +224,18 @@ let execute_prog prog debug_flag =
               let granularity = string_of_int gran_val 
              in
 
-              let comm = "Python util/load_img.py " ^ path ^ " " ^ granularity in 
-              Sys.command (comm);
               let filename_parts = Str.split (Str.regexp "/") path in 
                 let filename = 
-                  match Str.string_match (Str.regexp ".i$")  (List.hd (List.rev filename_parts)) 0 with 
-                    true -> 
+                  match Str.string_match (Str.regexp ".+.i")  (List.hd (List.rev filename_parts)) 0 with 
+                    false -> 
+                      debug ("Trying to open: " ^ "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" ); 
+                      let comm = "python util/load_img.py " ^ path ^ " " ^ granularity in 
+                      Sys.command (comm);
                       "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" 
-                  | false -> 
+                  | true -> 
+                      debug ("Trying to open raw: " ^ path ); 
                       path
               in 
-
               Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
                     (Hashtypes.Canvas (Canvas.load_canvas filename  gran_val));
               let ret_val = Address !(prog.glob_hash_counter) in
@@ -245,7 +260,7 @@ let execute_prog prog debug_flag =
               IntValue(g) -> g 
             in 
            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
-                  (Hashtypes.Canvas (Canvas.blank h_val w_val g_val));
+                  (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
             let ret_val = Address !(prog.glob_hash_counter) in
               prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
               stack.(sp-1) <- ret_val;
@@ -262,31 +277,39 @@ let execute_prog prog debug_flag =
                 match (Hashtbl.find prog.glob_hash j) with
                   Hashtypes.Canvas(c) -> c
             in 
-              (* print_endline (Hashtypes.string_of_ct (Hashtypes.Canvas(existing ))); *)
-            (* Make blank but the same *)
-              (* print_endline (Hashtypes.string_of_ct  (Hashtypes.Canvas(blank_slate)));  *)
-
             let sel_type =  match stack.(sp-2) with 
                               IntValue(t) -> t in 
             let selected = 
               (* This match should be on some sort of enum *)
               match sel_type with 
                   1 -> 
-                    let x =  match stack.(sp-4) with IntValue(t) -> t 
-                    and y =  match stack.(sp-3) with IntValue(t) -> t in 
+                    let x = match stack.(sp-4) with IntValue(t) -> t 
+                    and y = match stack.(sp-3) with IntValue(t) -> t in 
                     Canvas.select_point x y existing        
                 | 2 -> 
-                    let x1 =  match stack.(sp-6) with IntValue(t) -> t 
-                    and x2 =  match stack.(sp-5) with IntValue(t) -> t 
-                    and y1 =  match stack.(sp-4) with IntValue(t) -> t 
-                    and y2 =  match stack.(sp-3) with IntValue(t) -> t in 
+                    let x1 = match stack.(sp-6) with IntValue(t) -> t 
+                    and x2 = match stack.(sp-5) with IntValue(t) -> t 
+                    and y1 = match stack.(sp-4) with IntValue(t) -> t 
+                    and y2 = match stack.(sp-3) with IntValue(t) -> t in 
                     Canvas.select_rect x1 x2 y1 y2 existing 
-                (* 
-                | 3 -> print_endline ("Select vslice" );
-                | 4 -> print_endline ("Select hslice" );
-                | 5 -> print_endline ("Select allv" );
-                | 6 -> print_endline ("Select allh" );
-                | 7 -> print_endline ("Select all" );  *)
+                | 3 -> 
+                    let x = match stack.(sp-5) with IntValue(t) -> t 
+                    and y1 = match stack.(sp-4) with IntValue(t) -> t 
+                    and y2 = match stack.(sp-3) with IntValue(t) -> t in  
+                    Canvas.select_hslice x y1 y2 existing 
+                | 4 -> 
+                    let x1 = match stack.(sp-5) with IntValue(t) -> t 
+                    and x2 = match stack.(sp-4) with IntValue(t) -> t 
+                    and y  = match stack.(sp-3) with IntValue(t) -> t in
+                    Canvas.select_vslice x1 x2 y existing 
+                | 5 -> 
+                    let x = match stack.(sp-3) with IntValue(t) -> t in 
+                    Canvas.select_hslice_all x existing 
+                | 6 -> 
+                    let y = match stack.(sp-3) with IntValue(t) -> t in 
+                    Canvas.select_vslice_all y existing 
+                | 7 -> 
+                    Canvas.select_all existing 
             in 
 
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
