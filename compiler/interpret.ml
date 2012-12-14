@@ -36,7 +36,7 @@ let bool_of_int i =
  *  
  *
  * ============================================================ *)
-let run lexbuf=
+let run lexbuf =
     let (stmt_lst, fxns_lst) = 
       try 
         (Parser.program Scanner.token lexbuf)
