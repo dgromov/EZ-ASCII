@@ -49,14 +49,12 @@ let print_canvas_file can render the_map file_name =
     print_canvas can render the_map oc;
     close_out oc;;
 
-
 let make_map vals =
   let rec add_val the_map = function
      v :: vs -> (add_val (IntMap.add (IntMap.cardinal the_map) v the_map) vs) 
     | [] -> the_map
   in add_val IntMap.empty vals
   
-
 let load_canvas fname = 
   let ic = open_in fname in 
     let n = in_channel_length ic in
@@ -76,13 +74,8 @@ let load_canvas fname =
    
 
 let _ = 
-
-  let can = load_canvas "../Cimage/lena.jpg.i" in 
+  let can = load_canvas "../tmp/edwards.jpeg.i" in 
   let the_map = make_map ['.'; '-'; '+' ;'X'; '@'] in 
-    print_canvas_out can true the_map; 
+    print_canvas_out can true  the_map; 
     print_string "\n"
  
-  (* in 
-  print_canvas_file (blank 10 10) true the_map "test";
-  print_string "\n"
- *)

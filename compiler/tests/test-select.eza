@@ -1,5 +1,2 @@
-can <- v[, ];
+can <- v[1,2];
 can -> out;
-
-can2 <- v2[<4];
-can2 -> out;

@@ -22,38 +22,10 @@ let make_name name render =
     String.concat "" [name; ".i"]
 
 (* Print Row *)
-let print_row row render the_map oc =
-  Array.iter 
-  (
-    fun x -> (
-              match render with
-                  false -> output_string oc (string_of_int x);
-                           output_string oc " "; 
-
-                | true ->  output_char oc (IntMap.find x the_map ) 
-             )
-  ) row;;
-
-(* Print Canvas *)
-let print_canvas can render the_map oc =
- 
-    Array.iter 
-    (
-      fun x ->
-           ( 
-              print_row x render the_map oc;
-              output_string oc "\n";
-
-           )
-    ) can
-  
-let print_canvas_out can render the_map = 
-  print_canvas can render the_map stdout;; 
-
-let print_canvas_file can render the_map file_name = 
-  let oc = open_out (make_name file_name render) in
-    print_canvas can render the_map oc;
-    close_out oc;;
+let string_of_row row render the_map =
+  match render with
+      false -> String.concat " " (Array.to_list (Array.map string_of_int row ))
+    | true ->  String.concat "" (Array.to_list (Array.map (fun x -> Char.escaped (IntMap.find x the_map)) row))
 
 let make_map vals =
   let rec add_val the_map = function
@@ -62,8 +34,7 @@ let make_map vals =
   in add_val IntMap.empty vals
 
 let string_of_canvas can map render =
-  Array.fold_left (fun accum row ->
-                     accum ^ (String.concat "" (List.map string_of_int (Array.to_list row)))) "" can
+  String.concat "\n" (Array.to_list(Array.map (fun r -> string_of_row r render map ) can))
 
 (* Loads an image from filepath fname, and returns
  *  canvas type int array array *)

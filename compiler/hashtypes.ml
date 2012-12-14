@@ -12,11 +12,16 @@ type ct =
     Int of int
   | String of string
   | Bool of bool
-  | Canvas of int array array
+  | Canvas of int array array * int 
 
 let string_of_ct = function
     Int(i) -> string_of_int i
   | String(s) -> (Scanf.unescaped s)
   | Bool(b) -> string_of_bool b
-  | Canvas(c) -> Canvas.string_of_canvas c (make_map ['.'; '-'; '+'; 'X'; '@']) true
+  | Canvas(c, g) -> ("Granularity = " ^ string_of_int g 
+                                                    ^ "\n"  
+                                                    ^ Canvas.string_of_canvas c (make_map ['.'; '-'; '+'; 'X'; '@']) false)
+
+
+
      
