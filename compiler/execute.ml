@@ -208,21 +208,24 @@ let execute_prog prog debug_flag =
             and path = 
               (
                 match stack.(sp-2) with
-                   Address(j) ->
-                     match (Hashtbl.find prog.glob_hash j) with
-                         Hashtypes.String(s) -> s
-                       | _ ->
-                           raise (Failure("Jsr -2 expected address for file path string but got IntValue."))
+                    Address(j) ->
+                      (match (Hashtbl.find prog.glob_hash j) with
+                           Hashtypes.String(s) -> s
+                         | _ ->
+                             raise (Failure("Jsr -2 expected a string filepath but got a different type."))
+                      )
+                  | _ ->
+                      raise (Failure("Jsr -2 expected address for file path string but got IntValue."))
               )
-             in
-              let gran_val = 
-                match gran with 
+            in
+            let gran_val = 
+              match gran with 
                   IntValue(g) -> g 
-                  | _ -> 
+                | _ -> 
                     raise (Failure ("Jsr -2 expects an int granularity"))
-             in
-              let granularity = string_of_int gran_val 
-             in
+            in
+            let granularity = string_of_int gran_val 
+            in
 
               let filename_parts = Str.split (Str.regexp "/") path in 
                 let filename = 
@@ -237,7 +240,7 @@ let execute_prog prog debug_flag =
                       path
               in 
               Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
-                    (Hashtypes.Canvas (Canvas.load_canvas filename  gran_val));
+                (Hashtypes.Canvas (Canvas.load_canvas filename  gran_val));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
@@ -249,15 +252,18 @@ let execute_prog prog debug_flag =
             and width  =  stack.(sp-2)
             and granularity = stack.(sp-1)
             in 
-              let h_val = 
-             match height with 
-              IntValue(h) -> h
-             and w_val =
-             match width with 
-              IntValue(w) -> w
-             and g_val = 
-             match granularity with 
-              IntValue(g) -> g 
+            let h_val = 
+              match height with 
+                  IntValue(h) -> h
+                | Address(h) -> raise(Failure("Jsr -3 expected an integer for height but got an address."))
+            and w_val =
+              match width with 
+                  IntValue(w) -> w
+                | Address(w) -> raise(Failure("Jsr -3 expected an integer for width but got an address."))
+            and g_val = 
+              match granularity with 
+                  IntValue(g) -> g 
+                | Address(g) -> raise(Failure("Jsr -3 expected an integer for granularity but got an address."))
             in 
            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
                   (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
@@ -265,6 +271,7 @@ let execute_prog prog debug_flag =
               prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
               stack.(sp-1) <- ret_val;
               exec fp sp (pc+1)
+
         | Jsr (-4) -> 
             (* ATTRIBUTE *)
             debug ("JSR -4: - Canvas Attr");

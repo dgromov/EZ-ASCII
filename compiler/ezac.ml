@@ -45,13 +45,37 @@ let _ =
           print_endline (">>> Parse error at line " ^ (string_of_int line) ^ ", character " ^ (string_of_int cnum) ^ ": '" ^ tok ^ "'");
           exit 0;
   in
+  let run_ssanalyzer program = 
+    (try
+       let ret = Ssanalyzer.semantic_checker program
+       in ret
+     with 
+         TypeException(astexpr1, astexpr2, expected_typ, actual_typ) ->
+           print_endline("Type error at subexpression " ^ (Ast.string_of_expr astexpr1) ^ " in expression " ^ (Ast.string_of_expr astexpr2) ^ ".  Expected type " ^ (Ssanalyzer.string_of_t expected_typ) ^ " but got type " ^ (Ssanalyzer.string_of_t actual_typ ^ "."));
+           exit(0)
+       | UndefinedVarException(astexpr) ->
+           print_endline("Undefined variable " ^ (Ast.string_of_expr astexpr)); 
+           exit(0) 
+       | UndefinedFxnException(fxn_name, astexpr2) ->
+           print_endline("Undefined function " ^ fxn_name ^ " in expression " ^ (Ast.string_of_expr astexpr2));
+           exit(0)    
+       | Failure(s) ->
+           print_endline(s);
+           exit(0)
+    )
+  in 
     match action with
         Ast -> let listing = Ast.string_of_program program in print_string listing
       | StaticSemanticChecker ->
-          let sast_prog = Ssanalyzer.semantic_checker program
-          in print_endline("static semantic checker done.")
-      | Interpret -> print_string "Interpret: nada at the moment" (* ignore (Interpret.run program) *)
-      | Bytecode -> let listing = Bytecode.string_of_prog (Compiler.translate program) 
-                    in print_endline listing
-      | Compile -> let program = Compiler.translate program
-                   in Execute.execute_prog program debug_flag
+          let _ = run_ssanalyzer program in 
+            print_endline("Static semantic checker finished with no errors.")
+      | Interpret -> 
+          print_string "Interpret: nada at the moment" (* ignore (Interpret.run program) *)
+      | Bytecode -> 
+          let listing = Bytecode.string_of_prog (Compiler.translate program) 
+          in print_endline listing
+      | Compile -> 
+          let checked_prog = run_ssanalyzer program
+          in 
+          let program = Compiler.translate checked_prog
+          in Execute.execute_prog program debug_flag

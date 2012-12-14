@@ -15,7 +15,8 @@ type t =
   | Canvas
 
 let string_of_t = function
-    Int -> "Int"
+    Void -> "Void"
+  | Int -> "Int"
   | Bool -> "Bool"
   | Char -> "Char"
   | String -> "String"
@@ -37,7 +38,9 @@ type env = {
   mutable fxn_envs      : fxn_env StringMap.t; 
 }
 
-exception TypeException of string
+exception TypeException of Ast.expr * Ast.expr * t * t
+exception UndefinedVarException of Ast.expr
+exception UndefinedFxnException of string * Ast.expr
 
 (* takes Ast program and runs static semantic analysis (type errors, etc..) *)
 let semantic_checker (stmt_lst, func_decls) =
@@ -61,71 +64,132 @@ let semantic_checker (stmt_lst, func_decls) =
                 let search_global = StringMap.find s env.global_env in
                   search_global
               with Not_found ->
-                raise (Failure ("Undeclared variable " ^ s))))
-(*
-        else
-          if scope = "*global*"
-          then
- *)
+                raise (UndefinedVarException(Ast.Id(s)))))
         else
           (try
              let search_global = StringMap.find s env.global_env in
                search_global
            with Not_found ->
-             raise (Failure ("Undeclared variable " ^ s)))
+             raise (UndefinedVarException (Ast.Id(s))))
     | Ast.Binop(e1, op, e2) ->
         let (v1, t1) = expr env scope e1
         and (v2, t2) = expr env scope e2 in
           (match op with
-              Ast.Plus ->
-                (match (t1, t2) with
-                     (Int, Int) ->
-                       Sast.Binop(e1, op, e2), Int
-                   | (String, String) ->
-                       Sast.Binop(e1, op, e2), String
-                   | (_, _) ->
-                       raise(TypeException("Type error: " ^ (Ast.string_of_expr (Ast.Binop(e1, op, e2))) ^ ".  Operands must be both string or int types."));
-                )
+               Ast.Plus ->
+                 (match (t1, t2) with
+                      (Int, Int) ->
+                        Sast.Binop(e1, op, e2), Int
+                    | (String, String) ->
+                        Sast.Binop(e1, op, e2), String
+                    | (_, _) ->
+                        raise(TypeException(e2, Ast.Binop(e1, op, e2), t1, t2))
+                 )
+             | Ast.Minus | Ast.Times | Ast.Divide | Ast.Mod ->
+                 (match (t1, t2) with
+                      (Int, Int) ->
+                        Sast.Binop(e1, op, e2), Int
+                    | (_, _) ->
+                        raise(TypeException(e2, Ast.Binop(e1, op, e2), Int, t2))
+                 )
+             | Ast.Eq | Ast.Neq | Ast.Lt | Ast.Gt | Ast.Leq | Ast.Geq ->
+                 (match (t1, t2) with
+                      (Int, Int) ->
+                        Sast.Binop(e1, op, e2), Bool 
+                    | (_, _) ->
+                        raise(TypeException(e2, Ast.Binop(e1, op, e2), Int, t2))
+                 )
+             | Ast.Or | Ast.And ->
+                 (match (t1, t2) with
+                      (Bool, Bool) ->
+                        Sast.Binop(e1, op, e2), Bool 
+                    | (_, _) ->
+                        raise(TypeException(e2, Ast.Binop(e1, op, e2), Bool, t2))
+                 )
+             | Ast.Mask -> 
+                 Sast.Binop(e1, op, e2), Canvas (* need to do *)  
           );
     | Ast.Call(fname, actuals) ->
-        (try
-           (* first evaluate the actuals *)
-           let res = (List.map (expr env scope) (List.rev actuals)) in
-           let fxn_env_lookup = (StringMap.find fname env.fxn_envs) in
-           let bindings = List.combine (fxn_env_lookup.fxn_params) res in
-           let rec init_loc_env accum_env = function
-               [] -> accum_env
-             | (param_name, (sast_elem, typ)) :: tail ->
-                 init_loc_env (StringMap.add param_name (sast_elem, typ) accum_env) tail
-           in
-             (* Side effect: Initialize a local environment with the new parameter values *)
-             fxn_env_lookup.local_env <- init_loc_env StringMap.empty bindings;
-             (* execute the function_body, which will eventually
-              * update the return type *)
-             List.map (stmt env fxn_env_lookup.fxn_name) fxn_env_lookup.fxn_body;
-             (* finally, return the possibly updated return type *)
-             fxn_env_lookup.ret_type
-         with Not_found ->
-           raise (Failure ("Undefined function: " ^ fname)))
+        (* no need to execute recursive calls *)
+        if (scope <> "*global*") && (fname = scope)
+        then
+         (try 
+            let fxn_env_lookup = (StringMap.find fname env.fxn_envs) in
+              fxn_env_lookup.ret_type
+          with Not_found ->
+             raise (UndefinedFxnException (fname, Ast.Call(fname, actuals))))
+        else
+          (try
+             (* first evaluate the actuals *)
+             let res = (List.map (expr env scope) (List.rev actuals)) in
+             let fxn_env_lookup = (StringMap.find fname env.fxn_envs) in
+             let bindings = List.combine (fxn_env_lookup.fxn_params) res in
+             let rec init_loc_env accum_env = function
+                 [] -> accum_env
+               | (param_name, (sast_elem, typ)) :: tail ->
+                   init_loc_env (StringMap.add param_name (sast_elem, typ) accum_env) tail
+             in
+               (* Side effect: Initialize a local environment with the new parameter values *)
+               fxn_env_lookup.local_env <- init_loc_env StringMap.empty bindings;
+               (* execute the function_body, which will eventually
+                * update the return type *)
+               let _ = List.map (stmt env fxn_env_lookup.fxn_name) fxn_env_lookup.fxn_body
+               in 
+                 (* finally, return the possibly updated return type
+                  *  (it is already initialized to (IntLiteral(0), Int)) *)
+                 fxn_env_lookup.ret_type
+           with Not_found ->
+             raise (UndefinedFxnException (fname, Ast.Call(fname, actuals))))
     | Ast.Load(filepath_expr, gran_expr) ->
         let (v1, t1) = (expr env scope) filepath_expr
         and (v2, t2) = (expr env scope) gran_expr in
-          if not (t1 = String && t2 = Int)
+          if not (t1 = String)
           then 
-            raise(TypeException("Type error: " ^ (Ast.string_of_expr (Ast.Load(filepath_expr, gran_expr))) ^ ".  Load expects a string filepath and an integer granularity."))
-          else Sast.Load(filepath_expr, gran_expr), Canvas
-    | Ast.Select_Point (x, y) -> Sast.IntLiteral(1), Canvas 
-    | Ast.Select_Rect (x1, x2, y1, y2) -> Sast.IntLiteral(1), Canvas 
-    | Ast.Select_VSlice (x1, y1, y2)  -> Sast.IntLiteral(1), Canvas 
-(*
-    | Ast.Select_HSlice (x1, x2, y1) -> 
-    | Ast.Select_VSliceAll x -> [Lit 1]
-    | Ast.Select_HSliceAll y -> [Lit 1]
-    | Ast.Select_All -> [Lit (-1)]
-    | Ast.Select (canv, selection) -> [Lit (-16)]
-    | Ast.Select_Binop(op, e) -> [Lit 1]
-    | Ast.Select_Bool(e) -> [Lit 1]
- *)
+            raise(TypeException(filepath_expr, Ast.Load(filepath_expr, gran_expr), String, t1))
+          else 
+            if not (t2 = Int)
+            then
+              raise(TypeException(gran_expr, Ast.Load(filepath_expr, gran_expr), Int, t2))
+            else 
+              Sast.Load(filepath_expr, gran_expr), Canvas
+    | Ast.Blank(height, width, granularity) ->
+        let (v1, t1) = (expr env scope) height
+        and (v2, t2) = (expr env scope) width
+        and (v3, t3) = (expr env scope) granularity 
+        in
+          (match (t1, t2, t3) with
+               (Int, Int, Int) ->
+                 Sast.Canvas(height, width, granularity), Canvas
+             | (_, Int, Int) ->
+                 raise(TypeException(height, Ast.Blank(height, width, granularity), Int, t1))
+             | (Int, _, Int) ->
+                 raise(TypeException(width, Ast.Blank(height, width, granularity), Int, t2))
+             | (Int, Int, _) ->
+                 raise(TypeException(granularity, Ast.Blank(height, width, granularity), Int, t3))
+             | (_, _, _) ->
+                 raise(TypeException(height, Ast.Blank(height, width, granularity), Int, t1))
+          )
+    | Ast.Select_Point (x, y) -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_Rect (x1, x2, y1, y2) -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_VSlice (x1, y1, y2)  -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_HSlice (x1, x2, y1) ->
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_VSliceAll x ->
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_HSliceAll y ->
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_All -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select (canv, selection) -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_Binop(op, e) -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Select_Bool(e) -> 
+        Sast.IntLiteral(1), Canvas 
+    | Ast.Shift(canv, dir, count) ->
+        Sast.IntLiteral(1), Canvas 
    
   and stmt env scope = function
       (* need to update assign later *)
@@ -156,57 +220,58 @@ let semantic_checker (stmt_lst, func_decls) =
               env.global_env <- (StringMap.add var ev env.global_env)
     | Ast.OutputC(var) ->
         ();
-(*    | Ast.OutputF(var, oc) -> *)
-(*
+    | Ast.OutputF(var, oc) ->
+        (); 
     | Ast.If(cond, stmt_lst) ->
-        let eval_cond = expr env scope cond in
-          if 
-        let t_stmts = (List.iter (stmt env scope) stmt_lst)
-        in 
-          (expr env cond) @
-          [Beq (1 + List.length t_stmts)] @
-          t_stmts
+        let (cond_val, cond_typ) = expr env scope cond in
+          (match cond_typ with
+               Bool ->
+                 ();
+             | _ ->
+                 raise(TypeException(cond, cond, Bool, cond_typ))
+          );
+          (* regardless of the condition, check the statements *)
+          List.iter (stmt env scope) stmt_lst;
+          ();
     | Ast.If_else(cond, stmt_lst1, stmt_lst2) ->
-        let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst1))
-        and f_stmts = (List.concat (List.map (stmt env scope) stmt_lst2))
-        in 
-          (expr env cond) @
-          [Beq (2 + List.length t_stmts)] @
-          t_stmts @
-          [Bra (1 + List.length f_stmts)] @
-          f_stmts
+        let (cond_val, cond_typ) = expr env scope cond in
+          (match cond_typ with
+               Bool -> ();
+             | _ -> raise(TypeException(cond, cond, Bool, cond_typ))
+          );
+          (* regardless of the condition, check both blocks *)
+          List.iter (stmt env scope) stmt_lst1;
+          List.iter (stmt env scope) stmt_lst2;
+          ();
     | Ast.For(s1, e1, s2, stmt_lst) ->
         (* note: order of executing statements and evaluating expressions here
          * matters since the environment can be updated on each
          * execution/evaluation
          *)
-        let s1' = (stmt env scope s1)
-        and e1' = (expr env e1)
-        and for_body_stmts = (List.concat (List.map (stmt env scope) stmt_lst)) @ (stmt env scope s2)
+        (stmt env scope s1);
+        let (e1_val, e1_typ) = (expr env scope e1)
         in 
-         let 
-          for_body_length = (List.length for_body_stmts) in
-           s1' @
-           [Bra (1 + for_body_length)] @
-           for_body_stmts @
-           e1' @
-           [Bne (-(for_body_length + List.length e1'))]
- *)
+          (match e1_typ with
+               Bool -> ();
+             | _ -> raise(TypeException(e1, e1, Bool, e1_typ))
+          );
+          (* we only need to check the statement body once *)
+          List.iter (stmt env scope) stmt_lst;
+          stmt env scope s2;
+          ();
     | Ast.Return(e) ->
         let (v, typ) = expr env scope e 
         and fxn_env_lookup = StringMap.find scope env.fxn_envs
         in
           fxn_env_lookup.ret_type <- (v, typ);
-(*
     | Ast.Include(str) -> 
-        []
- *)
-    
-    
-  (* 
-   * Translates a function 
-   *)  
-
+        (* no type checking needed since we know it's already a string *)
+        (); 
+  
+  (************************ 
+   * start main code here 
+   ************************)  
+  
   in let env = { 
     global_env    = StringMap.empty; 
     fxn_envs      = StringMap.empty; 

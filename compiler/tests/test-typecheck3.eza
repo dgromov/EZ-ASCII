@@ -1,0 +1,4 @@
+// tests static semantic analysis
+
+d <- 3 && 2; // type error
+d -> out;

@@ -148,6 +148,8 @@ let translate (stmt_lst, func_decls) =
           (expr env) selection @ ev1_val @ [Jsr (-5)] 
     | Ast.Select_Binop(op, e) -> [Lit 1]
     | Ast.Select_Bool(e) -> [Lit 1]
+    | Ast.Shift(canv, dir, count) ->
+        [Lit 1]
   (* *) 
   and  stmt env scope = function
       (* need to update assign later *)

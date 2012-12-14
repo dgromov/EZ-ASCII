@@ -1,0 +1,10 @@
+// tests static semantic checker
+
+d <- "hello world!";
+
+Fun foo(s) {
+  s <- s + 1; // should output type error
+}
+
+e <- foo(d);
+e -> out;

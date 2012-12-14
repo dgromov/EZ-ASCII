@@ -1,0 +1,5 @@
+// tests calling an undefined function
+
+d <- 3;
+
+d <- foo(d); // undefined function error

@@ -1,3 +1,5 @@
+// tests basic assign functionality.
+
 d <- 3 + 4;
 d -> out;
 
