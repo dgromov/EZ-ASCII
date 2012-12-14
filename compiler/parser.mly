@@ -122,7 +122,7 @@ expr:
       | ID LPAREN expr_list RPAREN        { Call($1, List.rev $3) }
       | LPAREN expr RPAREN 			{ $2 }
 /*    | MINUS expr %prec UMINUS         { "unary minus" } */ 
-      | ID LBRACKET select_expr RBRACKET  { Select($1, $3) } 
+      | ID LBRACKET select_expr RBRACKET  { Select(Id($1), $3) } 
       | expr EQ expr                      { Binop($1, Eq, $3) }
       | expr NEQ expr                     { Binop($1, Neq, $3) }
       | expr LT expr                      { Binop($1, Lt, $3) }

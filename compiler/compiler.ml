@@ -110,19 +110,43 @@ let translate (stmt_lst, func_decls) =
           ev1_val @ ev2_val @ ev3_val @ [Jsr (-3)]
 
     | Ast.Select_Point (x, y) -> 
-      (*   let ev1_val = (expr env) x 
-        and ev2_val = (expr env) y 
-          ev1_val @ ev2_val @ [Lit 1] @ [Jsr(-4)] *)
-        stmt Assign("monkey" Ast.expr(4))
-        (* stmt env "*global*"  *)
+        let ev1_val = (expr env) x 
+        and ev2_val = (expr env) y in 
+          ev1_val @ ev2_val @ [Lit 1]
 
-    | Ast.Select_Rect (x1, x2, y1, y2) -> [Lit 1]
-    | Ast.Select_VSlice (x1, y1, y2)  -> [Lit 1]
-    | Ast.Select_HSlice (x1, x2, y1) -> [Lit 1]
-    | Ast.Select_VSliceAll x -> [Lit 1]
-    | Ast.Select_HSliceAll y -> [Lit 1]
-    | Ast.Select_All -> [Lit (-1)]
-    | Ast.Select (canv, selection) -> [Lit (-16)]
+    | Ast.Select_Rect (x1, x2, y1, y2) -> 
+        let ev1_val = (expr env) x1
+        and ev2_val = (expr env) x2
+        and ev3_val = (expr env) y1
+        and ev4_val = (expr env) y2 in 
+          ev1_val @ ev2_val  @ ev3_val @ ev4_val  @  [Lit 2]
+    | Ast.Select_VSlice (x1, y1, y2)  -> 
+        let ev1_val = (expr env) x1
+        and ev2_val = (expr env) y1
+        and ev3_val = (expr env) y2 in 
+          ev1_val @ ev2_val  @ ev3_val @  [Lit 3]
+    | Ast.Select_HSlice (x1, x2, y1) -> 
+        let ev1_val = (expr env) x1
+        and ev2_val = (expr env) x2
+        and ev3_val = (expr env) y1 in
+          ev1_val @ ev2_val  @ ev3_val @ [Lit 4] 
+
+    | Ast.Select_VSliceAll x ->
+        let ev1_val = (expr env) x in 
+          ev1_val @ [Lit 5]  
+    
+    | Ast.Select_HSliceAll y -> 
+        let ev1_val = (expr env) y in 
+          ev1_val @ [Lit 6] 
+
+    | Ast.Select_All -> 
+       [Lit 7] 
+   
+    | Ast.Select (canv, selection) ->
+        let ev1_val = (expr env) canv
+        in 
+          (expr env) selection @ ev1_val @ [Jsr (-5)] 
+
     | Ast.Select_Binop(op, e) -> [Lit 1]
     | Ast.Select_Bool(e) -> [Lit 1]
   (* *) 
