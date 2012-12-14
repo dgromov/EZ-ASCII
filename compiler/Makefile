@@ -2,7 +2,7 @@
 # AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720)
 # PURPOSE  :  Makefile for EZ-ASCII project.
 
-OBJS = ast.cmo scanner.cmo parser.cmo preprocess.cmo bytecode.cmo compiler.cmo canvas.cmo hashtypes.cmo execute.cmo ezac.cmo
+OBJS = ast.cmo scanner.cmo parser.cmo sast.cmo ssanalyzer.cmo preprocess.cmo bytecode.cmo compiler.cmo canvas.cmo hashtypes.cmo execute.cmo ezac.cmo
 
 ezac : $(OBJS)
 	ocamlc -o ezac str.cma $(OBJS)
@@ -34,10 +34,8 @@ compiler.cmo : hashtypes.cmo bytecode.cmo ast.cmo
 compiler.cmx : hashtypes.cmx bytecode.cmx ast.cmx
 execute.cmo : hashtypes.cmo bytecode.cmo ast.cmo
 execute.cmx : hashtypes.cmx bytecode.cmx ast.cmx
-ezac.cmo : scanner.cmo preprocess.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo
-ezac.cmx : scanner.cmx preprocess.cmx parser.cmx execute.cmx compiler.cmx bytecode.cmx ast.cmx
-ezatypes.cmo :
-ezatypes.cmx :
+ezac.cmo : ssanalyzer.cmo scanner.cmo preprocess.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo
+ezac.cmx : ssanalyzer.cmx scanner.cmx preprocess.cmx parser.cmx execute.cmx compiler.cmx bytecode.cmx ast.cmx
 hashtypes.cmo : canvas.cmo
 hashtypes.cmx : canvas.cmx
 interpret.cmo : scanner.cmo parser.cmi ast.cmo
@@ -46,6 +44,10 @@ parser.cmo : ast.cmo parser.cmi
 parser.cmx : ast.cmx parser.cmi
 preprocess.cmo :
 preprocess.cmx :
+sast.cmo :
+sast.cmx :
 scanner.cmo : parser.cmi
 scanner.cmx : parser.cmx
+ssanalyzer.cmo :
+ssanalyzer.cmx :
 parser.cmi : ast.cmo

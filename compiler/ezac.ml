@@ -8,18 +8,20 @@ open Ast
 open Parser
 open Scanner
 open Bytecode
+open Ssanalyzer
 open Compiler
 open Execute
 open Preprocess 
 
-type action = Ast | Interpret | Bytecode | Compile
+type action = Ast | StaticSemanticChecker | Interpret | Bytecode | Compile
 
 let _ =
   let (action, debug_flag, filepath) =
     let param_count = Array.length Sys.argv in
       if param_count > 2 then
         let option = (List.assoc Sys.argv.(1) 
-            [ ("-a",  (Ast, false)); 
+            [ ("-a",  (Ast, false));
+              ("-s",  (StaticSemanticChecker, false));
               ("-i",  (Interpret, false));
               ("-b",  (Bytecode, false)); 
               ("-c",  (Compile, false));
@@ -31,8 +33,6 @@ let _ =
           (Compile, false, Sys.argv.(1))
         else raise (Failure ("Invalid number of arguments."))
   in
-
-
   let preprocessed = Preprocess.run (filepath) in 
   let lexbuf = Lexing.from_string preprocessed in
   let program = try 
@@ -47,6 +47,9 @@ let _ =
   in
     match action with
         Ast -> let listing = Ast.string_of_program program in print_string listing
+      | StaticSemanticChecker ->
+          let sast_prog = Ssanalyzer.semantic_checker program
+          in print_endline("static semantic checker done.")
       | Interpret -> print_string "Interpret: nada at the moment" (* ignore (Interpret.run program) *)
       | Bytecode -> let listing = Bytecode.string_of_prog (Compiler.translate program) 
                     in print_endline listing
