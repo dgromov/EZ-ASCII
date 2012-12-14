@@ -35,7 +35,7 @@ type expr =
 
 type stmt =                                      (* Statements *)
     Assign of string * expr                      (* foo <- 42 *)
-  | OutputC of expr                              (* canvas -> out *)
+  | OutputC of expr * expr                             (* canvas -> out *)
   | OutputCR of expr * expr                      (* canvas -> out, render *)
   | OutputF of expr * string                     (* canvas -> "C:\test.png" *)
   | OutputFR of expr * string * expr           (* canvas -> "C:\test.png", render *)
@@ -126,8 +126,8 @@ let rec string_of_stmt = function
   | For(s1, e2, s3, sl4) ->
       "for (" ^ string_of_stmt s1  ^ " | " ^ string_of_expr e2 ^ " | " ^ string_of_stmt s3  ^ ")\n
       {\n" ^ String.concat "\n" (List.map string_of_stmt sl4)  ^ "\n}"
-  | OutputC(e) -> 
-      string_of_expr e ^ " -> out"
+  | OutputC(e, render_expr) -> 
+      string_of_expr e ^ string_of_expr render_expr ^ " -> out"
   | OutputF(e, f) -> 
       string_of_expr e ^ " -> " ^ f 
   | Assign(v, e) -> 

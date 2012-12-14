@@ -57,8 +57,8 @@ stmt_list:
 
 stmt:
     ID ASSIGN expr SEMICOLON                  { Assign($1, $3) }
-  | ID OUTPUT STDOUT SEMICOLON                { OutputC(Id($1)) }
-  /* | ID OUTPUT STDOUT COMMA expr SEMICOLON     { OutputC(Id($1), $5)} */
+  | ID OUTPUT STDOUT SEMICOLON                { OutputC(Id($1), BoolLiteral(false)) }
+  | ID OUTPUT STDOUT COMMA expr SEMICOLON     { OutputC(Id($1), $5)} 
   | ID OUTPUT STR SEMICOLON                   { OutputF(Id($1), $3) }
   /* | ID OUTPUT STR COMMA expr SEMICOLON        { OutputFR(Id($1), $3, $5)} */
 

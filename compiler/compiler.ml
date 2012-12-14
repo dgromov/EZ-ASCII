@@ -192,9 +192,15 @@ let translate (stmt_lst, func_decls) =
                         new_global_idx)] 
 
 
-    | Ast.OutputC(var) ->
+    | Ast.OutputC(var, rend) ->
         let var_val = (expr env var) in
-          [Lit 666] @ var_val @ [Jsr (-1)]
+
+        let rend_int = 
+              ( match rend with
+                  Ast.BoolLiteral(b) -> if b then 1 else 0
+                | _ -> 0 (* Should be handled by sast *) ) in 
+        [Lit rend_int] @ var_val @ [Jsr (-1)]
+
     | Ast.OutputCR(var, rend) ->
       let bc = (expr env var) in
       let ren_bc = (expr env rend) in 

@@ -218,9 +218,23 @@ let semantic_checker (stmt_lst, func_decls) =
             )
           else 
               env.global_env <- (StringMap.add var ev env.global_env)
-    | Ast.OutputC(var) ->
+    | Ast.OutputC(var, var_rend) ->
         let (var_val, var_typ) = expr env scope var
-        in ();
+        and (var_rend_val, var_rend_typ) = expr env scope var_rend
+        in 
+        (match (var_typ, var_rend_typ) with
+               (Canvas, Bool) ->
+                 ();
+             | (_, Bool ) ->
+                  ( match var_rend with 
+                      Ast.BoolLiteral(b) -> if b 
+                                          then raise(TypeException(var_rend, var_rend, Bool, var_rend_typ))
+                                          else ()
+                    | _ -> raise(TypeException(var_rend, var_rend, Bool, var_rend_typ)) ) ;
+             | (_, _) ->
+                 raise(TypeException(var_rend, var_rend, Bool, var_rend_typ))
+          );
+
     | Ast.OutputF(var, oc) ->
         let (var_val, var_typ) = expr env scope var
         in ();

@@ -1,0 +1,2 @@
+mkdir image 
+mkdir tmp
