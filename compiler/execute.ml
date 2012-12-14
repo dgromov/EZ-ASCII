@@ -22,20 +22,21 @@ let execute_prog prog debug_flag =
   in 
     debug ("DEBUG: num_globals is " ^ string_of_int prog.num_globals);
     try
-      let rec exec fp sp pc = match prog.text.(pc) with 
+      let rec exec fp sp pc = 
+        print_string("DEBUG: fp=" ^ (string_of_int fp) ^ ", sp=" ^ (string_of_int sp) ^ ", pc=" ^ (string_of_int pc) ^ ":  ");
+        match prog.text.(pc) with 
           Lit i -> 
             stack.(sp) <- IntValue i; 
-            debug ("DEBUG: Lit " ^ string_of_int i);
+            debug ("Lit " ^ string_of_int i);
             exec fp (sp+1) (pc+1)
         | Lct i ->
             stack.(sp) <- Address i;
-            debug ("DEBUG: Lct " ^ string_of_int i);
+            debug ("Lct " ^ string_of_int i);
             exec fp (sp+1) (pc+1)
         | Drp -> 
-            debug ("DEBUG: Drp ");
+            debug ("Drp ");
             exec fp (sp-1) (pc+1)
         | Bin op ->
-            debug ("DEBUG: Bin ");
             let op1 = 
               (match stack.(sp-2) with
                    IntValue(i)     -> Hashtypes.Int(i)
@@ -155,7 +156,7 @@ let execute_prog prog debug_flag =
                   exec fp (sp-1) (pc+1)
         | Lod i -> 
             stack.(sp) <- globals.(i); 
-            debug ("DEBUG: Lod " ^ string_of_int i ^ " Global=" ^ 
+            debug ("Lod " ^ string_of_int i ^ " Global=" ^ 
                    (match globals.(i) with
                         IntValue(j) -> "Int value " ^ string_of_int j
                       | Address(j) -> "Pointer to address " ^ string_of_int j 
@@ -171,25 +172,25 @@ let execute_prog prog debug_flag =
                    globals.(i) <- stack.(sp-1)
                | _ ->
                    globals.(i) <- stack.(sp-1)); 
-            debug ("DEBUG: Str " ^ string_of_int i); 
+            debug ("Str " ^ string_of_int i); 
             exec fp sp (pc+1) 
         | Lfp i -> 
-            debug("LFP: fp is " ^ (string_of_int fp));
-            debug("LFP: sp is " ^ (string_of_int sp));
             (match (stack.(fp+i), stack.(sp)) with
                  Address(j), Address(k) ->
                    if j != k then
-                     (* if over-writing a local... *)
+                     (* if over-writing a local, remove hash for 
+                      * the local being overwritten *)
                      (* if assigning a different pointer to a hash pair, no
                       * longer need the old hash pair, so remove it *)
                      Hashtbl.remove prog.glob_hash k;
                    stack.(sp) <- stack.(fp+i)
                | _ ->
                    stack.(sp) <- stack.(fp+i));
-            debug ("DEBUG: Lfp " ^ string_of_int i);
+            debug ("Lfp " ^ string_of_int i);
             exec fp (sp+1) (pc+1) 
         | Sfp i -> 
             stack.(fp+i) <- stack.(sp-1); 
+            debug ("Sfp " ^ string_of_int i);
             exec fp (sp+1) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
         | Jsr(-1) ->
@@ -199,8 +200,6 @@ let execute_prog prog debug_flag =
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
-
-              
             print_endline (Hashtypes.string_of_ct lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
@@ -228,7 +227,6 @@ let execute_prog prog debug_flag =
             in
             let granularity = string_of_int gran_val 
             in
-
               let filename_parts = Str.split (Str.regexp "/") path in 
                 let filename = 
                   match Str.string_match (Str.regexp ".+.i")  (List.hd (List.rev filename_parts)) 0 with 
@@ -249,7 +247,7 @@ let execute_prog prog debug_flag =
                 exec fp sp (pc+1)
         | Jsr(-3) ->
             (* BLANK *)
-            debug ("JSR -3"); 
+            debug ("Jsr -3"); 
             let height =  stack.(sp-3)
             and width  =  stack.(sp-2)
             and granularity = stack.(sp-1)
@@ -276,11 +274,11 @@ let execute_prog prog debug_flag =
 
         | Jsr (-4) -> 
             (* ATTRIBUTE *)
-            debug ("JSR -4: - Canvas Attr");
+            debug ("Jsr -4: - Canvas Attr");
             exec fp sp (pc+1 )
         | Jsr (-5) -> 
             (* SELECT *)
-            debug ("JSR -5: - Select Piece of Canvas");
+            debug ("Jsr -5: - Select Piece of Canvas");
             let existing = match stack.(sp-1) with 
               Address(j) ->
                 match (Hashtbl.find prog.glob_hash j) with
@@ -329,19 +327,19 @@ let execute_prog prog debug_flag =
 
         | Jsr (-6) -> 
             (* MASK *)
-            debug ("JSR -6: - Mask ");
+            debug ("Jsr -6: - Mask ");
             exec fp sp (pc+1)
         | Jsr (-7) ->
             (* SET POINT *)
-            debug ("JSR -7: - Set point");
+            debug ("Jsr -7: - Set point");
             exec fp sp (pc + 1)
         | Jsr i -> 
             stack.(sp) <- IntValue (pc + 1); 
-            debug ("DEBUG: Jsr " ^ string_of_int i);
+            debug ("Jsr " ^ string_of_int i);
             exec fp (sp+1) i
         | Ent i -> 
             stack.(sp) <- IntValue (fp); 
-            debug ("DEBUG: Ent " ^ string_of_int i);
+            debug ("Ent " ^ string_of_int i);
             exec sp (sp+i+1) (pc+1) 
         | Rts i ->
             let new_fp = match stack.(fp) with
@@ -352,10 +350,10 @@ let execute_prog prog debug_flag =
               | Address(k) -> raise (Failure("Rts expected an integer for new program counter but got an address.")) 
             in
               stack.(fp-i-1) <- stack.(sp-1);
-              debug ("DEBUG: Rts " ^ string_of_int i);
+              debug ("Rts " ^ string_of_int i);
               exec new_fp (fp-i) new_pc 
         | Beq i -> 
-            debug ("DEBUG: Beq " ^ string_of_int i);
+            debug ("Beq " ^ string_of_int i);
             exec fp (sp-1)
               (pc + 
                if (match stack.(sp-1) with
@@ -368,7 +366,7 @@ let execute_prog prog debug_flag =
                then i 
                else 1) 
         | Bne i -> 
-            debug ("DEBUG: Bne " ^ string_of_int i);
+            debug ("Bne " ^ string_of_int i);
             exec fp (sp-1)
               (pc + 
                if (match stack.(sp-1) with
@@ -381,7 +379,7 @@ let execute_prog prog debug_flag =
                then i 
                else 1) 
         | Bra i -> 
-            debug ("DEBUG: Bra " ^ string_of_int i);
+            debug ("Bra " ^ string_of_int i);
             exec fp sp (pc+i)
         | Hlt -> ()
       in exec 0 0 0 
