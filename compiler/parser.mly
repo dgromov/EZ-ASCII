@@ -22,7 +22,7 @@
 
 %nonassoc NOELSE
 %nonassoc ELSE
-%left PLUS, MINUS        /* lowest precedence */
+%left MASK, PLUS, MINUS        /* lowest precedence */
 %left TIMES, DIVIDE, MOD
 %left EQ, NEQ
 %left LT, GT, GEQ, LEQ
@@ -58,9 +58,9 @@ stmt_list:
 stmt:
     ID ASSIGN expr SEMICOLON                  { Assign($1, $3) }
   | ID OUTPUT STDOUT SEMICOLON                { OutputC(Id($1)) }
-  | ID OUTPUT STDOUT COMMA expr SEMICOLON     { OutputCR(Id($1), $5)}
+  /* | ID OUTPUT STDOUT COMMA expr SEMICOLON     { OutputC(Id($1), $5)} */
   | ID OUTPUT STR SEMICOLON                   { OutputF(Id($1), $3) }
-  | ID OUTPUT STR COMMA expr SEMICOLON        { OutputFR(Id($1), $3, $5)}
+  /* | ID OUTPUT STR COMMA expr SEMICOLON        { OutputFR(Id($1), $3, $5)} */
 
   | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
   | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
@@ -130,23 +130,10 @@ expr:
       | expr GEQ expr                     { Binop($1, Geq, $3) }
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
-      | expr MASK expr                    { Binop($1, Mask, $3) }
+      | expr MASK expr                    { Binop($1, Mask, $3) } 
       | ID ATTR_W                         { GetAttr ($1, W)}
       | ID ATTR_H                         { GetAttr ($1, H)} 
       | ID ATTR_G                         { GetAttr ($1, G)}
       | LOAD LPAREN expr COMMA expr RPAREN { Load($3, $5) } 
       | BLANK LPAREN expr COMMA expr COMMA expr RPAREN { Blank ($3, $5, $7 ) }
       | SHIFT LPAREN ID COMMA INTLITERAL COMMA expr RPAREN { Shift ($3, $5, $7 ) }
-
-
-
-
-
-/*	  
-actuals_opt:
-		/* nothing  { [] }
-		| actuals_list { List.rev $1 }
-actuals_list:
-		expr { [$1] }
-		| actuals_list COMMA expr { $3 :: $1 }
-*/
