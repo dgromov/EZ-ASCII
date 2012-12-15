@@ -104,8 +104,6 @@ let get x y can =
 let set x y intensity can = 
   can.data.(x).(y) <- intensity
 
-
-
 let set_rect_int x1 x2 y1 y2 can intensity = 
   for i = x1 to x2 do 
       for j = y1 to y2 do 
@@ -126,7 +124,6 @@ let set_rect_can x1 x2 y1 y2 old_can new_can =
 
     (new_can)
 ;;
-
 
 let select_rect x1 x2 y1 y2 can = 
    let blank_slate = create_blank_from_existing can (-1) in 
@@ -169,11 +166,6 @@ let shift can1 dir steps =
        set_rect_can 0 ((height can1)- (1+steps)) 0 ((width can1)-1) blank_slate can1
   | RIGHT ->
        set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1
-
-
-
-
-
 
 (* Loads an image from filepath fname, and returns
  *  canvas type int array array *)

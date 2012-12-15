@@ -20,7 +20,7 @@ type expr =
   | Call of string * expr list                   (* foo(1, 25) *)
   | Load of expr * expr                          (* load("filename", 10) *)
   | Blank of expr * expr * expr                  (* blank(x, y, g) *)
-  | Shift of string * int * expr
+  | Shift of expr * expr * expr
   | Select_Point  of expr * expr                 (* [1,2] *)
   | Select_Rect   of expr * expr * expr * expr   (* [1:2, 3:4] *)
   | Select_VSlice of expr * expr * expr          (* [1, 3:4] *)
@@ -82,7 +82,7 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Load(e1, gran) -> "Load(" ^ string_of_expr e1 ^ ", " ^ string_of_expr gran ^ ")"
   | Blank(e1, e2, e3) -> "Blank(" ^ string_of_expr e1 ^ ", " ^  string_of_expr e2 ^ ", " ^ string_of_expr e3 ^ ")"
-  | Shift(e1, dir, e3) -> "Shift(" ^ e1 ^ ", " ^  string_of_int dir ^ ", " ^ string_of_expr e3 ^ ")"
+  | Shift(e1, dir, e3) -> "Shift(" ^ string_of_expr e1 ^ ", " ^  string_of_expr dir ^ ", " ^ string_of_expr e3 ^ ")"
 
   | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "] -- point select"
   | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 

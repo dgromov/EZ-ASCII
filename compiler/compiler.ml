@@ -147,7 +147,11 @@ let translate (stmt_lst, func_decls) =
     | Ast.Select_Binop(op, e) -> [Lit 1]
     | Ast.Select_Bool(e) -> [Lit 1]
     | Ast.Shift(canv, dir, count) ->
-        [Lit 1]
+        let canv_val = (expr env) canv
+        and dir_val = (expr env) dir 
+        and count_val = (expr env) count in 
+        canv_val @ dir_val @ count_val @ [Jsr (-5)]
+        
     | Ast.GetAttr(canv, attr) -> 
         let canv_val = (expr env) canv 
         in

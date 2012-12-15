@@ -136,4 +136,4 @@ expr:
       | ID ATTR_G                         { GetAttr (Id($1), G)}
       | LOAD LPAREN expr COMMA expr RPAREN { Load($3, $5) } 
       | BLANK LPAREN expr COMMA expr COMMA expr RPAREN { Blank ($3, $5, $7 ) }
-      | SHIFT LPAREN ID COMMA INTLITERAL COMMA expr RPAREN { Shift ($3, $5, $7 ) }
+      | SHIFT LPAREN ID COMMA expr COMMA expr RPAREN { Shift (Id($3), $5, $7 ) }

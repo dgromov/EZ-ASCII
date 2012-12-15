@@ -234,19 +234,27 @@ let execute_prog prog debug_flag =
             print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
-            debug ("Jsr -1");
+            debug ("Jsr -2");
             let lookup =
               (match stack.(sp-1) with
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
+            let filename = 
+              ( match (pop_address_val stack.(sp-2)) with
+                  Hashtypes.String(s) -> s
+                | _ ->
+                    raise (Failure("Jsr -2 expected a string filepath but got a different type.")) 
+              ) in 
             let render = 
-              (match stack.(sp-2) with 
+              (match stack.(sp-3) with 
                   IntValue(i) -> raise (Failure ("Render should be a boolean"))
                 | Address(i) -> match (Hashtbl.find prog.glob_hash i) with 
                                 Hashtypes.Bool(b) -> b (* add error handling *)
               ) in
-            print_endline (Hashtypes.string_of_ct render lookup);
+           
+            let oc = open_out filename in 
+              output_string oc ( (Hashtypes.string_of_ct render lookup) ^ "\n" );
             exec fp sp (pc+1) 
         | Jsr(-3) ->
             (* CANVAS LOADING *)
@@ -291,29 +299,10 @@ let execute_prog prog debug_flag =
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
-     (*     | Jsr(-5) ->
-            (* ATTR *)
-            debug ("Jsr -5"); 
-             let existing = match (pop_address_val stack.(sp-1)) with
-                Hashtypes.Canvas(c) -> c
-              | _ -> raise(Failure("Jsr -5: Expected canvas type."))
-            in 
-            let sel_type = (pop_int stack.(sp-2)) in
-            let ret_val = 
-              (match sel_type with)
-                1 -> 
-            let h_val = (pop_int stack.(sp-3))
-            and w_val = (pop_int stack.(sp-2))
-            and g_val = (pop_int stack.(sp-1))
-            stack.(sp-1) <- ret_val; 
-
-            in 
-              Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
-                (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
-              let ret_val = Address !(prog.glob_hash_counter) in
-                prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
-                stack.(sp-1) <- ret_val;
-                exec fp sp (pc+1) *)
+       | Jsr (-5) -> 
+            (* SHIFT *)
+            debug ("Jsr -5");
+            exec fp sp (pc+1)
        | Jsr (-6) -> 
             (* SELECT *)
             debug ("Jsr -6: - Select Piece of Canvas");
