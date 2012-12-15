@@ -1,0 +1,4 @@
+// tests unary minus functionality.
+
+d <- -"hello world!"; // should be error
+d -> out;

@@ -1,0 +1,27 @@
+// tests locals in functions
+
+a <- 2;
+a -> out;
+
+b <- 3;
+b -> out;
+
+Fun foo() {
+  m <- "local in foo";
+  m -> out;
+
+  a <- "overridden a";
+}
+
+Fun bar() {
+  m -> out;  // should be undefined var error
+  n <- "local in bar";
+  n -> out;
+  b <- "overridden b";
+}
+
+g <- foo();
+g <- bar();
+
+a -> out;
+b -> out;

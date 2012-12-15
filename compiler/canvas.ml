@@ -196,13 +196,10 @@ let select_all can =
 
 let mask can1 can2 =
   let blank_slate = create_blank_from_existing can1 (-1) in 
- (*  let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) blank_slate can1 in 
-     set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) cp_can1 can2; *)
-  (blank_slate)
-
-
-
-
+     let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) can1 blank_slate in
+     (set_rect_can 0 ((height can1)-1) 0 ((width can1)-1) can2 cp_can1 ) 
+  
+  
 let shift can dir steps = 
   let shifted = create_blank_from_existing can (-1) in 
     let rec set_point = function

@@ -39,10 +39,10 @@ let _ =
         (Parser.program Scanner.token lexbuf)
       with Parsing.Parse_error ->
         let curr = lexbuf.Lexing.lex_curr_p in
-        let line = curr.Lexing.pos_lnum in
+        (* let line = curr.Lexing.pos_lnum in *)
         let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
         let tok = Lexing.lexeme lexbuf in 
-          print_endline (">>> Parse error at line " ^ (string_of_int line) ^ ", character " ^ (string_of_int cnum) ^ ": '" ^ tok ^ "'");
+          print_endline (">>> Parse error at character " ^ (string_of_int cnum) ^ ": '" ^ tok ^ "'");
           exit 0;
   in
   let run_ssanalyzer program = 

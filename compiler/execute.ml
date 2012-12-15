@@ -26,23 +26,23 @@ let execute_prog prog debug_flag =
   and globals = Array.make prog.num_globals (IntValue 0) 
   (*and canv_env = Array.make 100 [] *)
   and debug s =
-    if debug_flag then print_endline s
+    if debug_flag then print_string s
   in 
-    debug ("DEBUG: num_globals is " ^ string_of_int prog.num_globals);
+    debug ("DEBUG: num_globals is " ^ string_of_int prog.num_globals ^ "\n");
     try
       let rec exec fp sp pc = 
         debug ("DEBUG: fp=" ^ (string_of_int fp) ^ ", sp=" ^ (string_of_int sp) ^ ", pc=" ^ (string_of_int pc) ^ ":  ");
         match prog.text.(pc) with 
           Lit i -> 
             stack.(sp) <- IntValue i; 
-            debug ("Lit " ^ string_of_int i);
+            debug ("Lit " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1)
         | Lct i ->
             stack.(sp) <- Address i;
-            debug ("Lct " ^ string_of_int i);
+            debug ("Lct " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1)
         | Drp -> 
-            debug ("Drp ");
+            debug ("Drp " ^ "\n");
             exec fp (sp-1) (pc+1)
         | Bin op ->
             let op1 = 
@@ -64,43 +64,43 @@ let execute_prog prog debug_flag =
                        (Hashtypes.Int(i), Hashtypes.Int(j)) ->
                          (match op with
                               Plus ->  
-                                debug("Bin +: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin +: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (i + j)
                             | Minus ->
-                                debug("Bin -: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin -: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (i - j)
                             | Times ->
-                                debug("Bin *: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin *: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (i * j)
                             | Divide ->
-                                debug("Bin /: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin /: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (i / j)
                             | Mod ->
-                                debug("Bin mod: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin mod: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (i mod j)
                             | Eq ->
-                                debug("Bin eq: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin eq: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean (i = j))
                             | Neq        -> 
-                                debug("Bin neq: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin neq: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean (i != j))
                             | Lt         -> 
-                                debug("Bin <: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin <: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean (i < j))
                             | Gt         -> 
-                                debug("Bin >: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin >: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean (i > j))
                             | Leq        -> 
-                                debug("Bin <=: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin <=: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean (i <= j))
                             | Geq        -> 
-                                debug("Bin >=: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin >=: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean (i >= j))
                             | Or         -> 
-                                debug("Bin ||: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin ||: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean ((bool_of_int i) || (bool_of_int j)))
                             | And        -> 
-                                debug("Bin &&: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
+                                debug("Bin &&: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean ((bool_of_int i) && (bool_of_int j)))
                             | Mask -> 
                                 raise( Failure("Mask is not valid for bools. SS should catch this"))
@@ -108,25 +108,25 @@ let execute_prog prog debug_flag =
                      | (Hashtypes.Bool(b1), Hashtypes.Bool(b2)) ->
                          (match op with
                               Eq ->
-                                debug("Bin eq: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2);
+                                debug("Bin eq: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2 ^ "\n");
                                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Bool (b1 = b2));
                                 let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                                   ret_val
                             | Neq -> 
-                                debug("Bin neq: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2);
+                                debug("Bin neq: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2 ^ "\n");
                                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Bool (b1 != b2));
                                 let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                                   ret_val
                             | Or -> 
-                                debug("Bin ||: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2);
+                                debug("Bin ||: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2 ^ "\n");
                                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Bool (b1 || b2));
                                 let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                                   ret_val
                             | And -> 
-                                debug("Bin &&: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2);
+                                debug("Bin &&: b1=" ^ string_of_bool b1 ^ " b2=" ^ string_of_bool b2 ^ "\n");
                                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Bool (b1 && b2));
                                 let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
@@ -139,7 +139,7 @@ let execute_prog prog debug_flag =
                               Plus ->
                                 (* + operator for string operands is a
                                  * concatenation *)
-                                debug("Bin +: string1=" ^ s1 ^ " string2=" ^ s2);
+                                debug("Bin +: string1=" ^ s1 ^ " string2=" ^ s2 ^ "\n");
                                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.String (s1 ^ s2));
                                 let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter) + 1;
@@ -150,8 +150,8 @@ let execute_prog prog debug_flag =
                       | (Hashtypes.Canvas(c1), Hashtypes.Canvas(c2)) ->
                         ( match op with 
                           Mask -> 
-                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c1))   ));
-                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c2)) ));
+                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c1))   ) ^ "\n");
+                            debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c2)) ) ^ "\n");
                             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (Canvas.mask c1 c2));
                             let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
@@ -171,21 +171,25 @@ let execute_prog prog debug_flag =
                    (match globals.(i) with
                         IntValue(j) -> "Int value " ^ string_of_int j
                       | Address(j) -> "Pointer to address " ^ string_of_int j 
-                   ));
+                   ) ^ "\n");
             exec fp (sp+1) (pc+1) 
         | Str i ->
+(*
             (match (stack.(sp-1), globals.(i)) with
                  Address(j), Address(k) ->
                    if j != k then
                      (* if assigning a different pointer to a hash pair, no
                       * longer need the old hash pair, so remove it *)
-                     Hashtbl.remove prog.glob_hash k;
+                     (); (*Hashtbl.remove prog.glob_hash k; *)
                    globals.(i) <- stack.(sp-1)
                | _ ->
                    globals.(i) <- stack.(sp-1)); 
-            debug ("Str " ^ string_of_int i); 
+ *)
+            globals.(i) <- stack.(sp-1);
+            debug ("Str " ^ string_of_int i ^ "\n"); 
             exec fp sp (pc+1) 
         | Lfp i -> 
+(*
             (match (stack.(fp+i), stack.(sp)) with
                  Address(j), Address(k) ->
                    if j != k then
@@ -193,15 +197,17 @@ let execute_prog prog debug_flag =
                       * the local being overwritten *)
                      (* if assigning a different pointer to a hash pair, no
                       * longer need the old hash pair, so remove it *)
-                     Hashtbl.remove prog.glob_hash k;
+                     Hashtbl.remove prog.glob_hash k; 
                    stack.(sp) <- stack.(fp+i)
                | _ ->
                    stack.(sp) <- stack.(fp+i));
-            debug ("Lfp " ^ string_of_int i);
+ *)
+            stack.(sp) <- stack.(fp + i);
+            debug ("Lfp " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1) 
         | Sfp i -> 
             stack.(fp+i) <- stack.(sp-1); 
-            debug ("Sfp " ^ string_of_int i);
+            debug ("Sfp " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
         | CAtr atr -> 
@@ -222,17 +228,23 @@ let execute_prog prog debug_flag =
             exec fp sp (pc+1)
 
         | Jsr(-1) ->
-            debug ("Jsr -1");
+            debug ("Jsr -1" ^ "\n");
             let lookup =
               (match stack.(sp-1) with
                    IntValue(i) -> Hashtypes.Int(i)
-                 | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
+                 | Address(i) -> 
+                     try (Hashtbl.find prog.glob_hash i)
+                     with Not_found ->
+                       (* add error handling *)
+                       raise(Failure("Jsr -1: No value found at address " ^ string_of_int i))
               ) in 
             let render = 
               (match stack.(sp-2) with 
-                  IntValue(i) -> raise (Failure ("Render should be a boolean"))
-                | Address(i) -> match (Hashtbl.find prog.glob_hash i) with 
-                                Hashtypes.Bool(b) -> b (* add error handling *)
+                  IntValue(i) -> raise (Failure ("Jsr -1: Render should be a boolean."))
+                | Address(i) -> 
+                    match (Hashtbl.find prog.glob_hash i) with 
+                        Hashtypes.Bool(b) -> b
+                      | _ -> raise(Failure ("Jsr -1: Render should be a boolean.")) 
               ) in
             print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
@@ -263,7 +275,7 @@ let execute_prog prog debug_flag =
             exec fp sp (pc+1) 
         | Jsr(-3) ->
             (* CANVAS LOADING *)
-            debug ("Jsr -2");
+            debug ("Jsr -2" ^ "\n");
             let gran_val = pop_int(stack.(sp-1))
             and path = 
               match (pop_address_val stack.(sp-2)) with
@@ -277,12 +289,13 @@ let execute_prog prog debug_flag =
                 let filename = 
                   match Str.string_match (Str.regexp ".+.i")  (List.hd (List.rev filename_parts)) 0 with 
                     false -> 
-                      debug ("Trying to open: " ^ "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" ); 
+                      debug ("Trying to open: " ^ "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" ^ "\n"); 
                       let comm = "python util/load_img.py " ^ path ^ " " ^ granularity in 
-                      Sys.command (comm);
+                      let _ = Sys.command (comm)
+                      in ();
                       "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" 
                   | true -> 
-                      debug ("Trying to open raw: " ^ path ); 
+                      debug ("Trying to open raw: " ^ path ^ "\n"); 
                       path
               in 
               Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
@@ -293,7 +306,7 @@ let execute_prog prog debug_flag =
                 exec fp sp (pc+1)
         | Jsr(-4) ->
             (* BLANK *)
-            debug ("Jsr -4"); 
+            debug ("Jsr -4" ^ "\n"); 
             let h_val = (pop_int stack.(sp-3))
             and w_val = (pop_int stack.(sp-2))
             and g_val = (pop_int stack.(sp-1))
@@ -306,7 +319,7 @@ let execute_prog prog debug_flag =
                 exec fp sp (pc+1)
        | Jsr (-5) -> 
             (* SHIFT *)
-            debug ("Jsr -5");
+            debug ("Jsr -5" ^ "\n");
              let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
               | _ -> raise(Failure("Jsr -6: Expected canvas type."))
@@ -322,7 +335,7 @@ let execute_prog prog debug_flag =
                 exec fp sp (pc+1)
        | Jsr (-6) -> 
             (* SELECT *)
-            debug ("Jsr -6: - Select Piece of Canvas");
+            debug ("Jsr -6: - Select Piece of Canvas" ^ "\n");
             let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
               | _ -> raise(Failure("Jsr -6: Expected canvas type."))
@@ -368,28 +381,27 @@ let execute_prog prog debug_flag =
               prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
               stack.(sp-1) <- ret_val;
               exec fp sp (pc+1)
-
         | Jsr (-7) ->
             (* SET POINT *)
-            debug ("Jsr -7: - Set point");
+            debug ("Jsr -7: - Set point" ^ "\n");
             exec fp sp (pc + 1)
         | Jsr i -> 
             stack.(sp) <- IntValue (pc + 1); 
-            debug ("Jsr " ^ string_of_int i);
+            debug ("Jsr " ^ string_of_int i ^ "\n");
             exec fp (sp+1) i
         | Ent i -> 
             stack.(sp) <- IntValue (fp); 
-            debug ("Ent " ^ string_of_int i);
+            debug ("Ent " ^ string_of_int i ^ "\n");
             exec sp (sp+i+1) (pc+1) 
         | Rts i ->
             let new_fp = pop_int stack.(fp) 
             and new_pc = pop_int stack.(fp-1) 
             in
               stack.(fp-i-1) <- stack.(sp-1);
-              debug ("Rts " ^ string_of_int i);
+              debug ("Rts " ^ string_of_int i ^ "\n");
               exec new_fp (fp-i) new_pc 
         | Beq i -> 
-            debug ("Beq " ^ string_of_int i);
+            debug ("Beq " ^ string_of_int i ^ "\n");
             exec fp (sp-1)
               (pc + 
                if (match stack.(sp-1) with
@@ -400,7 +412,7 @@ let execute_prog prog debug_flag =
                then i 
                else 1) 
         | Bne i -> 
-            debug ("Bne " ^ string_of_int i);
+            debug ("Bne " ^ string_of_int i ^ "\n");
             exec fp (sp-1)
               (pc + 
                if (match stack.(sp-1) with
@@ -411,10 +423,10 @@ let execute_prog prog debug_flag =
                then i 
                else 1) 
         | Bra i -> 
-            debug ("Bra " ^ string_of_int i);
+            debug ("Bra " ^ string_of_int i ^ "\n");
             exec fp sp (pc+i)
         | Hlt -> ()
       in exec 0 0 0 
     with e -> (* catch all exceptions *)
-      Printf.eprintf "Unexpected exception: %s\n" (Printexc.to_string e);
+      Printf.eprintf "Runtime error: %s\n" (Printexc.to_string e);
 
