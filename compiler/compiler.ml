@@ -49,7 +49,8 @@ let translate (stmt_lst, func_decls) =
           (bif_helper (StringMap.add hd (counter) map) (counter-1)) tl
     (* add built-in functions here *)
     (* reserve -1 for printing *)
-    in (bif_helper StringMap.empty (-2)) ["load"; "blank"; "shift"]
+    (* reserve -2 for printing to file *)
+    in (bif_helper StringMap.empty (-3)) ["load"; "blank"; "shift"]
   in  
 
   let function_indexes = string_map_pairs built_in_functions
@@ -96,13 +97,13 @@ let translate (stmt_lst, func_decls) =
     | Ast.Load(filepath_expr, gran_expr) ->
         let ev1_val = (expr env) filepath_expr
         and ev2_val = (expr env) gran_expr in
-          ev1_val @ ev2_val @ [Jsr (-2)]
+          ev1_val @ ev2_val @ [Jsr (-3)]
     
     | Ast.Blank(height, width, granularity) -> 
         let ev1_val = (expr env) height
         and ev2_val = (expr env) width 
         and ev3_val = (expr env) granularity in 
-          ev1_val @ ev2_val @ ev3_val @ [Jsr (-3)]
+          ev1_val @ ev2_val @ ev3_val @ [Jsr (-4)]
 
     | Ast.Select_Point (x, y) -> 
         let ev1_val = (expr env) x 
@@ -142,11 +143,15 @@ let translate (stmt_lst, func_decls) =
     | Ast.Select (canv, selection) ->
         let ev1_val = (expr env) canv
         in 
-          (expr env) selection @ ev1_val @ [Jsr (-5)] 
+          (expr env) selection @ ev1_val @ [Jsr (-6)] 
     | Ast.Select_Binop(op, e) -> [Lit 1]
     | Ast.Select_Bool(e) -> [Lit 1]
     | Ast.Shift(canv, dir, count) ->
         [Lit 1]
+    | Ast.GetAttr(canv, attr) -> 
+        let canv_val = (expr env) canv 
+        in
+          canv_val @ [CAtr attr]
   (* *) 
   and  stmt env scope = function
       (* need to update assign later *)

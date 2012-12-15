@@ -1,0 +1,4 @@
+include "tests/test-loadcanvas.eza";
+
+d <- shift(c, SHIFT_DOWN, 10);
+d -> out;

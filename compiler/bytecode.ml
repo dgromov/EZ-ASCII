@@ -24,6 +24,7 @@ type bstmt =
   | Bne of int          (* Branch relative if top-of-stack is non-zero *)
   | Bra of int          (* Branch relative *)
   | Lct of int          (* Load complex type by absolute address *)
+  | CAtr of Ast.attr    (* Get Canvas Attribute*) 
   | Hlt                 (* Terminate *)
 
 type prog = {

@@ -5,35 +5,35 @@ v <- load ("../image/small.i", 10 );
 
 // Point
 can <- v[2,2];
-can -> out;
+can -> out, true;
 new_line -> out;
 
 // Select 
 can <- v[0:5, 0:6];
-can -> out;
+can -> out, true;
 new_line -> out;
 
 // Horizontal Slice_ALL
 can <- v[2,];
-can -> out;
+can -> out, true;
 new_line -> out;
 
 // Vertical Slice_ALL
 can <- v[,3];
-can -> out;
+can -> out, true;
 new_line -> out;
 
 // Horizontl Slice 
 can <- v[2,0:4];
-can -> out;
+can -> out, true;
 new_line -> out;
 
 // Vertical Slice 
 can <- v[3:6,3];
-can -> out;
+can -> out, true;
 new_line -> out;
 
 // ALL 
 can <- v[,];
-can -> out;
+can -> out, true;
 new_line -> out;

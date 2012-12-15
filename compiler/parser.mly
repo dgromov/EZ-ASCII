@@ -131,9 +131,9 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
       | expr MASK expr                    { Binop($1, Mask, $3) } 
-      | ID ATTR_W                         { GetAttr ($1, W)}
-      | ID ATTR_H                         { GetAttr ($1, H)} 
-      | ID ATTR_G                         { GetAttr ($1, G)}
+      | ID ATTR_W                         { GetAttr (Id($1), W)}
+      | ID ATTR_H                         { GetAttr (Id($1), H)} 
+      | ID ATTR_G                         { GetAttr (Id($1), G)}
       | LOAD LPAREN expr COMMA expr RPAREN { Load($3, $5) } 
       | BLANK LPAREN expr COMMA expr COMMA expr RPAREN { Blank ($3, $5, $7 ) }
       | SHIFT LPAREN ID COMMA INTLITERAL COMMA expr RPAREN { Shift ($3, $5, $7 ) }

@@ -13,8 +13,16 @@ type stack_t =
     IntValue of int
   | Address of int
 
+
 let execute_prog prog debug_flag =
-  let stack = Array.make 1024 (IntValue 0)
+  (* wrapper functions around extracting types from the stack *)
+  let pop_int = function
+      IntValue(i) -> i 
+    | Address(i)  -> raise (Failure ("Expected an int but popped an address."))
+  and pop_address_val = function
+      IntValue(i) -> raise (Failure ("Expected an address but popped an int."))    
+    | Address(i) -> (Hashtbl.find prog.glob_hash i) 
+  and stack = Array.make 1024 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
   (*and canv_env = Array.make 100 [] *)
   and debug s =
@@ -193,6 +201,23 @@ let execute_prog prog debug_flag =
             debug ("Sfp " ^ string_of_int i);
             exec fp (sp+1) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
+        | CAtr atr -> 
+            debug ("CAtr "); 
+            let canv_id = stack.(sp-1) in 
+              let canv = (match pop_address_val canv_id with 
+                Hashtypes.Canvas(c) -> c 
+              | _ -> raise (Failure ("Catr needs to be given a canvas"))) in
+
+            let result = 
+              (
+                match atr with
+                  Ast.W -> Canvas.width canv 
+                | Ast.H -> Canvas.height canv 
+                | Ast.G -> Canvas.granularity canv 
+              ) in 
+            stack.(sp-1) <- IntValue result; 
+            exec fp sp (pc+1)
+
         | Jsr(-1) ->
             debug ("Jsr -1");
             let lookup =
@@ -226,25 +251,12 @@ let execute_prog prog debug_flag =
         | Jsr(-3) ->
             (* CANVAS LOADING *)
             debug ("Jsr -2");
-            let gran = stack.(sp-1)
+            let gran_val = pop_int(stack.(sp-1))
             and path = 
-              (
-                match stack.(sp-2) with
-                    Address(j) ->
-                      (match (Hashtbl.find prog.glob_hash j) with
-                           Hashtypes.String(s) -> s
-                         | _ ->
-                             raise (Failure("Jsr -2 expected a string filepath but got a different type."))
-                      )
-                  | _ ->
-                      raise (Failure("Jsr -2 expected address for file path string but got IntValue."))
-              )
-            in
-            let gran_val = 
-              match gran with 
-                  IntValue(g) -> g 
-                | _ -> 
-                    raise (Failure ("Jsr -2 expects an int granularity"))
+              match (pop_address_val stack.(sp-2)) with
+                  Hashtypes.String(s) -> s
+                | _ ->
+                    raise (Failure("Jsr -2 expected a string filepath but got a different type."))
             in
             let granularity = string_of_int gran_val 
             in
@@ -268,73 +280,76 @@ let execute_prog prog debug_flag =
                 exec fp sp (pc+1)
         | Jsr(-4) ->
             (* BLANK *)
-            debug ("Jsr -3"); 
-            let height =  stack.(sp-3)
-            and width  =  stack.(sp-2)
-            and granularity = stack.(sp-1)
+            debug ("Jsr -4"); 
+            let h_val = (pop_int stack.(sp-3))
+            and w_val = (pop_int stack.(sp-2))
+            and g_val = (pop_int stack.(sp-1))
             in 
-            let h_val = 
-              match height with 
-                  IntValue(h) -> h
-                | Address(h) -> raise(Failure("Jsr -3 expected an integer for height but got an address."))
-            and w_val =
-              match width with 
-                  IntValue(w) -> w
-                | Address(w) -> raise(Failure("Jsr -3 expected an integer for width but got an address."))
-            and g_val = 
-              match granularity with 
-                  IntValue(g) -> g 
-                | Address(g) -> raise(Failure("Jsr -3 expected an integer for granularity but got an address."))
+              Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
+                (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
+              let ret_val = Address !(prog.glob_hash_counter) in
+                prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                stack.(sp-1) <- ret_val;
+                exec fp sp (pc+1)
+     (*     | Jsr(-5) ->
+            (* ATTR *)
+            debug ("Jsr -5"); 
+             let existing = match (pop_address_val stack.(sp-1)) with
+                Hashtypes.Canvas(c) -> c
+              | _ -> raise(Failure("Jsr -5: Expected canvas type."))
             in 
-           Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
-                  (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
-            let ret_val = Address !(prog.glob_hash_counter) in
-              prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
-              stack.(sp-1) <- ret_val;
-              exec fp sp (pc+1)
+            let sel_type = (pop_int stack.(sp-2)) in
+            let ret_val = 
+              (match sel_type with)
+                1 -> 
+            let h_val = (pop_int stack.(sp-3))
+            and w_val = (pop_int stack.(sp-2))
+            and g_val = (pop_int stack.(sp-1))
+            stack.(sp-1) <- ret_val; 
 
-        | Jsr (-5) -> 
-            (* ATTRIBUTE *)
-            debug ("Jsr -4: - Canvas Attr");
-            exec fp sp (pc+1 )
-        | Jsr (-6) -> 
-            (* SELECT *)
-            debug ("Jsr -5: - Select Piece of Canvas");
-            let existing = match stack.(sp-1) with 
-              Address(j) ->
-                match (Hashtbl.find prog.glob_hash j) with
-                  Hashtypes.Canvas(c) -> c
             in 
-            let sel_type =  match stack.(sp-2) with 
-                              IntValue(t) -> t in 
+              Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
+                (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
+              let ret_val = Address !(prog.glob_hash_counter) in
+                prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                stack.(sp-1) <- ret_val;
+                exec fp sp (pc+1) *)
+       | Jsr (-6) -> 
+            (* SELECT *)
+            debug ("Jsr -6: - Select Piece of Canvas");
+            let existing = match (pop_address_val stack.(sp-1)) with
+                Hashtypes.Canvas(c) -> c
+              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
+            in 
+            let sel_type = (pop_int stack.(sp-2)) in
             let selected = 
               (* This match should be on some sort of enum *)
               match sel_type with 
                   1 -> 
-                    let x = match stack.(sp-4) with IntValue(t) -> t 
-                    and y = match stack.(sp-3) with IntValue(t) -> t in 
+                    let x = pop_int stack.(sp-4) 
+                    and y = pop_int stack.(sp-3) in
                     Canvas.select_point x y existing        
                 | 2 -> 
-                    let x1 = match stack.(sp-6) with IntValue(t) -> t 
-                    and x2 = match stack.(sp-5) with IntValue(t) -> t 
-                    and y1 = match stack.(sp-4) with IntValue(t) -> t 
-                    and y2 = match stack.(sp-3) with IntValue(t) -> t in 
+                    let x1 = pop_int stack.(sp-6) 
+                    and x2 = pop_int stack.(sp-5) 
+                    and y1 = pop_int stack.(sp-4)
+                    and y2 = pop_int stack.(sp-3) in
                     Canvas.select_rect x1 x2 y1 y2 existing 
                 | 3 -> 
-                    let x = match stack.(sp-5) with IntValue(t) -> t 
-                    and y1 = match stack.(sp-4) with IntValue(t) -> t 
-                    and y2 = match stack.(sp-3) with IntValue(t) -> t in  
+                    let x = pop_int stack.(sp-5)
+                    and y1 = pop_int stack.(sp-4)
+                    and y2 = pop_int stack.(sp-3) in
                     Canvas.select_hslice x y1 y2 existing 
                 | 4 -> 
-                    let x1 = match stack.(sp-5) with IntValue(t) -> t 
-                    and x2 = match stack.(sp-4) with IntValue(t) -> t 
-                    and y  = match stack.(sp-3) with IntValue(t) -> t in
+                    let x1 = pop_int stack.(sp-5)
+                    and x2 = pop_int stack.(sp-4)
+                    and y  = pop_int stack.(sp-3) in
                     Canvas.select_vslice x1 x2 y existing 
                 | 5 -> 
-                    let x = match stack.(sp-3) with IntValue(t) -> t in 
+                    let x = pop_int stack.(sp-3) in
                     Canvas.select_hslice_all x existing 
                 | 6 -> 
-                    let y = match stack.(sp-3) with IntValue(t) -> t in 
+                    let y = pop_int stack.(sp-3) in
                     Canvas.select_vslice_all y existing 
                 | 7 -> 
                     Canvas.select_all existing 
@@ -359,12 +374,8 @@ let execute_prog prog debug_flag =
             debug ("Ent " ^ string_of_int i);
             exec sp (sp+i+1) (pc+1) 
         | Rts i ->
-            let new_fp = match stack.(fp) with
-                IntValue(k) -> k
-              | Address(k) -> raise (Failure("Rts expected an integer for new frame pointer but got an address."))
-            and new_pc = match stack.(fp-1) with
-                IntValue(k) -> k
-              | Address(k) -> raise (Failure("Rts expected an integer for new program counter but got an address.")) 
+            let new_fp = pop_int stack.(fp) 
+            and new_pc = pop_int stack.(fp-1) 
             in
               stack.(fp-i-1) <- stack.(sp-1);
               debug ("Rts " ^ string_of_int i);
@@ -375,11 +386,9 @@ let execute_prog prog debug_flag =
               (pc + 
                if (match stack.(sp-1) with
                        IntValue(k) -> (k = 0)
-                     | Address(k) -> 
-                         (match (Hashtbl.find prog.glob_hash k) with
-                              Hashtypes.Bool(b) -> not b
-                            | _ -> raise(Failure("Beq operation: Address lookup resulted in a non-boolean type."))
-                         )) 
+                     | Address(k) -> match (Hashtbl.find prog.glob_hash k) with
+                           Hashtypes.Bool(b) -> not b
+                         | _ -> raise(Failure("Beq operation: Address lookup resulted in a non-boolean type.")))
                then i 
                else 1) 
         | Bne i -> 
@@ -388,11 +397,9 @@ let execute_prog prog debug_flag =
               (pc + 
                if (match stack.(sp-1) with
                        IntValue(k) -> (k != 0)
-                     | Address(k) -> 
-                         (match (Hashtbl.find prog.glob_hash k) with
-                              Hashtypes.Bool(b) -> b
-                            | _ -> raise(Failure("Bne operation: Address lookup resulted in a non-boolean type."))
-                         )) 
+                     | Address(k) -> match (Hashtbl.find prog.glob_hash k) with
+                           Hashtypes.Bool(b) -> not b
+                         | _ -> raise(Failure("Bne operation: Address lookup resulted in a non-boolean type.")))
                then i 
                else 1) 
         | Bra i -> 

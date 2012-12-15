@@ -206,6 +206,17 @@ let semantic_checker (stmt_lst, func_decls) =
         Sast.IntLiteral(1), Canvas 
     | Ast.Shift(canv, dir, count) ->
         Sast.IntLiteral(1), Canvas 
+    | Ast.GetAttr(canv, attr) -> 
+        let (v1, t1) = (expr env scope) canv in
+        (match t1 with
+          (Canvas) -> 
+            (match attr with 
+              Ast.W | Ast.H | Ast.G ->
+                Sast.Canvas, Canvas )
+          | (_) -> 
+              raise(TypeException(canv, Ast.GetAttr(canv, attr), Canvas, t1))
+          )
+        
   
   (* execute statement *)                              
   and stmt env scope = function

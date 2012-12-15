@@ -31,7 +31,7 @@ type expr =
   | Select of expr * expr                      (* canv[...] *)
   | Select_Binop of op * expr                    (* canv[<5] *)
   | Select_Bool of expr                          (* <5 *)
-  | GetAttr of string * attr                        (* canv$w *)
+  | GetAttr of expr * attr                        (* canv$w *)
 
 type stmt =                                      (* Statements *)
     Assign of string * expr                      (* foo <- 42 *)

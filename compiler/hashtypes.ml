@@ -6,9 +6,6 @@
 
 open Canvas
 
-
-
-
 type ct =
     (* Note: The compiler will not add any int types to the hash map 
      * but the bytecode executor might during binop operations *)
@@ -21,7 +18,7 @@ let string_of_ct render = function
     Int(i) -> string_of_int i
   | String(s) -> ( Scanf.unescaped s )
   | Bool(b) -> string_of_bool b
-  | Canvas(c) -> (Canvas.string_of_canvas c (make_map [' '; '-'; '+'; 'X'; '@']) render)
+  | Canvas(c) -> (Canvas.string_of_canvas c (make_map ['.'; ','; ':'; '-'; '+'; 'm'; '5'; 'Q'; 'X'; '@']) render)
 
 
 
