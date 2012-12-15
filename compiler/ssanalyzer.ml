@@ -205,7 +205,7 @@ let semantic_checker (stmt_lst, func_decls) =
     | Ast.Select_Bool(e) -> 
         Sast.IntLiteral(1), Canvas 
     | Ast.Shift(canv, dir, count) ->
-        Sast.IntLiteral(1), Canvas 
+      Sast.IntLiteral(1), Canvas
     | Ast.GetAttr(canv, attr) -> 
         let (v1, t1) = (expr env scope) canv in
         (match t1 with
@@ -265,7 +265,7 @@ let semantic_checker (stmt_lst, func_decls) =
     | Ast.OutputF(var, var_fname, var_rend) ->
         let (var_val, var_typ) = expr env scope var
         and (var_rend_val, var_rend_typ) = expr env scope var_rend
-        and (var_fname_val, var_fname_typ) = expr env scope var_fname
+        (* and (var_fname_val, var_fname_typ) = expr env scope var_fname *)
         in
         (match (var_typ, var_rend_typ) with
                (Canvas, Bool) ->
@@ -320,6 +320,7 @@ let semantic_checker (stmt_lst, func_decls) =
           fxn_env_lookup.ret_type <- (v, typ);
     | Ast.Include(str) -> 
         (); (* no type checking needed since we know it's already a string *)
+    | Ast.CanSet (_, _, _) -> ()
   
   (************************ 
    * start main code here 

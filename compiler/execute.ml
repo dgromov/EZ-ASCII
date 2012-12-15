@@ -102,6 +102,8 @@ let execute_prog prog debug_flag =
                             | And        -> 
                                 debug("Bin &&: i=" ^ string_of_int i ^ " j=" ^ string_of_int j);
                                 IntValue (boolean ((bool_of_int i) && (bool_of_int j)))
+                            | Mask -> 
+                                raise( Failure("Mask is not valid for bools. SS should catch this"))
                          )
                      | (Hashtypes.Bool(b1), Hashtypes.Bool(b2)) ->
                          (match op with
@@ -158,8 +160,9 @@ let execute_prog prog debug_flag =
                               raise (Failure ("Binop not supported for canvas types."))
                         )
 
-                (* ?     | (_, _) -> *)
-                         (* raise (Failure ("Binop not supported with input operand types.")) *)
+                     | (_, _) ->
+                          (* This shouldn't happened if the SS gets to it first *)
+                          raise (Failure ("Binop not supported on those operand types."))
                   ))); 
                   exec fp (sp-1) (pc+1)
         | Lod i -> 
@@ -249,8 +252,10 @@ let execute_prog prog debug_flag =
             let render = 
               (match stack.(sp-3) with 
                   IntValue(i) -> raise (Failure ("Render should be a boolean"))
-                | Address(i) -> match (Hashtbl.find prog.glob_hash i) with 
-                                Hashtypes.Bool(b) -> b (* add error handling *)
+                | Address(i) -> match (Hashtbl.find prog.glob_hash i) 
+                  with 
+                    Hashtypes.Bool(b) -> b (* add error handling *)
+                  | _ -> raise (Failure("Jsr -2 expected a boolean render but got a different type.")) 
               ) in
            
             let oc = open_out filename in 
@@ -302,7 +307,19 @@ let execute_prog prog debug_flag =
        | Jsr (-5) -> 
             (* SHIFT *)
             debug ("Jsr -5");
-            exec fp sp (pc+1)
+             let existing = match (pop_address_val stack.(sp-1)) with
+                Hashtypes.Canvas(c) -> c
+              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
+             and dir = pop_int stack.(sp-2)
+             and dist = pop_int stack.(sp-3)
+           in 
+            let shifted = (Canvas.shift existing dir dist) in 
+            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
+                (Hashtypes.Canvas (shifted));
+              let ret_val = Address !(prog.glob_hash_counter) in
+                prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                stack.(sp-1) <- ret_val;
+                exec fp sp (pc+1)
        | Jsr (-6) -> 
             (* SELECT *)
             debug ("Jsr -6: - Select Piece of Canvas");
@@ -342,6 +359,8 @@ let execute_prog prog debug_flag =
                     Canvas.select_vslice_all y existing 
                 | 7 -> 
                     Canvas.select_all existing 
+                | _ -> 
+                  raise (Failure("Invalid Select: SS should catch this"))
             in 
 
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));

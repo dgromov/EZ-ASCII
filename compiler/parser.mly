@@ -68,7 +68,7 @@ stmt:
   stmt_list RBRACE   { For($2, $4, $6, List.rev $8) }
   | RETURN expr SEMICOLON             { Return($2) }
   | INCLUDE STR SEMICOLON             { Include($2) }
-  | ID LBRACKET select_expr RBRACKET ASSIGN expr SEMICOLON {CanSet($1, $3, $6)}
+  | ID LBRACKET select_expr RBRACKET ASSIGN expr SEMICOLON {CanSet(Id($1), $3, $6)}
 
 stmt_in_for:
   ID ASSIGN expr          { Assign($1, $3) }
@@ -118,10 +118,6 @@ expr:
       | expr TIMES expr                   { Binop($1, Times, $3) }
       | expr DIVIDE expr                  { Binop($1, Divide, $3) } 
       | expr MOD expr                     { Binop($1, Mod, $3) }
-      | ID LPAREN expr_list RPAREN        { Call($1, List.rev $3) }
-      | LPAREN expr RPAREN 			{ $2 }
-/*    | MINUS expr %prec UMINUS         { "unary minus" } */ 
-      | ID LBRACKET select_expr RBRACKET  { Select(Id($1), $3) } 
       | expr EQ expr                      { Binop($1, Eq, $3) }
       | expr NEQ expr                     { Binop($1, Neq, $3) }
       | expr LT expr                      { Binop($1, Lt, $3) }
@@ -131,6 +127,10 @@ expr:
       | expr OR expr                      { Binop($1, Or, $3) }
       | expr AND expr                     { Binop($1, And, $3) }
       | expr MASK expr                    { Binop($1, Mask, $3) } 
+      | ID LPAREN expr_list RPAREN        { Call($1, List.rev $3) }
+      | LPAREN expr RPAREN 			{ $2 }
+/*    | MINUS expr %prec UMINUS         { "unary minus" } */ 
+      | ID LBRACKET select_expr RBRACKET  { Select(Id($1), $3) } 
       | ID ATTR_W                         { GetAttr (Id($1), W)}
       | ID ATTR_H                         { GetAttr (Id($1), H)} 
       | ID ATTR_G                         { GetAttr (Id($1), G)}

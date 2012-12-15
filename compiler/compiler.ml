@@ -150,8 +150,8 @@ let translate (stmt_lst, func_decls) =
         let canv_val = (expr env) canv
         and dir_val = (expr env) dir 
         and count_val = (expr env) count in 
-        canv_val @ dir_val @ count_val @ [Jsr (-5)]
-        
+        count_val @ dir_val  @ canv_val @[Jsr (-5)]
+
     | Ast.GetAttr(canv, attr) -> 
         let canv_val = (expr env) canv 
         in
@@ -249,7 +249,10 @@ let translate (stmt_lst, func_decls) =
            [Bne (-(for_body_length + List.length e1'))]
     | Ast.Return(e) ->
         (expr env e) @ [Rts env.num_formals] 
-
+    | Ast.CanSet(can, select_exp, inten)->
+        let int_exp = (expr env inten) 
+        and sel_exp = (expr env (Ast.Select(can, select_exp)))  in 
+        int_exp @ sel_exp @ [Jsr (-7)]
     | Ast.Include(str) -> 
         []
     

@@ -42,7 +42,7 @@ type stmt =                                      (* Statements *)
   | For of stmt * expr * stmt * stmt list        (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                               (* return 42; *)
   | Include of string                            (* include super_awesome.eza *)
-  | CanSet of string * expr * expr               (* can[..] <- 1 *)
+  | CanSet of expr * expr * expr               (* can[..] <- 1 *)
   
 type func_decl = {
   fname : string;                                (* Name of the function *)
@@ -51,6 +51,11 @@ type func_decl = {
 }
 
 type program = stmt list * func_decl list        (* global vars, fxn declarations *) 
+
+let string_of_attr = function 
+  W -> "$W"
+| H -> "$H"
+| G -> "$G"
 
 
  let rec string_of_expr = function
@@ -111,6 +116,7 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
       string_of_expr e2
   | Select_Bool(e1) -> "[" ^ string_of_expr e1  ^ "] "
   | Select (canv, selection) -> string_of_expr canv ^ string_of_expr selection  
+  | GetAttr(canv, attr) -> string_of_expr canv ^ " -> " ^ string_of_attr attr 
 
 let rec string_of_stmt = function
   | Return(expr) -> "return " ^ string_of_expr expr ^ ";"
@@ -130,6 +136,7 @@ let rec string_of_stmt = function
       string_of_expr e ^ ", " ^ string_of_expr render_expr ^ " -> " ^ string_of_expr fname
   | Assign(v, e) -> 
       v ^ " <- " ^ string_of_expr e
+  | CanSet(_, _, _) -> "Can Set"
   | Include(str) ->
      "include " ^ str
 

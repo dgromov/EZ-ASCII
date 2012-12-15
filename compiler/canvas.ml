@@ -36,16 +36,16 @@ let select_type = function
 
 type dir =
    UP
- | DOWN 
  | LEFT 
+ | DOWN 
  | RIGHT
 
 let get_dir = function 
-  0 -> (UP)
- | 1 -> (DOWN)
- | 2 -> (LEFT)
+   0 -> (UP)
+ | 1 -> (LEFT)
+ | 2 -> (DOWN)
  | 3 -> (RIGHT)
-;;
+ | _ -> raise(Failure ("Not a valid Direction"))
 
 
 (* Blank Function  *)
@@ -127,9 +127,8 @@ let set_rect_can x1 x2 y1 y2 old_can new_can =
 
 let select_rect x1 x2 y1 y2 can = 
    let blank_slate = create_blank_from_existing can (-1) in 
-    set_rect_can x1 x2 y1 y2 can blank_slate;
-  (blank_slate)
-
+    set_rect_can x1 x2 y1 y2 can blank_slate
+ 
 let select_point x y can = 
   select_rect x x y y can 
 
@@ -153,19 +152,30 @@ let select_all can =
 let mask can1 can2 =
   let blank_slate = create_blank_from_existing can1 (-1) in 
   let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) blank_slate can1 in 
-    set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) blank_slate can2 
+    set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) cp_can1 can2 
 
 let shift can1 dir steps = 
   let blank_slate = create_blank_from_existing can1 (-1) in 
-  match dir with 
+
+  let res = match (get_dir (dir)) with 
     UP -> 
        set_rect_can 0 ((height can1)-1) 0 ((width can1) - (1+steps) ) blank_slate can1
-  | DOWN ->
-       set_rect_can 0 ((height can1)-1) steps ((width can1)-1) blank_slate can1
   | LEFT -> 
        set_rect_can 0 ((height can1)- (1+steps)) 0 ((width can1)-1) blank_slate can1
+  | DOWN ->
+       
+       print_string "Down \n";
+       print_endline (string_of_int 0 ^ " " ^ (string_of_int ((height can1)-1))
+                ^ " " ^ string_of_int steps ^ " " ^ (string_of_int ((width can1)-1)));
+
+
+       set_rect_can 0 ((height can1)-1) steps ((width can1)-1) blank_slate can1
+       
+
   | RIGHT ->
-       set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1
+       set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1 in
+
+ blank_slate 
 
 (* Loads an image from filepath fname, and returns
  *  canvas type int array array *)
