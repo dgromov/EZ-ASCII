@@ -1,0 +1,18 @@
+// tests unary minus functionality.
+
+d <- 3 + -4;
+d -> out;
+
+e <- 3 + (-4);
+e -> out;
+
+f <- 3 * -1;
+f -> out;
+
+Fun foo(i) {
+  return i / -1;
+
+}
+
+g <- foo(f) - -1;
+g -> out;

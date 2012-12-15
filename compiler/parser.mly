@@ -109,7 +109,8 @@ expr_list:
       | expr_list COMMA expr              { $3 :: $1 }
 
 expr:  
-        INTLITERAL		                    { IntLiteral($1) }
+        INTLITERAL		            { IntLiteral($1) }
+      | MINUS INTLITERAL %prec UMINUS     { IntLiteral(- $2) }  
       | BOOLLITERAL                       { BoolLiteral($1) }
       | STR                               { StrLiteral($1) } 
       | ID                                { Id($1) }
@@ -129,7 +130,6 @@ expr:
       | expr MASK expr                    { Binop($1, Mask, $3) } 
       | ID LPAREN expr_list RPAREN        { Call($1, List.rev $3) }
       | LPAREN expr RPAREN 			{ $2 }
-/*    | MINUS expr %prec UMINUS         { "unary minus" } */ 
       | ID LBRACKET select_expr RBRACKET  { Select(Id($1), $3) } 
       | ID ATTR_W                         { GetAttr (Id($1), W)}
       | ID ATTR_H                         { GetAttr (Id($1), H)} 
