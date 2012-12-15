@@ -61,7 +61,6 @@ stmt:
   | ID OUTPUT STDOUT COMMA expr SEMICOLON     { OutputC(Id($1), $5)} 
   | ID OUTPUT expr SEMICOLON                   { OutputF(Id($1), $3, BoolLiteral(false)) }
   | ID OUTPUT expr COMMA expr SEMICOLON        { OutputF(Id($1), $3, $5) }
-
   | IF LPAREN expr RPAREN cond_body %prec NOELSE { If($3, $5) }
   | IF LPAREN expr RPAREN cond_body ELSE cond_body { If_else($3, $5, $7) }
   | FOR stmt_in_for FOR_SEP expr FOR_SEP stmt_in_for LBRACE

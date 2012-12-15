@@ -93,37 +93,82 @@ let granularity can =
 (* END CANVAS ATTRIBUTES *)
 
 let create_blank_from_existing existing default = 
-   blank (width existing) (height existing) (granularity existing) default 
+   blank (height existing) (width existing)  (granularity existing) default 
 
 
 (* SELECT *)
 let get x y can = 
-  can.data.(x).(y)
-
+  if x < (height can) && x >= 0
+     && y < (width can) && y >= 0
+  then
+    can.data.(x).(y)
+  else 
+    raise (Failure("(" ^ string_of_int x ^ ", " ^ string_of_int y ^ ") is out of bounds of canvas")) 
 (* MASK *)
 let set x y intensity can = 
-  can.data.(x).(y) <- intensity
+  if x < (height can) && x >= 0
+     && y < (width can) && y >= 0
+  then
+    can.data.(x).(y) <- intensity
+  
+let rec fetch_row x1 y1 y2 acc =
+    match y1 <= y2 with 
+      true -> (x1, y1) :: fetch_row x1 (y1+1) y2 acc 
+    | false -> [] 
+    
+let rec fetch_box x1 x2 y1 y2 acc = 
+    match x1 <= x2 with
+      true -> (fetch_row x1 y1 y2 acc) @ fetch_box (x1+1) x2 y1 y2 acc 
+      | false -> []
+
+let string_of_point = function 
+  (x, y) -> string_of_int x ^ " " ^ string_of_int y ;;
+
+let rec print_l = function
+    x :: xs -> print_endline (string_of_point x); 
+               print_l xs 
+  | [] -> ""
+
+
+
 
 let set_rect_int x1 x2 y1 y2 can intensity = 
-  for i = x1 to x2 do 
-      for j = y1 to y2 do 
-          set i j intensity can;
-      done; 
-    done;
-;;
+  let rec set_point = function
+      x :: xs -> (match (x) with 
+                  (i,j) -> 
+                    (match intensity >= 0 with 
+                      true -> set i j intensity can
+                      | false -> ());
+                    set_point xs;
+                  )
+    | [] -> ()
+  in 
+  
+  let l = (fetch_box x1 x2 y1 y2 [] )in 
+    set_point (l); 
+  
+  can
 
-let set_rect_can x1 x2 y1 y2 old_can new_can = 
-  for i = x1 to x2 do 
-      for j = y1 to y2 do 
-        let selected = get i j old_can in 
-          match selected >= 0 with 
-            true -> set i j selected new_can;
-            | false -> ();
-      done; 
-    done;
 
-    (new_can)
-;;
+
+
+let set_rect_can x1 x2 y1 y2 old_can new_can= 
+  let rec set_point = function 
+    x :: xs -> (match x with 
+                (i,j) -> 
+                  let selected = get i j old_can in 
+                    match selected >= 0 with 
+                      true -> set i j selected new_can
+                      | false -> ()
+                  
+                );
+                set_point xs;
+  | [] -> () 
+  in 
+
+  let l = fetch_box x1 x2 y1 y2 [] in
+  set_point (l);
+  (new_can)
 
 let select_rect x1 x2 y1 y2 can = 
    let blank_slate = create_blank_from_existing can (-1) in 
@@ -151,31 +196,55 @@ let select_all can =
 
 let mask can1 can2 =
   let blank_slate = create_blank_from_existing can1 (-1) in 
-  let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) blank_slate can1 in 
-    set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) cp_can1 can2 
-
-let shift can1 dir steps = 
-  let blank_slate = create_blank_from_existing can1 (-1) in 
-
-  let res = match (get_dir (dir)) with 
-    UP -> 
-       set_rect_can 0 ((height can1)-1) 0 ((width can1) - (1+steps) ) blank_slate can1
-  | LEFT -> 
-       set_rect_can 0 ((height can1)- (1+steps)) 0 ((width can1)-1) blank_slate can1
-  | DOWN ->
-       
-       print_string "Down \n";
-       print_endline (string_of_int 0 ^ " " ^ (string_of_int ((height can1)-1))
-                ^ " " ^ string_of_int steps ^ " " ^ (string_of_int ((width can1)-1)));
+ (*  let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) blank_slate can1 in 
+     set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) cp_can1 can2; *)
+  (blank_slate)
 
 
-       set_rect_can 0 ((height can1)-1) steps ((width can1)-1) blank_slate can1
-       
 
-  | RIGHT ->
-       set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1 in
 
- blank_slate 
+let shift can dir steps = 
+  let shifted = create_blank_from_existing can (-1) in 
+    let rec set_point = function
+      x :: xs -> (match (x) with 
+                  (i,j) -> 
+                    ( let intensity = get i j can 
+                      and new_point = 
+                        (match ( get_dir (dir) ) with 
+                          UP ->
+                            (i - steps, j) 
+                        | DOWN -> 
+                            (i + steps, j) 
+                        | LEFT ->
+                            (i, j - steps)
+                        | RIGHT -> 
+                            (i, j + steps) 
+                        ) in 
+
+                      (
+                        match new_point with 
+                          (a, b) ->  set a b intensity shifted 
+                      )
+                     )
+                  );
+                  set_point xs;
+    | [] -> ()
+  in 
+  
+  let l = 
+    (match ( get_dir (dir) ) with 
+                          UP ->
+                          (fetch_box steps (((height can)-1)) 0 ((width can)-1) [])
+                        | DOWN -> 
+                          (fetch_box 0 (((height can)-1) - steps) 0 ((width can)-1) [])
+                        | LEFT ->
+                          (fetch_box 0 ((height can)-1) steps ((width can)-1) [])
+                        | RIGHT -> 
+                          (fetch_box 0 (((height can)-1)) 0 (((width can)-1) - steps) [])
+                      ) in 
+    set_point (l); 
+  
+  shifted
 
 (* Loads an image from filepath fname, and returns
  *  canvas type int array array *)

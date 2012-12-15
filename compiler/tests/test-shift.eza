@@ -1,3 +1,23 @@
-c <- load ("../tmp/small.i", 10);
-d <- shift(c, SHIFT_DOWN, 5);
-d -> out;
+Fun print_dir(dir)
+{
+	dir -> out;
+}
+
+c <- load ("~/Desktop/lena.jpeg", 10);
+c -> out;
+
+x <- print_dir("left");
+l <- shift(c, SHIFT_LEFT, 10);
+l -> out, true;
+
+x <- print_dir("right");
+r <- shift(c, SHIFT_RIGHT, 10);
+r -> out, true;
+
+x <- print_dir("up");
+u <- shift(c, SHIFT_UP, 10);
+u -> out, true;
+
+x <- print_dir("down");
+d <- shift(c, SHIFT_DOWN, 10);
+d -> out, true;

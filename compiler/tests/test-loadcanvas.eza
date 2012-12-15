@@ -1,6 +1,6 @@
 // tests canvas loading
 
-c <- load("~/Desktop/joconde.jpeg", 9);
+c <- load("~/Desktop/edwards.jpeg", 9);
 
 Fun to_Render()
 {
