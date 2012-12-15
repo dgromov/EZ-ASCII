@@ -205,7 +205,18 @@ let semantic_checker (stmt_lst, func_decls) =
     | Ast.Select_Bool(e) -> 
         Sast.IntLiteral(1), Canvas 
     | Ast.Shift(canv, dir, count) ->
-        Sast.IntLiteral(1), Canvas 
+      Sast.IntLiteral(1), Canvas
+    | Ast.GetAttr(canv, attr) -> 
+        let (v1, t1) = (expr env scope) canv in
+        (match t1 with
+          (Canvas) -> 
+            (match attr with 
+              Ast.W | Ast.H | Ast.G ->
+                Sast.Canvas, Canvas )
+          | (_) -> 
+              raise(TypeException(canv, Ast.GetAttr(canv, attr), Canvas, t1))
+          )
+        
   
   (* execute statement *)                              
   and stmt env scope = function
@@ -251,9 +262,24 @@ let semantic_checker (stmt_lst, func_decls) =
                  raise(TypeException(var_rend, var_rend, Bool, var_rend_typ))
           );
 
-    | Ast.OutputF(var, oc) ->
+    | Ast.OutputF(var, var_fname, var_rend) ->
         let (var_val, var_typ) = expr env scope var
-        in ();
+        and (var_rend_val, var_rend_typ) = expr env scope var_rend
+        (* and (var_fname_val, var_fname_typ) = expr env scope var_fname *)
+        in
+        (match (var_typ, var_rend_typ) with
+               (Canvas, Bool) ->
+                 ();
+             | (_, Bool ) ->
+                  ( match var_rend with 
+                      Ast.BoolLiteral(b) -> if b 
+                                          then raise(TypeException(var_rend, var_rend, Bool, var_rend_typ))
+                                          else ()
+                    | _ -> raise(TypeException(var_rend, var_rend, Bool, var_rend_typ)) ) ;
+             | (_, _) ->
+                 raise(TypeException(var_rend, var_rend, Bool, var_rend_typ))
+          );
+        
     | Ast.If(cond, stmt_lst) ->
         let (cond_val, cond_typ) = expr env scope cond in
           (match cond_typ with
@@ -294,6 +320,7 @@ let semantic_checker (stmt_lst, func_decls) =
           fxn_env_lookup.ret_type <- (v, typ);
     | Ast.Include(str) -> 
         (); (* no type checking needed since we know it's already a string *)
+    | Ast.CanSet (_, _, _) -> ()
   
   (************************ 
    * start main code here 

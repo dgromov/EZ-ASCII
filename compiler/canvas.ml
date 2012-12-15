@@ -15,6 +15,39 @@ type canvas =
   gran: int; 
 };; 
 
+type stypes = 
+  POINT
+| RECT  
+| VSLICE 
+| HSLICE  
+| VSLICE_ALL 
+| HSLICE_ALL  
+| ALL
+
+let select_type = function 
+  POINT -> 1
+| RECT -> 2
+| VSLICE -> 3
+| HSLICE -> 4 
+| VSLICE_ALL -> 5  
+| HSLICE_ALL -> 6 
+| ALL -> 7 
+
+
+type dir =
+   UP
+ | LEFT 
+ | DOWN 
+ | RIGHT
+
+let get_dir = function 
+   0 -> (UP)
+ | 1 -> (LEFT)
+ | 2 -> (DOWN)
+ | 3 -> (RIGHT)
+ | _ -> raise(Failure ("Not a valid Direction"))
+
+
 (* Blank Function  *)
 let blank height width granularity default= 
   { 
@@ -71,8 +104,6 @@ let get x y can =
 let set x y intensity can = 
   can.data.(x).(y) <- intensity
 
-
-
 let set_rect_int x1 x2 y1 y2 can intensity = 
   for i = x1 to x2 do 
       for j = y1 to y2 do 
@@ -94,12 +125,10 @@ let set_rect_can x1 x2 y1 y2 old_can new_can =
     (new_can)
 ;;
 
-
 let select_rect x1 x2 y1 y2 can = 
    let blank_slate = create_blank_from_existing can (-1) in 
-    set_rect_can x1 x2 y1 y2 can blank_slate;
-  (blank_slate)
-
+    set_rect_can x1 x2 y1 y2 can blank_slate
+ 
 let select_point x y can = 
   select_rect x x y y can 
 
@@ -110,23 +139,43 @@ let select_vslice x1 x2 y can =
   select_rect x1 x2 y y can 
 
 let select_hslice_all x can = 
-  select_rect x x 0 ((height can)-1) can 
+  select_rect x x 0 ((width can)-1) can 
 
 let select_vslice_all y can = 
-  select_rect 0 ((width can)-1) y y can 
+  select_rect 0 ((height can)-1) y y can 
 
 let select_all can = 
-  select_rect 0 ((width can)-1) 0 ((height can)-1) can 
+  select_rect 0 ((height can)-1) 0 ((width can)-1) can 
 
 (* END SELECT *)
 
 let mask can1 can2 =
-  set_rect_can 0 ((width can2)-1) 0 ((height can2)-1) can2 can1 
-   
+  let blank_slate = create_blank_from_existing can1 (-1) in 
+  let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) blank_slate can1 in 
+    set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) cp_can1 can2 
+
+let shift can1 dir steps = 
+  let blank_slate = create_blank_from_existing can1 (-1) in 
+
+  let res = match (get_dir (dir)) with 
+    UP -> 
+       set_rect_can 0 ((height can1)-1) 0 ((width can1) - (1+steps) ) blank_slate can1
+  | LEFT -> 
+       set_rect_can 0 ((height can1)- (1+steps)) 0 ((width can1)-1) blank_slate can1
+  | DOWN ->
+       
+       print_string "Down \n";
+       print_endline (string_of_int 0 ^ " " ^ (string_of_int ((height can1)-1))
+                ^ " " ^ string_of_int steps ^ " " ^ (string_of_int ((width can1)-1)));
 
 
+       set_rect_can 0 ((height can1)-1) steps ((width can1)-1) blank_slate can1
+       
 
+  | RIGHT ->
+       set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1 in
 
+ blank_slate 
 
 (* Loads an image from filepath fname, and returns
  *  canvas type int array array *)

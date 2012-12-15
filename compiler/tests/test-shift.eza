@@ -1,0 +1,3 @@
+c <- load ("../tmp/small.i", 10);
+d <- shift(c, SHIFT_DOWN, 5);
+d -> out;

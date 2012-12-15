@@ -1,2 +1,4 @@
-can <- blank(1,2); 
-can -> out; 
+can <- blank(1,2,3); 
+can -> out;
+
+include "./tests/test-include.eza"; 

@@ -1,0 +1,10 @@
+can <- blank(6, 10, 5);
+can -> out;
+
+w <- can$w; 
+h <- can$h; 
+g <- can$g; 
+
+w -> out; 
+h -> out; 
+g -> out; 

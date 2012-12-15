@@ -2,7 +2,7 @@
 # AUTHOR(S):  Joe Lee (jyl2157), Dmitriy Gromov (dg2720)
 # PURPOSE  :  Makefile for EZ-ASCII project.
 
-OBJS = ast.cmo scanner.cmo parser.cmo sast.cmo ssanalyzer.cmo preprocess.cmo bytecode.cmo compiler.cmo canvas.cmo hashtypes.cmo execute.cmo ezac.cmo
+OBJS = ast.cmo scanner.cmo parser.cmo sast.cmo ssanalyzer.cmo preprocess.cmo bytecode.cmo canvas.cmo compiler.cmo  hashtypes.cmo execute.cmo ezac.cmo
 
 ezac : $(OBJS)
 	ocamlc -o ezac str.cma $(OBJS)
@@ -30,8 +30,8 @@ bytecode.cmo : hashtypes.cmo ast.cmo
 bytecode.cmx : hashtypes.cmx ast.cmx
 canvas.cmo :
 canvas.cmx :
-compiler.cmo : hashtypes.cmo bytecode.cmo ast.cmo
-compiler.cmx : hashtypes.cmx bytecode.cmx ast.cmx
+compiler.cmo : canvas.cmo hashtypes.cmo bytecode.cmo ast.cmo
+compiler.cmx : canvas.cmx hashtypes.cmx bytecode.cmx ast.cmx
 execute.cmo : hashtypes.cmo bytecode.cmo ast.cmo
 execute.cmx : hashtypes.cmx bytecode.cmx ast.cmx
 ezac.cmo : ssanalyzer.cmo scanner.cmo preprocess.cmo parser.cmi execute.cmo compiler.cmo bytecode.cmo ast.cmo

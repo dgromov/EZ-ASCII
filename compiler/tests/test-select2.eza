@@ -1,0 +1,20 @@
+new_line <- "";
+
+v <- load ("~/Desktop/edwards.jpeg", 10 );
+// v -> out;
+
+// Select 
+can <- v[0:5, 0:6];
+can -> out, true;
+new_line -> out;
+
+// Horizontal Slice_ALL
+can <- v[2,];
+can -> out, true;
+new_line -> out;
+
+// Vertical Slice 
+can <- v[3:6,3];
+can -> out, true;
+new_line -> out;
+

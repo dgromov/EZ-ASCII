@@ -1,5 +1,5 @@
 include "./tests/test-if1.eza"; 
-// include "./tests/test-fun2.eza";
+include "./tests/test-fun2.eza";
 
 
 

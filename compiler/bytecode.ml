@@ -24,6 +24,7 @@ type bstmt =
   | Bne of int          (* Branch relative if top-of-stack is non-zero *)
   | Bra of int          (* Branch relative *)
   | Lct of int          (* Load complex type by absolute address *)
+  | CAtr of Ast.attr    (* Get Canvas Attribute*) 
   | Hlt                 (* Terminate *)
 
 type prog = {
@@ -33,6 +34,7 @@ type prog = {
   glob_hash : (int, Hashtypes.ct) Hashtbl.t;
   glob_hash_counter : int ref;  
 }
+
 
 let string_of_prog prog =
   let rec string_of_prog_helper s = function
@@ -54,6 +56,7 @@ let string_of_prog prog =
             | Bne(i)      -> s ^ "Bne " ^ string_of_int i ^ "\n"
             | Bra(i)      -> s ^ "Bra " ^ string_of_int i ^ "\n"
             | Lct(i)      -> s ^ "Lct " ^ string_of_int i ^ "\n"    
+            | CAtr(a)     -> s ^ "Catr " ^ Ast.string_of_attr a ^ "\n"
             | Hlt         -> s ^ "Hlt\n"
         in string_of_prog_helper s tail
   in string_of_prog_helper "" (Array.to_list prog.text) 

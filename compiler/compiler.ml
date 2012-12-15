@@ -7,6 +7,7 @@ open Ast
 open Bytecode
 (*open Ezatypes*)
 open Hashtypes
+open Canvas 
 
 (* global hash table
  * keys are absolute integer addresses
@@ -48,7 +49,8 @@ let translate (stmt_lst, func_decls) =
           (bif_helper (StringMap.add hd (counter) map) (counter-1)) tl
     (* add built-in functions here *)
     (* reserve -1 for printing *)
-    in (bif_helper StringMap.empty (-2)) ["load"; "blank"]
+    (* reserve -2 for printing to file *)
+    in (bif_helper StringMap.empty (-3)) ["load"; "blank"; "shift"]
   in  
 
   let function_indexes = string_map_pairs built_in_functions
@@ -83,6 +85,7 @@ let translate (stmt_lst, func_decls) =
         let ev1 = (expr env) e1
         and ev2 = (expr env) e2 in
         ev1 @ ev2 @ [Bin op]
+
     | Ast.Call(fname, actuals) ->
         (try
            (* first evaluate the actuals *)
@@ -94,55 +97,65 @@ let translate (stmt_lst, func_decls) =
     | Ast.Load(filepath_expr, gran_expr) ->
         let ev1_val = (expr env) filepath_expr
         and ev2_val = (expr env) gran_expr in
-          ev1_val @ ev2_val @ [Jsr (-2)]
+          ev1_val @ ev2_val @ [Jsr (-3)]
     
     | Ast.Blank(height, width, granularity) -> 
         let ev1_val = (expr env) height
         and ev2_val = (expr env) width 
         and ev3_val = (expr env) granularity in 
-          ev1_val @ ev2_val @ ev3_val @ [Jsr (-3)]
+          ev1_val @ ev2_val @ ev3_val @ [Jsr (-4)]
 
     | Ast.Select_Point (x, y) -> 
         let ev1_val = (expr env) x 
         and ev2_val = (expr env) y in 
-          ev1_val @ ev2_val @ [Lit 1]
+          ev1_val @ ev2_val @ [Lit (Canvas.select_type (Canvas.POINT))]
 
     | Ast.Select_Rect (x1, x2, y1, y2) -> 
         let ev1_val = (expr env) x1
         and ev2_val = (expr env) x2
         and ev3_val = (expr env) y1
         and ev4_val = (expr env) y2 in 
-          ev1_val @ ev2_val  @ ev3_val @ ev4_val  @  [Lit 2]
+          ev1_val @ ev2_val  @ ev3_val @ ev4_val  @  [Lit (Canvas.select_type (Canvas.RECT))]
+
     | Ast.Select_VSlice (x1, y1, y2)  -> 
         let ev1_val = (expr env) x1
         and ev2_val = (expr env) y1
         and ev3_val = (expr env) y2 in 
-          ev1_val @ ev2_val  @ ev3_val @  [Lit 3]
+          ev1_val @ ev2_val  @ ev3_val @  [Lit (Canvas.select_type (Canvas.VSLICE))]
+
     | Ast.Select_HSlice (x1, x2, y1) -> 
         let ev1_val = (expr env) x1
         and ev2_val = (expr env) x2
         and ev3_val = (expr env) y1 in
-          ev1_val @ ev2_val  @ ev3_val @ [Lit 4] 
+          ev1_val @ ev2_val  @ ev3_val @ [Lit (Canvas.select_type (Canvas.HSLICE))] 
 
     | Ast.Select_VSliceAll x ->
         let ev1_val = (expr env) x in 
-          ev1_val @ [Lit 5]  
+          ev1_val @ [Lit (Canvas.select_type (Canvas.VSLICE_ALL))]  
     
     | Ast.Select_HSliceAll y -> 
         let ev1_val = (expr env) y in 
-          ev1_val @ [Lit 6] 
+          ev1_val @ [Lit (Canvas.select_type (Canvas.HSLICE_ALL))] 
 
     | Ast.Select_All -> 
-       [Lit 7] 
+       [Lit (Canvas.select_type (Canvas.ALL))] 
    
     | Ast.Select (canv, selection) ->
         let ev1_val = (expr env) canv
         in 
-          (expr env) selection @ ev1_val @ [Jsr (-5)] 
+          (expr env) selection @ ev1_val @ [Jsr (-6)] 
     | Ast.Select_Binop(op, e) -> [Lit 1]
     | Ast.Select_Bool(e) -> [Lit 1]
     | Ast.Shift(canv, dir, count) ->
-        [Lit 1]
+        let canv_val = (expr env) canv
+        and dir_val = (expr env) dir 
+        and count_val = (expr env) count in 
+        count_val @ dir_val  @ canv_val @[Jsr (-5)]
+
+    | Ast.GetAttr(canv, attr) -> 
+        let canv_val = (expr env) canv 
+        in
+          canv_val @ [CAtr attr]
   (* *) 
   and  stmt env scope = function
       (* need to update assign later *)
@@ -197,13 +210,12 @@ let translate (stmt_lst, func_decls) =
         let rend_val = (expr env rend) in 
         rend_val @ var_val @ [Jsr (-1)]
 
-    | Ast.OutputCR(var, rend) ->
-      let bc = (expr env var) in
-      let ren_bc = (expr env rend) in 
-          ren_bc @ bc @ [Jsr (-1)]
+    | Ast.OutputF(var, fn, rend) ->
+        let var_val = (expr env var) in 
+        let fn_val = (expr env fn) in 
+        let rend_val = (expr env rend) in
+        rend_val @ fn_val @ var_val @ [Jsr (-2)]
 
-    | Ast.OutputF(var, oc) ->
-        []
     | Ast.If(cond, stmt_lst) ->
         let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst))
         in 
@@ -237,7 +249,10 @@ let translate (stmt_lst, func_decls) =
            [Bne (-(for_body_length + List.length e1'))]
     | Ast.Return(e) ->
         (expr env e) @ [Rts env.num_formals] 
-
+    | Ast.CanSet(can, select_exp, inten)->
+        let int_exp = (expr env inten) 
+        and sel_exp = (expr env (Ast.Select(can, select_exp)))  in 
+        int_exp @ sel_exp @ [Jsr (-7)]
     | Ast.Include(str) -> 
         []
     

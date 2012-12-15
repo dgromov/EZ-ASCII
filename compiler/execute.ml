@@ -102,6 +102,8 @@ let execute_prog prog debug_flag =
                             | And        -> 
                                 debug("Bin &&: i=" ^ string_of_int i ^ " j=" ^ string_of_int j ^ "\n");
                                 IntValue (boolean ((bool_of_int i) && (bool_of_int j)))
+                            | Mask -> 
+                                raise( Failure("Mask is not valid for bools. SS should catch this"))
                          )
                      | (Hashtypes.Bool(b1), Hashtypes.Bool(b2)) ->
                          (match op with
@@ -158,8 +160,9 @@ let execute_prog prog debug_flag =
                               raise (Failure ("Binop not supported for canvas types."))
                         )
 
-                (* ?     | (_, _) -> *)
-                         (* raise (Failure ("Binop not supported with input operand types.")) *)
+                     | (_, _) ->
+                          (* This shouldn't happened if the SS gets to it first *)
+                          raise (Failure ("Binop not supported on those operand types."))
                   ))); 
                   exec fp (sp-1) (pc+1)
         | Lod i -> 
@@ -207,6 +210,23 @@ let execute_prog prog debug_flag =
             debug ("Sfp " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
+        | CAtr atr -> 
+            debug ("CAtr "); 
+            let canv_id = stack.(sp-1) in 
+              let canv = (match pop_address_val canv_id with 
+                Hashtypes.Canvas(c) -> c 
+              | _ -> raise (Failure ("Catr needs to be given a canvas"))) in
+
+            let result = 
+              (
+                match atr with
+                  Ast.W -> Canvas.width canv 
+                | Ast.H -> Canvas.height canv 
+                | Ast.G -> Canvas.granularity canv 
+              ) in 
+            stack.(sp-1) <- IntValue result; 
+            exec fp sp (pc+1)
+
         | Jsr(-1) ->
             debug ("Jsr -1" ^ "\n");
             let lookup =
@@ -227,6 +247,31 @@ let execute_prog prog debug_flag =
             print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
+            debug ("Jsr -2");
+            let lookup =
+              (match stack.(sp-1) with
+                   IntValue(i) -> Hashtypes.Int(i)
+                 | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
+              ) in 
+            let filename = 
+              ( match (pop_address_val stack.(sp-2)) with
+                  Hashtypes.String(s) -> s
+                | _ ->
+                    raise (Failure("Jsr -2 expected a string filepath but got a different type.")) 
+              ) in 
+            let render = 
+              (match stack.(sp-3) with 
+                  IntValue(i) -> raise (Failure ("Render should be a boolean"))
+                | Address(i) -> match (Hashtbl.find prog.glob_hash i) 
+                  with 
+                    Hashtypes.Bool(b) -> b (* add error handling *)
+                  | _ -> raise (Failure("Jsr -2 expected a boolean render but got a different type.")) 
+              ) in
+           
+            let oc = open_out filename in 
+              output_string oc ( (Hashtypes.string_of_ct render lookup) ^ "\n" );
+            exec fp sp (pc+1) 
+        | Jsr(-3) ->
             (* CANVAS LOADING *)
             debug ("Jsr -2" ^ "\n");
             let gran_val = pop_int(stack.(sp-1))
@@ -256,9 +301,9 @@ let execute_prog prog debug_flag =
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
-        | Jsr(-3) ->
+        | Jsr(-4) ->
             (* BLANK *)
-            debug ("Jsr -3" ^ "\n"); 
+            debug ("Jsr -4" ^ "\n"); 
             let h_val = (pop_int stack.(sp-3))
             and w_val = (pop_int stack.(sp-2))
             and g_val = (pop_int stack.(sp-1))
@@ -269,16 +314,28 @@ let execute_prog prog debug_flag =
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
-        | Jsr (-4) -> 
-            (* ATTRIBUTE *)
-            debug ("Jsr -4: - Canvas Attr" ^ "\n");
-            exec fp sp (pc+1 )
-        | Jsr (-5) -> 
+       | Jsr (-5) -> 
+            (* SHIFT *)
+            debug ("Jsr -5" ^ "\n");
+             let existing = match (pop_address_val stack.(sp-1)) with
+                Hashtypes.Canvas(c) -> c
+              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
+             and dir = pop_int stack.(sp-2)
+             and dist = pop_int stack.(sp-3)
+           in 
+            let shifted = (Canvas.shift existing dir dist) in 
+            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) 
+                (Hashtypes.Canvas (shifted));
+              let ret_val = Address !(prog.glob_hash_counter) in
+                prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                stack.(sp-1) <- ret_val;
+                exec fp sp (pc+1)
+       | Jsr (-6) -> 
             (* SELECT *)
-            debug ("Jsr -5: - Select Piece of Canvas" ^ "\n");
+            debug ("Jsr -6: - Select Piece of Canvas" ^ "\n");
             let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
-              | _ -> raise(Failure("Jsr -5: Expected canvas type."))
+              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
             in 
             let sel_type = (pop_int stack.(sp-2)) in
             let selected = 
@@ -312,6 +369,8 @@ let execute_prog prog debug_flag =
                     Canvas.select_vslice_all y existing 
                 | 7 -> 
                     Canvas.select_all existing 
+                | _ -> 
+                  raise (Failure("Invalid Select: SS should catch this"))
             in 
 
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
@@ -319,11 +378,6 @@ let execute_prog prog debug_flag =
               prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
               stack.(sp-1) <- ret_val;
               exec fp sp (pc+1)
-
-        | Jsr (-6) -> 
-            (* MASK *)
-            debug ("Jsr -6: - Mask " ^ "\n");
-            exec fp sp (pc+1)
         | Jsr (-7) ->
             (* SET POINT *)
             debug ("Jsr -7: - Set point" ^ "\n");
@@ -371,5 +425,5 @@ let execute_prog prog debug_flag =
         | Hlt -> ()
       in exec 0 0 0 
     with e -> (* catch all exceptions *)
-      Printf.eprintf "Unexpected exception: %s\n" (Printexc.to_string e);
+      Printf.eprintf "Runtime error: %s\n" (Printexc.to_string e);
 

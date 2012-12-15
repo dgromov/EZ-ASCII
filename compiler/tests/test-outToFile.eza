@@ -1,3 +1,9 @@
 x <- 1;
-x -> "test-outToFile.result";
+x -> "../tmp/test-outToFile.result";
+
+c <- load("../tmp/small.i", 10);
+
+c -> "../tmp/test-outToFile_2.result", true; 
+c -> "../tmp/test-outToFile_3.result", false;
+
 

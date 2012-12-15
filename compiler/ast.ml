@@ -20,7 +20,7 @@ type expr =
   | Call of string * expr list                   (* foo(1, 25) *)
   | Load of expr * expr                          (* load("filename", 10) *)
   | Blank of expr * expr * expr                  (* blank(x, y, g) *)
-  | Shift of string * int * expr
+  | Shift of expr * expr * expr
   | Select_Point  of expr * expr                 (* [1,2] *)
   | Select_Rect   of expr * expr * expr * expr   (* [1:2, 3:4] *)
   | Select_VSlice of expr * expr * expr          (* [1, 3:4] *)
@@ -31,20 +31,18 @@ type expr =
   | Select of expr * expr                      (* canv[...] *)
   | Select_Binop of op * expr                    (* canv[<5] *)
   | Select_Bool of expr                          (* <5 *)
-  | GetAttr of string * attr                        (* canv$w *)
+  | GetAttr of expr * attr                        (* canv$w *)
 
 type stmt =                                      (* Statements *)
     Assign of string * expr                      (* foo <- 42 *)
   | OutputC of expr * expr                             (* canvas -> out *)
-  | OutputCR of expr * expr                      (* canvas -> out, render *)
-  | OutputF of expr * string                     (* canvas -> "C:\test.png" *)
-  | OutputFR of expr * string * expr           (* canvas -> "C:\test.png", render *)
+  | OutputF of expr * expr * expr                     (* canvas -> "C:\test.png" *)
   | If of expr * stmt list                       (* if (foo = 42) {} *)
   | If_else of expr * stmt list * stmt list      (* if (foo = 42) {} else {} *)
   | For of stmt * expr * stmt * stmt list        (* for i <- 0 | i < 10 | i <- i + 1 { ... } *)
   | Return of expr                               (* return 42; *)
   | Include of string                            (* include super_awesome.eza *)
-  | CanSet of string * expr * expr               (* can[..] <- 1 *)
+  | CanSet of expr * expr * expr               (* can[..] <- 1 *)
   
 type func_decl = {
   fname : string;                                (* Name of the function *)
@@ -53,6 +51,11 @@ type func_decl = {
 }
 
 type program = stmt list * func_decl list        (* global vars, fxn declarations *) 
+
+let string_of_attr = function 
+  W -> "$W"
+| H -> "$H"
+| G -> "$G"
 
 
  let rec string_of_expr = function
@@ -84,7 +87,7 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Load(e1, gran) -> "Load(" ^ string_of_expr e1 ^ ", " ^ string_of_expr gran ^ ")"
   | Blank(e1, e2, e3) -> "Blank(" ^ string_of_expr e1 ^ ", " ^  string_of_expr e2 ^ ", " ^ string_of_expr e3 ^ ")"
-  | Shift(e1, dir, e3) -> "Shift(" ^ e1 ^ ", " ^  string_of_int dir ^ ", " ^ string_of_expr e3 ^ ")"
+  | Shift(e1, dir, e3) -> "Shift(" ^ string_of_expr e1 ^ ", " ^  string_of_expr dir ^ ", " ^ string_of_expr e3 ^ ")"
 
   | Select_Point (x, y) -> "[" ^ string_of_expr x ^ ", " ^ string_of_expr y ^ "] -- point select"
   | Select_Rect (x1, x2, y1, y2) ->  "[" ^ string_of_expr x1 ^  ":" ^ string_of_expr x2 ^ ", " 
@@ -113,6 +116,7 @@ type program = stmt list * func_decl list        (* global vars, fxn declaration
       string_of_expr e2
   | Select_Bool(e1) -> "[" ^ string_of_expr e1  ^ "] "
   | Select (canv, selection) -> string_of_expr canv ^ string_of_expr selection  
+  | GetAttr(canv, attr) -> string_of_expr canv ^ " -> " ^ string_of_attr attr 
 
 let rec string_of_stmt = function
   | Return(expr) -> "return " ^ string_of_expr expr ^ ";"
@@ -128,10 +132,11 @@ let rec string_of_stmt = function
       {\n" ^ String.concat "\n" (List.map string_of_stmt sl4)  ^ "\n}"
   | OutputC(e, render_expr) -> 
       string_of_expr e ^ ", " ^ string_of_expr render_expr ^ " -> out"
-  | OutputF(e, f) -> 
-      string_of_expr e ^ " -> " ^ f 
+  | OutputF(e, fname, render_expr) -> 
+      string_of_expr e ^ ", " ^ string_of_expr render_expr ^ " -> " ^ string_of_expr fname
   | Assign(v, e) -> 
       v ^ " <- " ^ string_of_expr e
+  | CanSet(_, _, _) -> "Can Set"
   | Include(str) ->
      "include " ^ str
 
