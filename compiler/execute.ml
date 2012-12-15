@@ -240,9 +240,11 @@ let execute_prog prog debug_flag =
               ) in 
             let render = 
               (match stack.(sp-2) with 
-                  IntValue(i) -> raise (Failure ("Render should be a boolean"))
-                | Address(i) -> match (Hashtbl.find prog.glob_hash i) with 
-                                Hashtypes.Bool(b) -> b (* add error handling *)
+                  IntValue(i) -> raise (Failure ("Jsr -1: Render should be a boolean."))
+                | Address(i) -> 
+                    match (Hashtbl.find prog.glob_hash i) with 
+                        Hashtypes.Bool(b) -> b
+                      | _ -> raise(Failure ("Jsr -1: Render should be a boolean.")) 
               ) in
             print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
@@ -289,7 +291,8 @@ let execute_prog prog debug_flag =
                     false -> 
                       debug ("Trying to open: " ^ "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" ^ "\n"); 
                       let comm = "python util/load_img.py " ^ path ^ " " ^ granularity in 
-                      Sys.command (comm);
+                      let _ = Sys.command (comm)
+                      in ();
                       "../tmp/" ^ List.hd (List.rev filename_parts) ^ ".i" 
                   | true -> 
                       debug ("Trying to open raw: " ^ path ^ "\n"); 
