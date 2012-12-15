@@ -157,25 +157,25 @@ let mask can1 can2 =
 let shift can1 dir steps = 
   let blank_slate = create_blank_from_existing can1 (-1) in 
 
-  let res = match (get_dir (dir)) with 
-    UP -> 
-       set_rect_can 0 ((height can1)-1) 0 ((width can1) - (1+steps) ) blank_slate can1
-  | LEFT -> 
-       set_rect_can 0 ((height can1)- (1+steps)) 0 ((width can1)-1) blank_slate can1
-  | DOWN ->
-       
-       print_string "Down \n";
-       print_endline (string_of_int 0 ^ " " ^ (string_of_int ((height can1)-1))
-                ^ " " ^ string_of_int steps ^ " " ^ (string_of_int ((width can1)-1)));
+  let _ = match (get_dir (dir)) with 
+      UP -> 
+        set_rect_can 0 ((height can1)-1) 0 ((width can1) - (1+steps) ) blank_slate can1
+    | LEFT -> 
+        set_rect_can 0 ((height can1)- (1+steps)) 0 ((width can1)-1) blank_slate can1
+    | DOWN ->
+
+        print_string "Down \n";
+        print_endline (string_of_int 0 ^ " " ^ (string_of_int ((height can1)-1))
+                       ^ " " ^ string_of_int steps ^ " " ^ (string_of_int ((width can1)-1)));
 
 
-       set_rect_can 0 ((height can1)-1) steps ((width can1)-1) blank_slate can1
-       
+        set_rect_can 0 ((height can1)-1) steps ((width can1)-1) blank_slate can1
 
-  | RIGHT ->
-       set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1 in
 
- blank_slate 
+    | RIGHT ->
+        set_rect_can steps ((height can1)-1) 0 ((width can1)-1) blank_slate can1 
+  in
+    blank_slate 
 
 (* Loads an image from filepath fname, and returns
  *  canvas type int array array *)
