@@ -230,13 +230,13 @@ let select_vslice x1 x2 y  =
   fetch_box x1 x2 y y []
 
 let select_hslice_all x w= 
-  fetch_box x x 0 (w - 1) []
+  fetch_box x x 0 (w) []
 
 let select_vslice_all y h = 
-  fetch_box 0 ((h)-1) y y []
+  fetch_box 0 (h) y y []
 
 let select_all h w= 
-  fetch_box 0 ((h)-1) 0 ((w)-1) []
+  fetch_box 0 (h) 0 (w) []
 
 (* END SELECT *)
 
