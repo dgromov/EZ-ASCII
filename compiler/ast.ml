@@ -9,6 +9,23 @@ type op = Plus | Minus | Times | Divide  | Mod
         | Lt  | Gt  | Eq | Leq | Geq | Neq
         | Mask
 
+let string_of_op op =
+  match op with
+      Plus   -> "+"      
+    | Minus  -> "-"      
+    | Times  -> "*"     
+    | Divide -> "/"   
+    | Mod    -> "%"   
+    | And    -> "&&"
+    | Or     -> "||"   
+    | Eq     -> "="       
+    | Neq    -> "~="     
+    | Lt     -> "<"        
+    | Leq    -> "<="      
+    | Gt     -> ">"        
+    | Geq    -> ">=" 
+    | Mask   -> "MASK"
+
 type attr = W | H | G 
 
 type expr = 
@@ -57,33 +74,13 @@ let string_of_attr = function
 | H -> "$H"
 | G -> "$G"
 
-
- let rec string_of_expr = function
+let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
-  | StrLiteral(l) -> l 
+  | StrLiteral(l) -> "\"" ^ l ^ "\"" 
   | BoolLiteral(l) -> if l == true then "true" else "false"
   | Id(s) -> s
   | Binop(e1, o, e2) ->
-      string_of_expr e1 ^ " " ^
-      (
-        match o with
-         Plus -> "+"      
-       | Minus-> "-"      
-       | Times -> "*"     
-       | Divide -> "/"   
-       | Mod -> "%"   
-       | And -> "&&"
-       | Or -> "||"   
-       | Eq -> "=="       
-       | Neq -> "!="     
-       | Lt -> "<"        
-       | Leq -> "<="      
-       | Gt -> ">"        
-       | Geq -> ">=" 
-       | Mask -> "MASK" (* Not sure this should ever happen*)
-      )  
-      ^ " " ^
-      string_of_expr e2
+      string_of_expr e1 ^ " " ^ (string_of_op o) ^ " " ^ string_of_expr e2
   | Call(f, el)  ->  f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Load(e1, gran) -> "Load(" ^ string_of_expr e1 ^ ", " ^ string_of_expr gran ^ ")"
   | Blank(e1, e2, e3) -> "Blank(" ^ string_of_expr e1 ^ ", " ^  string_of_expr e2 ^ ", " ^ string_of_expr e3 ^ ")"
@@ -99,21 +96,20 @@ let string_of_attr = function
   | Select_VSliceAll x1 -> "[" ^ string_of_expr x1 ^ ",] - vslice_all" 
   | Select_HSliceAll y1 -> "[," ^ string_of_expr y1 ^ "] - hslice all"
   | Select_All -> "[,] - select all"
-  | Select_Binop(o, e2) -> "i " ^
+  | Select_Binop(o, e2) -> 
       (
         match o with
-       | And -> "&&"
-       | Or -> "||"   
-       | Eq -> "=="       
-       | Neq -> "!="     
-       | Lt -> "<"        
-       | Leq -> "<="      
-       | Gt -> ">"        
-       | Geq -> ">=" 
-       | _ -> "error"
-       )  
-      ^ " " ^
-      string_of_expr e2
+          | And  -> "&&"
+          | Or   -> "||"   
+          | Eq   -> "="       
+          | Neq  -> "~="     
+          | Lt   -> "<"        
+          | Leq  -> "<="      
+          | Gt   -> ">"        
+          | Geq  -> ">=" 
+          | _    -> "error"
+      )  
+    ^ " " ^ string_of_expr e2
   | Select_Bool(e1) -> "[" ^ string_of_expr e1  ^ "] "
   | Select (canv, selection) -> string_of_expr canv ^ string_of_expr selection  
   | GetAttr(canv, attr) -> string_of_expr canv ^ " -> " ^ string_of_attr attr 

@@ -1,5 +1,5 @@
 // tests static semantic analysis
 
 e <- load("asdf", 10);
-e <- e[4, "asdf"]; // type error
+e[4, "asdf"] <- 5; // type error
 

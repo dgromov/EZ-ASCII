@@ -1,0 +1,5 @@
+// tests static semantic analysis
+
+d <- load("asdf", 10);
+d[, (2 * 3)] <- 5;    // select hslice-all ok
+d[, "hello"] <- 6;   // type error
