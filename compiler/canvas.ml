@@ -110,16 +110,29 @@ let set x y intensity can =
      && y < (width can) && y >= 0
   then
     can.data.(x).(y) <- intensity
-  
-let rec fetch_row x1 y1 y2 acc =
+
+let accept_all x y = 
+  true 
+
+
+let rec fetch_row x1 y1 y2 acc cond =
     match y1 <= y2 with 
-      true -> (x1, y1) :: fetch_row x1 (y1+1) y2 acc 
+      true -> 
+           if (cond x1 y1) then 
+                (x1, y1) :: fetch_row x1 (y1+1) y2 acc cond 
+           else fetch_row x1 (y1+1) y2 acc cond
+          
     | false -> [] 
-    
+
 let rec fetch_box x1 x2 y1 y2 acc = 
     match x1 <= x2 with
-      true -> (fetch_row x1 y1 y2 acc) @ fetch_box (x1+1) x2 y1 y2 acc 
+      true -> (fetch_row x1 y1 y2 acc accept_all) @ fetch_box (x1+1) x2 y1 y2 acc 
       | false -> []
+
+(* let rec fetch_match pl acc can cond = 
+    match x1 <= x2 with
+      true -> (fetch_row x1 y1 y2 acc cond) @ fetch_box (x1+1) x2 y1 y2 acc 
+      | false -> [] *)
 
 let string_of_point = function 
   (x, y) -> string_of_int x ^ " " ^ string_of_int y ;;
@@ -129,77 +142,77 @@ let rec print_l = function
                print_l xs 
   | [] -> ""
 
+let rec set_point can intensity = function
+    x :: xs -> (match (x) with 
+                (i,j) -> 
+                  (match intensity >= 0 with 
+                    true -> set i j intensity can
+                    | false -> ());
+                  set_point can intensity xs;
+                )
+  | [] -> ()
+;; 
 
-
-
+(* let set_points_int points can intensity = 
+  let l = (fetch_match can []) in 
+    set_point can intensity l 
+ *)
 let set_rect_int x1 x2 y1 y2 can intensity = 
-  let rec set_point = function
-      x :: xs -> (match (x) with 
-                  (i,j) -> 
-                    (match intensity >= 0 with 
-                      true -> set i j intensity can
-                      | false -> ());
-                    set_point xs;
-                  )
-    | [] -> ()
-  in 
-  
   let l = (fetch_box x1 x2 y1 y2 [] )in 
-    set_point (l); 
-  
+    set_point can intensity l ; 
   can
 
 
 
-
-let set_rect_can x1 x2 y1 y2 old_can new_can= 
+let set_rect_can l old_can new_can= 
   let rec set_point = function 
     x :: xs -> (match x with 
-                (i,j) -> 
-                  let selected = get i j old_can in 
-                    match selected >= 0 with 
-                      true -> set i j selected new_can
+                  (i,j) -> 
+                    let selected = get i j old_can in 
+                      match selected >= 0 with 
+                        true -> set i j selected new_can
                       | false -> ()
-                  
                 );
                 set_point xs;
   | [] -> () 
   in 
-
-  let l = fetch_box x1 x2 y1 y2 [] in
   set_point (l);
   (new_can)
 
-let select_rect x1 x2 y1 y2 can = 
+let select_rect_from_list l can = 
    let blank_slate = create_blank_from_existing can (-1) in 
-    set_rect_can x1 x2 y1 y2 can blank_slate
+    set_rect_can  l can blank_slate 
  
-let select_point x y can = 
-  select_rect x x y y can 
+let select_rect x1 x2 y1 y2 = 
+    fetch_box x1 x2 y1 y2 []
 
-let select_hslice x y1 y2 can = 
-  select_rect x x y1 y2 can 
+let select_point x y = 
+  fetch_box x x y y [] 
 
-let select_vslice x1 x2 y can = 
-  select_rect x1 x2 y y can 
+let select_hslice x y1 y2  = 
+  fetch_box x x y1 y2 [] 
 
-let select_hslice_all x can = 
-  select_rect x x 0 ((width can)-1) can 
+let select_vslice x1 x2 y  = 
+  fetch_box x1 x2 y y []
 
-let select_vslice_all y can = 
-  select_rect 0 ((height can)-1) y y can 
+let select_hslice_all x w= 
+  fetch_box x x 0 (w - 1) []
 
-let select_all can = 
-  select_rect 0 ((height can)-1) 0 ((width can)-1) can 
+let select_vslice_all y h = 
+  fetch_box 0 ((h)-1) y y []
+
+let select_all h w= 
+  fetch_box 0 ((h)-1) 0 ((w)-1) []
 
 (* END SELECT *)
 
 let mask can1 can2 =
   let blank_slate = create_blank_from_existing can1 (-1) in 
-     let cp_can1 = set_rect_can 0 ((height can2)-1) 0 ((width can2)-1) can1 blank_slate in
-     (set_rect_can 0 ((height can1)-1) 0 ((width can1)-1) can2 cp_can1 ) 
+    let pl = select_all ((height can2)-1) ((width can2)-1) in
+     let cp_can1 = set_rect_can pl can1 blank_slate in
+     (set_rect_can  pl can2 cp_can1 ) 
   
-  
+ 
 let shift can dir steps = 
   let shifted = create_blank_from_existing can (-1) in 
     let rec set_point = function
@@ -228,6 +241,8 @@ let shift can dir steps =
     | [] -> ()
   in 
   
+
+
   let l = 
     (match ( get_dir (dir) ) with 
                           UP ->

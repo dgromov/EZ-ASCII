@@ -1,0 +1,504 @@
+55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+++++m55555555555555QXXX+++mmm+++m+++m++5
+55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmm+++m55555555555555QXXX+++++++++m++++++5
+55555555555m+--++++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmmm++++mm5555555555555mXXXQ+++++++++++mmm+,
+55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm++++m5555555555mm5m5XXX++++++++++mmm-,,
+55555555555mm--+++++++++m+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+m+++mm5555555555555mQXXQ++++m++mmmm-,:,
+55555555555m+-+-+++++++++m+mmmmmmmmmmmmmm+m+mmmmmmmmm+mmmm+m+m++++m555555555555mm5XXXm+++++++mm-:,,,
+55555555555m+---+-+++++++mmmmmmmmmmmmmmm++mmmm+mmmmm+mmmmmmmm++++mm5555555555555mmQXXX-++++mmm-,,:,,
+55555555555m+--+++++++++++m+m++mmmmmmmmmm+++m+++mmmmmmmmm++m++++++m55555555555555mmXXX5+++++m-,,::::
+55555555555m+--++++++++++m+mm+m+mmm+mmmmmmm+++++mmmmmmmmmmm+++++++m55555555555555mmQXXX++++m-,,,:,,,
+555555555555+--+++++++++m+mmmmmmmmmmmmm+mmmm555m++++mmmmmmmmm+++++mmm555555555mmmmmmXXXQ+++-,,,:::,,
+55555mm5555m+---+++++++++mmm+mmmm+mmmmm5mmQ5QQQQQQm+++mm++mm++++++mmmm5555555mmmmmmmQXXXm+-,,,:::,,,
+55Q5mmm5555m+-----+++++++mm+mmmm+mmm+5mm5m555QQQQQQQ+++m++m+++++++mmmmm55mmmmmmmmmmmmXX@X+,,,:::,:,,
+5555+-m55555+---++-+++++++m++mm+mmm++mmmmmm5Q5Q5QQQQQQ++++++++++++mmmmm5m5mmm5mmmmmmm5X@@,,,:::,,:,,
+555m-+m5555m+------++++++m+++m+5+m+++mmmmm55Q5QQQQQQQQQ+++++++++-+mm5mmmm5mmmmmmmmmmmmX@5,,,:::,:,,:
+Q5m+-+m5555m+:--++---+++++++++m+++++mmmm+mmm55QQQQQQQXQQm+++++++-+m555mmmm5mmmmmmmmmm55m,,,,::,::,:,
+55m--+m5555m+:--+--++++++++++mm++++++m+mmmm555QQQQQQQQQQXX++++++++m55mmm+mmmm5mmmmmmm5m,,,::,,:,,:,,
+55+--+m5555m+:-----++++++m+++m+++++++m+mmmmmmQQQQQQQQXXXXXX--++--+m555m+-+mmmmmmmmm55m,,,:,:,:,,:-,m
+5+---+m5555m+----++--+++++++m++++m+++mmmmmm555QQQ5QXXXXXXXXX-----+m5m5mm::+mmmmmmmmm5:,,:,,,::,:--mm
+m----+m5555m+----+--+++++++++++++++++mmmm5mm55Q55XXXXXXXXXXXm----+m555mm-,-m5mmmmmmm-,,,::,:,,:::mmm
++----+m5555m+---+-+++++++++m++++++++mmmmmmmmmQmQXXXQQQXQQXXX@5:--+m555mm-,:+mmmmmm55,,,::,,:,:::mmm5
+-----+m5555m+------+++++++m++++++++m+mmmmmmmmmQQQQXQQXXXXXXXXXQ:-+m55m5m-:,-m5mmmm5:,,:::,:,:::+mm55
+-----+m5555m+----++-++++++m+++++++mmmmmmmmm+QQXQQQ5QXXXXXXXXXXX-:+m555mm-,,,+mmmm5m,,,:,:,,:,,+5mm55
+-----+m5555m+----++-+++++m+++++++++mmmmmmm+QQQQQ5QXQQXQXXQXXXXX@:-mm555m-,,,:mXXQm,,::,::::::-5mm555
+-----+m5555m+:------++++-X+++++++mmmm+m++mQXQ5QQQQQXQQQQXXXXXXXX+-m5555m-,,,QXQX@X,,::-::,:::mmm5555
+------m5555m+:-------++++Q+-+++++m++mmm+5QQ5Q5QQQQQQQQXQXQXXXXXXX:m5555m:,,XQXXXX@,,,:,:,::,m5m55555
+--+-+-m5555m+::---+++++++5++++++mm+m+++5Q5Q5Q5QQQQQQQQQXXXXXQQXXXQ+555m+:-X5XXXXX@,,:,,,,:,:5m555555
+--++-+m5555m+---+++-++++m5+--+++++m+m-55mQQ5QQ5QQ5QQQQQQQX5XQXXXXXXm55m-XQQXXXQXX@,,,:,,:,,mmm555555
+++--++m55555+----+-+-+++Qm+-+++++m+++5mmm55Q55QQ5QQQQQQQX5QQQQXXQQX55mQXQXXXXXXXXX,:,:,,:,+5m5555555
++--+++m55555+---+++-+++-X5++++++m+m+mmm+55555QQ5QQQQQQQ5QQQQQQQQQQQQ5XQQXXQXXXXXXX,,,,::::mm55555555
++---++m55Q55+----+--+++-X5++-+++mm+5mm+m5555Q55QQ5Q5QQQQQQQQQ5QQQQQXQQXXXQQXXXQXXX,,:,,,:+5m55555555
+--+--+m55555+----++--++-Xmmm++++++mmm+mmmm5Q5QQ55Q555QQQQQQQQQ5Q55QQXXXQQQXXX5QXX:,,:,:::5m555555555
+-----+m55555+---+++-++--Qmmm+-++-mm5+m5m5mmm55555Q555555QQ55QQ55XQQXQQQQQQXX55Q5X:::,,,:mmm555555555
+-----+m55555+-------+---Q5mm+-++mmmmmmmmm5m555Q555Q5555555Q555Q5QXXQQQQQQXXX5Q5QX,,:,::-5m5555555555
+-----+m55555m------+-+--QQ55m+-mmm+mmmmmmm55m55mmm55555555555QQXQQQQQQXXXXXm55+Q,,:::,:mm55555555555
+----++m55555+-----------XQ5mm+++m+mmm+mmm5+mm+-m5++55+m5-5mQ5XQQQQQXXXXXXXX5--QX,,,,:,+5m55555555555
+--++++m5QQQ5+----+---+--XQ5m5++m+mmm+mmmm55++-:m5m+--:::,:55XQQQQQQXQXXXX5---mX,,,:,,:mm555555555555
+-+--++m55555m-----+-----XQQmm++++mm+mmmmmm++++:-+:-:-,,,5mQXQQQXQQQQXXX+----5Q:,:,,,,-5m555555555555
+++--++m55555m----+----+-XQQmmm-+mmm+m+mm+m-:-::++:--:,,5+QQQQQQQQQQQQmm--+m5Q,,,:,:::mm5555555555555
++++-++m55555+---+----++-mXX5mm+mm+mmmmm5+-::,,,+,:-:,+Q+QQQQQQQQQQQQ-+m5555Q,,:::,,,-mm5555555555555
+++++++m55555m-------+++--XQQ5-+m+m+mmm+-:::::,-::::m,Q+QQQQQQ5QQQQ:+++m55QQ:,,:::,::mm55555555555555
++++--+m55Q55m----+---+++-XQ55mm+mmmm+++-::,+,:-:::,,mmXQQQQQ5QQQQQ---m+55Q:,,:::,,::mm55555555555555
++++--+m555Q5m-----+--++++-XQ++++m++++---+:,-:,,---:++QQQQQQQQQQQQQm-+:m55,,,::::,:,-mm55555555555555
++++---m5Q5Q5m:----++-++++-XXm++++mm---:::-::-,,,,:-5QQQ55QQQ5QQQQQ5-:+mm+,,,::::,,:+m555555555555555
++++---m55555m----++--++++-XX++++mm+:::,:--,,+-,,,+QmQQQ55Q55QQXXXXQ-,::5-,,::::,:,-mm555555555555555
+-++---m55555m----+-+++m+++XQ++-m+::--,::,::::,,,m55m5Q555m5QQQQXXXX+:,-5-:::::,::,+m5555555555555555
++++---m55555m---++-+-++++++X++mmm-:,-,,,:::--+,5m5Qm5Q55m55QQQXXXXXm:,:5-:::::,:,:mm5555mm5m5555555m
+++++--m55555m----++++++++++Q+mmm::+,,,-:,,:-,m5+5QQ5Q55555QQQXXXXXX5-,,m-:::::,:,-mm5555555mmmmm5555
++++-+-m555Q5m-----+++++++++m++++:,-,:+:,,,:+,++555QQ55555QQQQQQXXXXQ-,,-m:-:::::,mm555555555mmmmmm5m
+++----m55Q55m---++-++++++X:,mm+,-,+:::,,,,,,:-QQ55QQ:+mm5QQQQQQQXXX5:,,,5:::-:,,:mm55555555555mmmmmm
+++-+--m555Q5m----+-+++++mm:,5+-:,:m,:,,,,::,mQ5X5Q5m55+-:m55QQQQQ5+--,,:5:-::,,:+mm5555555555555mmmm
+--+---m5QQ55m----+-++-+m5m5m-::m---,:,+,:,,5Q5QQQ++:--,+m+m55QQQm+::::,-Q-:::,::m+55555555555555mmmm
+------m55QQ5m-:--+---+Xmm5--,++-:---:,,+,,:+5QXQ-:::,::,-mm55XX+:::::,,:Q-::,:::mm55555555555555mmmm
+-+---:m5QQQ5m-----+--5Qm5m-,-:,--:,,m,,,::mXQQX+-:--,:X-++mmQX5:,+5:,,,:5-::::,+mm55555555555mmmmmmm
+++---:m5QQQ5m--+++++::QX+,,-::---:,,:,,,,:m5QQ5+m+++:XX5+++mQX+m-+5:,,,:5:-:::,mm5555555555mmmmmmmm5
++++--:m5QQQ5m--+++,:555,,-+-,,:--+,,:,,,,mQQXm+mmmm++m55mmmmQ@5mm5+::,:,5-:,,:+mm555m55m555mmmmmm5QQ
++++--:+55QQ5m---++mm5--::+m+::++mm,,,,,,++QQ5-mmmmmmmm555mmm5@5mmm+-:,::5m:,:,-mm555m55m55mmmmm5QQQQ
++----:m5QQQ5m--+++++:-,,:+,-,:,m:+,,,:,,+QQQ-+mm55555555mmmm5XQ55m++:,::5m-,:,+m555555mmmmmmmm5QQQQQ
+----::+55QQ5m---+m55--::--+,,,-+m,-,,,,m+QX,-+mm55Q5Q5Q5mmmm5XQ5mmm+:,,,55:,:,mm55555555mmmmm5QQQQQQ
+----::+5QQQ5m---+m+--::++-,,,,,,,-+,,:,+XQ,:++mm55QQ5555mmmm5XQ55mmm:,::m5::,-mm555mm5m5mmmm5QQQQQQQ
+:--:::+555Q5m---++m++:-::m::,,,:,--+,,m+QQ,:++mm555QQ555mmmm5XX55mm+:::,+m,::+mQ555m5mmmmmmmQQQQQXXX
+-:-::,+555Q5m---m+,++::+5:,:,,:-,++m,,+QX,::+mmmm5555555mmm+mQX5mmm+,::,-m-:,mm555555mmmmmm5QQQQXXXX
+--:::,+55QQ5m--++m:+-,-+--,,,,--5-m,,m+X,,-:++mmm555555mm+++mQ@55mm-,::,-5+,:mm555555mmmmmmQQQQXXXXX
+---::,+55QQ5m--m++-:-:-,-mm::,:5++,,mm+5,,-:-+mmmm55555m+mmmmQ@mmm+,,:-:,5m,+m555m555mmmmm5QQQXXXXXX
+---::,+555Q5m+--+-:--,+:+Q+::,,:m,,,5Q5:,,--++mmmm55555m+m:++5X5mm+,,::,,5m,mm555m55mmmmmmQQQXXXXXXX
+---:::m55QQ5m--++-:::m--m+-,,5,,-,:+m5:,,,--++mmm5m5555mmmm++555mm-:,::,,5m,mm55m55m55mmmmQQQXXXXXXX
+::-::-m555Q5m---+m,:-:--+-+-:m:--+5+m5,:::--++mmmmmm55555mmQ5Q55mm:,,:-,,mm:mm5555mmmmmmm5QQXXXXXXXX
+:::-:-m555Q5m---m+:m::-:--m+--,,Q55-Q,,,-:-+++mmmmmm55555m5XQQ5mm-:,:-::,+m+m55555mmmmmmm5QQXXXXXXXX
+:::::-m55QQQm-:m+---:::-:-:+m,++mQ-5,-,,:::+-m+mmmmmmmmmm55XQQ5mm,,,:--:,++mm555mmmmmmmmm5QXXXXXXXXX
+:::::-m55QQ5m---+:,+:::++:+++-+QX-+,,:,::::--+mmmmmm++mmmm+mm+-m-,:,---:,:+5m5555mm5mmmm+QXXXXXXXXXX
+:::::-m55QQ5m-+-m::,:::m-+-+-mm@5-5,,:,::-:--+++mmmmm+++mmmm5mmm,,,:::-::,m5m5555mmmmmmmmQXXXXXXXXXX
+:::::-m555Q5mm:++:m,,::5,+-:+mmX+Q,::,:,:-:-:++++mmmmm+mmm555mm:,:,:,--::,55555555mmmmmmmQXXXXXXXXXX
+:::::-m5QQQ5m--m+:m,-:-++--m-5+m5:::-::::::::-+++mmmmmmm+mm+mmm,,:,:,:-::,555555555mmmmm+XXXXXXXXXXX
+,:,:+-m55QQ5m----::,-:+m++++-m+5-:::::::::,::--++mmmmmmmmmm5mm,:,::,,:-:-:555555555mmmmm+XXXXXXXXXXX
+,,:,+-m55QQ5m-:+:+:,-::+++--+++5,:,::::,::,::::-++mmmm555555mm:,:::,,:-:::Qmm55555m5mmmm+XXXXXXXXXXX
+,:,,--m555Q5m---::,,-:-+:m+++m+:::::::::::::::,,-+mmmm5555555:::,:,,:-:-,:Qm55555m55mmmmmXXXXXXXXXXX
+,:,::+m555Q5m-:-,+::::,m:-+5m5m:,:,:,:,::,::::::,::-+mm5555mm,:::::,:---::5mmmmmmmm5mmm+5XXXXXXXXQm:
+,,,,:-m555Q5m-5-,-:::,,+::++:5:5:,,:,:,:,,,::::--+mmmmm5555QQ+:,:::::---::5+++++mmmmmmm+QXXXXXXQm:,,
+:::,::+m5555m+-5,-:::::+m,+5++-:m,:-,:,,:::::::-+mmmmmmmmm5QQXX5::::---:-:m+m+++++++mm++QXXXXXQ5:,:-
+m+-::,-m555Xm--:,,-,:--:m:m--m++-+::,-,,::,:::,-m+mmmmmmmm5QQQQXXQ,,---::,5mmmm++++--++-QXXXXX5,::--
+mm+--,-m5555m+Q,,,-,:::,-+--+-m+5,::,-,,,:::::,-++++mmmmm55QQQQXXXX,:---::5mmmmmm+++-++:QXXXXm,:----
++mmm-,-m5555mQ-,,,:::--m,:-:-+mm,55:,-:::::::-,-+m+mmmmmm555QQQQXXXX:-:::-5mmmmmmmm++m++XXXXQ,:---+-
++mmmm:-m55Q5m+-,::::::,,,+::+-mmm+:,,-:,,::::+,:m+mmmmmm55555QQQQXXXX,,::+mmmmmmmmmm+mm5XXXXm:---++-
+,-m5m:-m5QQ5m+:,,+::,::,:-+----mQ,m+,-::,:::-+:-+mmmmmmm55555QQQQXXXXQ,::5mmmmmmmmmm+mmQXXXQ----++-+
+,:m55::m5QQ5mX,,:,:,::-,,::-+:-+5-mQ,--::-,:-+::+mmmmmmm55555QQQQXXXXX,,,5mmmmmmmmm++mQXXXX5---++--+
+,:m55::mQQQ5mm,,:,,,+::,,,::+--m5:--,--:,:,:-+:-+mmmmmmmmm5555QQQXXXXXX,,mm5mmmmmmm+mQXXXXQ+--++--+-
+,,m55::mQQQ5m+,::,,,+:,::,,:+::m5m5Q,::,,:,-+m--+mmmmmmmmm55555QQQXXXXX,,m5mmmmmmm++QXXXXX5---++-++-
+,,+55::mQQQ55+:,,::--:,-,,:-:++m:mm,::,:,,:-mm:-mmmmmmmmmmm555QQQQXXXXX+,mmmmmmmmm++QXXXXQm+-+++-++-
+,,+55-:mQ5Q5mm,,,:,:-::::,,+,:mm-,,+++m::::++m:+mmmmmmmmmmm5555QQQQXXXXX,mmmmmmmmmm+XXXXX5++-++--+--
+,,+55-:m5QQQm+,,,,:,::,,,,,:,-++++,,:::-::-+mm:+mmmmmmmmmmm55555QQQXXXXX:m5mmmmmmmmmQXQXXm++-+--+---
+,,-55+:mQQQ5mm-,,-,,::::-:-:+-++:+-,:::,,:-+m+-mmmmmmmmmmmm55555QQQXXXXX+mmmmmmmmmmmm5XXXm+----+--+-
+,,-55+:m5QQ5mm:,,:,::::::,,,+-:-,:m,,:,,:-++m:-mmmmmmmmmmmm55555QQQXXXXXQ+--+mmmmmm5mmXXQ+----++----
+,,:5Qm:m55QQ5+-,:,,:::-,,,:+++::,-::,,,,:-+++:+mmmmmmmmmmmmm55555QQXXXXXX-+:---++m55m5XXm-----+--+-:
+,,,5Qm:m555Q5+-,,,:,::-:,:,:+m5+-,:,,,,:-+++,-mmmmmmmmmmmmmm55555QQXXXXXX-----::,:+Q5QXQ-:---+---+-:
+:--5Q5:m5QQQmm,::,,,::::,::-,:m-:,:,,,,-+++::mmmmmmmmmmmmmmmm55555QQXXXXX5-+---:,,+X5XXm::-:+---++-:
+--+5Q5:m5QQQm+:,,,::,,-,,,::,::++,,,,,:-++::+mmmmmmmmmmmmmmmm55555QQXXXXXX-+++--:,-QQQm::::--:--+--:
+:++5Q5-m5QQQm+,,,:,:,:-:-,-:::-+::,,,,---,-+mmmmmmmmmmmmmmmmmm5555QQQXXXXX-+--+---+XQ+::::-+-:-++-::
+,--mQ5-m5QQQ5-:,:::-:---+::,-:-5,,:,,,,,-++mmmmmmmmmmmmmmmmmmmm555QQQQXXXX---++-+++5+-:-:-+-::+++-::
+,,-+55++5QQQ5-,:,::+,:::-,--:+:m+,,,::-++++mmmmmmmmmmmmmmmmmmmm5555QQQXXXXQ--+++++++-----+--:-++--::
+:,:+XQmm5QQQ+:,:,::,,:,,:m,m,::-:,,::-++++mmmmmmmmmmmmmmmmmmmmmm555QQQQXXXX--+++++++++--+-:--+m+-:::
+,::mQQ5+5QQQ+:::,:-::+::,m,+,::-:+,:-+++++mmmmmmmmmmmmmmmm55mm55555QQQQXXXX--+++++++m+------+m+-:,:-
+left
+5m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+++++m55555555555555QXXX+++mmm+++m+++m++5          
+5m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmm+++m55555555555555QXXX+++++++++m++++++5          
+5m+--++++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmmm++++mm5555555555555mXXXQ+++++++++++mmm+,          
+5m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm++++m5555555555mm5m5XXX++++++++++mmm-,,          
+5mm--+++++++++m+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+m+++mm5555555555555mQXXQ++++m++mmmm-,:,          
+5m+-+-+++++++++m+mmmmmmmmmmmmmm+m+mmmmmmmmm+mmmm+m+m++++m555555555555mm5XXXm+++++++mm-:,,,          
+5m+---+-+++++++mmmmmmmmmmmmmmm++mmmm+mmmmm+mmmmmmmm++++mm5555555555555mmQXXX-++++mmm-,,:,,          
+5m+--+++++++++++m+m++mmmmmmmmmm+++m+++mmmmmmmmm++m++++++m55555555555555mmXXX5+++++m-,,::::          
+5m+--++++++++++m+mm+m+mmm+mmmmmmm+++++mmmmmmmmmmm+++++++m55555555555555mmQXXX++++m-,,,:,,,          
+55+--+++++++++m+mmmmmmmmmmmmm+mmmm555m++++mmmmmmmmm+++++mmm555555555mmmmmmXXXQ+++-,,,:::,,          
+5m+---+++++++++mmm+mmmm+mmmmm5mmQ5QQQQQQm+++mm++mm++++++mmmm5555555mmmmmmmQXXXm+-,,,:::,,,          
+5m+-----+++++++mm+mmmm+mmm+5mm5m555QQQQQQQ+++m++m+++++++mmmmm55mmmmmmmmmmmmXX@X+,,,:::,:,,          
+55+---++-+++++++m++mm+mmm++mmmmmm5Q5Q5QQQQQQ++++++++++++mmmmm5m5mmm5mmmmmmm5X@@,,,:::,,:,,          
+5m+------++++++m+++m+5+m+++mmmmm55Q5QQQQQQQQQ+++++++++-+mm5mmmm5mmmmmmmmmmmmX@5,,,:::,:,,:          
+5m+:--++---+++++++++m+++++mmmm+mmm55QQQQQQQXQQm+++++++-+m555mmmm5mmmmmmmmmm55m,,,,::,::,:,          
+5m+:--+--++++++++++mm++++++m+mmmm555QQQQQQQQQQXX++++++++m55mmm+mmmm5mmmmmmm5m,,,::,,:,,:,,          
+5m+:-----++++++m+++m+++++++m+mmmmmmQQQQQQQQXXXXXX--++--+m555m+-+mmmmmmmmm55m,,,:,:,:,,:-,m          
+5m+----++--+++++++m++++m+++mmmmmm555QQQ5QXXXXXXXXX-----+m5m5mm::+mmmmmmmmm5:,,:,,,::,:--mm          
+5m+----+--+++++++++++++++++mmmm5mm55Q55XXXXXXXXXXXm----+m555mm-,-m5mmmmmmm-,,,::,:,,:::mmm          
+5m+---+-+++++++++m++++++++mmmmmmmmmQmQXXXQQQXQQXXX@5:--+m555mm-,:+mmmmmm55,,,::,,:,:::mmm5          
+5m+------+++++++m++++++++m+mmmmmmmmmQQQQXQQXXXXXXXXXQ:-+m55m5m-:,-m5mmmm5:,,:::,:,:::+mm55          
+5m+----++-++++++m+++++++mmmmmmmmm+QQXQQQ5QXXXXXXXXXXX-:+m555mm-,,,+mmmm5m,,,:,:,,:,,+5mm55          
+5m+----++-+++++m+++++++++mmmmmmm+QQQQQ5QXQQXQXXQXXXXX@:-mm555m-,,,:mXXQm,,::,::::::-5mm555          
+5m+:------++++-X+++++++mmmm+m++mQXQ5QQQQQXQQQQXXXXXXXX+-m5555m-,,,QXQX@X,,::-::,:::mmm5555          
+5m+:-------++++Q+-+++++m++mmm+5QQ5Q5QQQQQQQQXQXQXXXXXXX:m5555m:,,XQXXXX@,,,:,:,::,m5m55555          
+5m+::---+++++++5++++++mm+m+++5Q5Q5Q5QQQQQQQQQXXXXXQQXXXQ+555m+:-X5XXXXX@,,:,,,,:,:5m555555          
+5m+---+++-++++m5+--+++++m+m-55mQQ5QQ5QQ5QQQQQQQX5XQXXXXXXm55m-XQQXXXQXX@,,,:,,:,,mmm555555          
+55+----+-+-+++Qm+-+++++m+++5mmm55Q55QQ5QQQQQQQX5QQQQXXQQX55mQXQXXXXXXXXX,:,:,,:,+5m5555555          
+55+---+++-+++-X5++++++m+m+mmm+55555QQ5QQQQQQQ5QQQQQQQQQQQQ5XQQXXQXXXXXXX,,,,::::mm55555555          
+55+----+--+++-X5++-+++mm+5mm+m5555Q55QQ5Q5QQQQQQQQQ5QQQQQXQQXXXQQXXXQXXX,,:,,,:+5m55555555          
+55+----++--++-Xmmm++++++mmm+mmmm5Q5QQ55Q555QQQQQQQQQ5Q55QQXXXQQQXXX5QXX:,,:,:::5m555555555          
+55+---+++-++--Qmmm+-++-mm5+m5m5mmm55555Q555555QQ55QQ55XQQXQQQQQQXX55Q5X:::,,,:mmm555555555          
+55+-------+---Q5mm+-++mmmmmmmmm5m555Q555Q5555555Q555Q5QXXQQQQQQXXX5Q5QX,,:,::-5m5555555555          
+55m------+-+--QQ55m+-mmm+mmmmmmm55m55mmm55555555555QQXQQQQQQXXXXXm55+Q,,:::,:mm55555555555          
+55+-----------XQ5mm+++m+mmm+mmm5+mm+-m5++55+m5-5mQ5XQQQQQXXXXXXXX5--QX,,,,:,+5m55555555555          
+Q5+----+---+--XQ5m5++m+mmm+mmmm55++-:m5m+--:::,:55XQQQQQQXQXXXX5---mX,,,:,,:mm555555555555          
+55m-----+-----XQQmm++++mm+mmmmmm++++:-+:-:-,,,5mQXQQQXQQQQXXX+----5Q:,:,,,,-5m555555555555          
+55m----+----+-XQQmmm-+mmm+m+mm+m-:-::++:--:,,5+QQQQQQQQQQQQmm--+m5Q,,,:,:::mm5555555555555          
+55+---+----++-mXX5mm+mm+mmmmm5+-::,,,+,:-:,+Q+QQQQQQQQQQQQ-+m5555Q,,:::,,,-mm5555555555555          
+55m-------+++--XQQ5-+m+m+mmm+-:::::,-::::m,Q+QQQQQQ5QQQQ:+++m55QQ:,,:::,::mm55555555555555          
+55m----+---+++-XQ55mm+mmmm+++-::,+,:-:::,,mmXQQQQQ5QQQQQ---m+55Q:,,:::,,::mm55555555555555          
+Q5m-----+--++++-XQ++++m++++---+:,-:,,---:++QQQQQQQQQQQQQm-+:m55,,,::::,:,-mm55555555555555          
+Q5m:----++-++++-XXm++++mm---:::-::-,,,,:-5QQQ55QQQ5QQQQQ5-:+mm+,,,::::,,:+m555555555555555          
+55m----++--++++-XX++++mm+:::,:--,,+-,,,+QmQQQ55Q55QQXXXXQ-,::5-,,::::,:,-mm555555555555555          
+55m----+-+++m+++XQ++-m+::--,::,::::,,,m55m5Q555m5QQQQXXXX+:,-5-:::::,::,+m5555555555555555          
+55m---++-+-++++++X++mmm-:,-,,,:::--+,5m5Qm5Q55m55QQQXXXXXm:,:5-:::::,:,:mm5555mm5m5555555m          
+55m----++++++++++Q+mmm::+,,,-:,,:-,m5+5QQ5Q55555QQQXXXXXX5-,,m-:::::,:,-mm5555555mmmmm5555          
+Q5m-----+++++++++m++++:,-,:+:,,,:+,++555QQ55555QQQQQQXXXXQ-,,-m:-:::::,mm555555555mmmmmm5m          
+55m---++-++++++X:,mm+,-,+:::,,,,,,:-QQ55QQ:+mm5QQQQQQQXXX5:,,,5:::-:,,:mm55555555555mmmmmm          
+Q5m----+-+++++mm:,5+-:,:m,:,,,,::,mQ5X5Q5m55+-:m55QQQQQ5+--,,:5:-::,,:+mm5555555555555mmmm          
+55m----+-++-+m5m5m-::m---,:,+,:,,5Q5QQQ++:--,+m+m55QQQm+::::,-Q-:::,::m+55555555555555mmmm          
+Q5m-:--+---+Xmm5--,++-:---:,,+,,:+5QXQ-:::,::,-mm55XX+:::::,,:Q-::,:::mm55555555555555mmmm          
+Q5m-----+--5Qm5m-,-:,--:,,m,,,::mXQQX+-:--,:X-++mmQX5:,+5:,,,:5-::::,+mm55555555555mmmmmmm          
+Q5m--+++++::QX+,,-::---:,,:,,,,:m5QQ5+m+++:XX5+++mQX+m-+5:,,,:5:-:::,mm5555555555mmmmmmmm5          
+Q5m--+++,:555,,-+-,,:--+,,:,,,,mQQXm+mmmm++m55mmmmQ@5mm5+::,:,5-:,,:+mm555m55m555mmmmmm5QQ          
+Q5m---++mm5--::+m+::++mm,,,,,,++QQ5-mmmmmmmm555mmm5@5mmm+-:,::5m:,:,-mm555m55m55mmmmm5QQQQ          
+Q5m--+++++:-,,:+,-,:,m:+,,,:,,+QQQ-+mm55555555mmmm5XQ55m++:,::5m-,:,+m555555mmmmmmmm5QQQQQ          
+Q5m---+m55--::--+,,,-+m,-,,,,m+QX,-+mm55Q5Q5Q5mmmm5XQ5mmm+:,,,55:,:,mm55555555mmmmm5QQQQQQ          
+Q5m---+m+--::++-,,,,,,,-+,,:,+XQ,:++mm55QQ5555mmmm5XQ55mmm:,::m5::,-mm555mm5m5mmmm5QQQQQQQ          
+Q5m---++m++:-::m::,,,:,--+,,m+QQ,:++mm555QQ555mmmm5XX55mm+:::,+m,::+mQ555m5mmmmmmmQQQQQXXX          
+Q5m---m+,++::+5:,:,,:-,++m,,+QX,::+mmmm5555555mmm+mQX5mmm+,::,-m-:,mm555555mmmmmm5QQQQXXXX          
+Q5m--++m:+-,-+--,,,,--5-m,,m+X,,-:++mmm555555mm+++mQ@55mm-,::,-5+,:mm555555mmmmmmQQQQXXXXX          
+Q5m--m++-:-:-,-mm::,:5++,,mm+5,,-:-+mmmm55555m+mmmmQ@mmm+,,:-:,5m,+m555m555mmmmm5QQQXXXXXX          
+Q5m+--+-:--,+:+Q+::,,:m,,,5Q5:,,--++mmmm55555m+m:++5X5mm+,,::,,5m,mm555m55mmmmmmQQQXXXXXXX          
+Q5m--++-:::m--m+-,,5,,-,:+m5:,,,--++mmm5m5555mmmm++555mm-:,::,,5m,mm55m55m55mmmmQQQXXXXXXX          
+Q5m---+m,:-:--+-+-:m:--+5+m5,:::--++mmmmmm55555mmQ5Q55mm:,,:-,,mm:mm5555mmmmmmm5QQXXXXXXXX          
+Q5m---m+:m::-:--m+--,,Q55-Q,,,-:-+++mmmmmm55555m5XQQ5mm-:,:-::,+m+m55555mmmmmmm5QQXXXXXXXX          
+QQm-:m+---:::-:-:+m,++mQ-5,-,,:::+-m+mmmmmmmmmm55XQQ5mm,,,:--:,++mm555mmmmmmmmm5QXXXXXXXXX          
+Q5m---+:,+:::++:+++-+QX-+,,:,::::--+mmmmmm++mmmm+mm+-m-,:,---:,:+5m5555mm5mmmm+QXXXXXXXXXX          
+Q5m-+-m::,:::m-+-+-mm@5-5,,:,::-:--+++mmmmm+++mmmm5mmm,,,:::-::,m5m5555mmmmmmmmQXXXXXXXXXX          
+Q5mm:++:m,,::5,+-:+mmX+Q,::,:,:-:-:++++mmmmm+mmm555mm:,:,:,--::,55555555mmmmmmmQXXXXXXXXXX          
+Q5m--m+:m,-:-++--m-5+m5:::-::::::::-+++mmmmmmm+mm+mmm,,:,:,:-::,555555555mmmmm+XXXXXXXXXXX          
+Q5m----::,-:+m++++-m+5-:::::::::,::--++mmmmmmmmmm5mm,:,::,,:-:-:555555555mmmmm+XXXXXXXXXXX          
+Q5m-:+:+:,-::+++--+++5,:,::::,::,::::-++mmmm555555mm:,:::,,:-:::Qmm55555m5mmmm+XXXXXXXXXXX          
+Q5m---::,,-:-+:m+++m+:::::::::::::::,,-+mmmm5555555:::,:,,:-:-,:Qm55555m55mmmmmXXXXXXXXXXX          
+Q5m-:-,+::::,m:-+5m5m:,:,:,:,::,::::::,::-+mm5555mm,:::::,:---::5mmmmmmmm5mmm+5XXXXXXXXQm:          
+Q5m-5-,-:::,,+::++:5:5:,,:,:,:,,,::::--+mmmmm5555QQ+:,:::::---::5+++++mmmmmmm+QXXXXXXQm:,,          
+55m+-5,-:::::+m,+5++-:m,:-,:,,:::::::-+mmmmmmmmm5QQXX5::::---:-:m+m+++++++mm++QXXXXXQ5:,:-          
+5Xm--:,,-,:--:m:m--m++-+::,-,,::,:::,-m+mmmmmmmm5QQQQXXQ,,---::,5mmmm++++--++-QXXXXX5,::--          
+55m+Q,,,-,:::,-+--+-m+5,::,-,,,:::::,-++++mmmmm55QQQQXXXX,:---::5mmmmmm+++-++:QXXXXm,:----          
+55mQ-,,,:::--m,:-:-+mm,55:,-:::::::-,-+m+mmmmmm555QQQQXXXX:-:::-5mmmmmmmm++m++XXXXQ,:---+-          
+Q5m+-,::::::,,,+::+-mmm+:,,-:,,::::+,:m+mmmmmm55555QQQQXXXX,,::+mmmmmmmmmm+mm5XXXXm:---++-          
+Q5m+:,,+::,::,:-+----mQ,m+,-::,:::-+:-+mmmmmmm55555QQQQXXXXQ,::5mmmmmmmmmm+mmQXXXQ----++-+          
+Q5mX,,:,:,::-,,::-+:-+5-mQ,--::-,:-+::+mmmmmmm55555QQQQXXXXX,,,5mmmmmmmmm++mQXXXX5---++--+          
+Q5mm,,:,,,+::,,,::+--m5:--,--:,:,:-+:-+mmmmmmmmm5555QQQXXXXXX,,mm5mmmmmmm+mQXXXXQ+--++--+-          
+Q5m+,::,,,+:,::,,:+::m5m5Q,::,,:,-+m--+mmmmmmmmm55555QQQXXXXX,,m5mmmmmmm++QXXXXX5---++-++-          
+Q55+:,,::--:,-,,:-:++m:mm,::,:,,:-mm:-mmmmmmmmmmm555QQQQXXXXX+,mmmmmmmmm++QXXXXQm+-+++-++-          
+Q5mm,,,:,:-::::,,+,:mm-,,+++m::::++m:+mmmmmmmmmmm5555QQQQXXXXX,mmmmmmmmmm+XXXXX5++-++--+--          
+QQm+,,,,:,::,,,,,:,-++++,,:::-::-+mm:+mmmmmmmmmmm55555QQQXXXXX:m5mmmmmmmmmQXQXXm++-+--+---          
+Q5mm-,,-,,::::-:-:+-++:+-,:::,,:-+m+-mmmmmmmmmmmm55555QQQXXXXX+mmmmmmmmmmmm5XXXm+----+--+-          
+Q5mm:,,:,::::::,,,+-:-,:m,,:,,:-++m:-mmmmmmmmmmmm55555QQQXXXXXQ+--+mmmmmm5mmXXQ+----++----          
+QQ5+-,:,,:::-,,,:+++::,-::,,,,:-+++:+mmmmmmmmmmmmm55555QQXXXXXX-+:---++m55m5XXm-----+--+-:          
+5Q5+-,,,:,::-:,:,:+m5+-,:,,,,:-+++,-mmmmmmmmmmmmmm55555QQXXXXXX-----::,:+Q5QXQ-:---+---+-:          
+QQmm,::,,,::::,::-,:m-:,:,,,,-+++::mmmmmmmmmmmmmmmm55555QQXXXXX5-+---:,,+X5XXm::-:+---++-:          
+QQm+:,,,::,,-,,,::,::++,,,,,:-++::+mmmmmmmmmmmmmmmm55555QQXXXXXX-+++--:,-QQQm::::--:--+--:          
+QQm+,,,:,:,:-:-,-:::-+::,,,,---,-+mmmmmmmmmmmmmmmmmm5555QQQXXXXX-+--+---+XQ+::::-+-:-++-::          
+QQ5-:,:::-:---+::,-:-5,,:,,,,,-++mmmmmmmmmmmmmmmmmmmm555QQQQXXXX---++-+++5+-:-:-+-::+++-::          
+QQ5-,:,::+,:::-,--:+:m+,,,::-++++mmmmmmmmmmmmmmmmmmmm5555QQQXXXXQ--+++++++-----+--:-++--::          
+QQ+:,:,::,,:,,:m,m,::-:,,::-++++mmmmmmmmmmmmmmmmmmmmmm555QQQQXXXX--+++++++++--+-:--+m+-:::          
+QQ+:::,:-::+::,m,+,::-:+,:-+++++mmmmmmmmmmmmmmmm55mm55555QQQQXXXX--+++++++m+------+m+-:,:-          
+right
+          55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+++++m55555555555555QXXX+++mmm+
+          55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmm+++m55555555555555QXXX+++++++
+          55555555555m+--++++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmmm++++mm5555555555555mXXXQ++++++
+          55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm++++m5555555555mm5m5XXX++++++
+          55555555555mm--+++++++++m+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+m+++mm5555555555555mQXXQ++++m
+          55555555555m+-+-+++++++++m+mmmmmmmmmmmmmm+m+mmmmmmmmm+mmmm+m+m++++m555555555555mm5XXXm++++
+          55555555555m+---+-+++++++mmmmmmmmmmmmmmm++mmmm+mmmmm+mmmmmmmm++++mm5555555555555mmQXXX-+++
+          55555555555m+--+++++++++++m+m++mmmmmmmmmm+++m+++mmmmmmmmm++m++++++m55555555555555mmXXX5+++
+          55555555555m+--++++++++++m+mm+m+mmm+mmmmmmm+++++mmmmmmmmmmm+++++++m55555555555555mmQXXX+++
+          555555555555+--+++++++++m+mmmmmmmmmmmmm+mmmm555m++++mmmmmmmmm+++++mmm555555555mmmmmmXXXQ++
+          55555mm5555m+---+++++++++mmm+mmmm+mmmmm5mmQ5QQQQQQm+++mm++mm++++++mmmm5555555mmmmmmmQXXXm+
+          55Q5mmm5555m+-----+++++++mm+mmmm+mmm+5mm5m555QQQQQQQ+++m++m+++++++mmmmm55mmmmmmmmmmmmXX@X+
+          5555+-m55555+---++-+++++++m++mm+mmm++mmmmmm5Q5Q5QQQQQQ++++++++++++mmmmm5m5mmm5mmmmmmm5X@@,
+          555m-+m5555m+------++++++m+++m+5+m+++mmmmm55Q5QQQQQQQQQ+++++++++-+mm5mmmm5mmmmmmmmmmmmX@5,
+          Q5m+-+m5555m+:--++---+++++++++m+++++mmmm+mmm55QQQQQQQXQQm+++++++-+m555mmmm5mmmmmmmmmm55m,,
+          55m--+m5555m+:--+--++++++++++mm++++++m+mmmm555QQQQQQQQQQXX++++++++m55mmm+mmmm5mmmmmmm5m,,,
+          55+--+m5555m+:-----++++++m+++m+++++++m+mmmmmmQQQQQQQQXXXXXX--++--+m555m+-+mmmmmmmmm55m,,,:
+          5+---+m5555m+----++--+++++++m++++m+++mmmmmm555QQQ5QXXXXXXXXX-----+m5m5mm::+mmmmmmmmm5:,,:,
+          m----+m5555m+----+--+++++++++++++++++mmmm5mm55Q55XXXXXXXXXXXm----+m555mm-,-m5mmmmmmm-,,,::
+          +----+m5555m+---+-+++++++++m++++++++mmmmmmmmmQmQXXXQQQXQQXXX@5:--+m555mm-,:+mmmmmm55,,,::,
+          -----+m5555m+------+++++++m++++++++m+mmmmmmmmmQQQQXQQXXXXXXXXXQ:-+m55m5m-:,-m5mmmm5:,,:::,
+          -----+m5555m+----++-++++++m+++++++mmmmmmmmm+QQXQQQ5QXXXXXXXXXXX-:+m555mm-,,,+mmmm5m,,,:,:,
+          -----+m5555m+----++-+++++m+++++++++mmmmmmm+QQQQQ5QXQQXQXXQXXXXX@:-mm555m-,,,:mXXQm,,::,:::
+          -----+m5555m+:------++++-X+++++++mmmm+m++mQXQ5QQQQQXQQQQXXXXXXXX+-m5555m-,,,QXQX@X,,::-::,
+          ------m5555m+:-------++++Q+-+++++m++mmm+5QQ5Q5QQQQQQQQXQXQXXXXXXX:m5555m:,,XQXXXX@,,,:,:,:
+          --+-+-m5555m+::---+++++++5++++++mm+m+++5Q5Q5Q5QQQQQQQQQXXXXXQQXXXQ+555m+:-X5XXXXX@,,:,,,,:
+          --++-+m5555m+---+++-++++m5+--+++++m+m-55mQQ5QQ5QQ5QQQQQQQX5XQXXXXXXm55m-XQQXXXQXX@,,,:,,:,
+          ++--++m55555+----+-+-+++Qm+-+++++m+++5mmm55Q55QQ5QQQQQQQX5QQQQXXQQX55mQXQXXXXXXXXX,:,:,,:,
+          +--+++m55555+---+++-+++-X5++++++m+m+mmm+55555QQ5QQQQQQQ5QQQQQQQQQQQQ5XQQXXQXXXXXXX,,,,::::
+          +---++m55Q55+----+--+++-X5++-+++mm+5mm+m5555Q55QQ5Q5QQQQQQQQQ5QQQQQXQQXXXQQXXXQXXX,,:,,,:+
+          --+--+m55555+----++--++-Xmmm++++++mmm+mmmm5Q5QQ55Q555QQQQQQQQQ5Q55QQXXXQQQXXX5QXX:,,:,:::5
+          -----+m55555+---+++-++--Qmmm+-++-mm5+m5m5mmm55555Q555555QQ55QQ55XQQXQQQQQQXX55Q5X:::,,,:mm
+          -----+m55555+-------+---Q5mm+-++mmmmmmmmm5m555Q555Q5555555Q555Q5QXXQQQQQQXXX5Q5QX,,:,::-5m
+          -----+m55555m------+-+--QQ55m+-mmm+mmmmmmm55m55mmm55555555555QQXQQQQQQXXXXXm55+Q,,:::,:mm5
+          ----++m55555+-----------XQ5mm+++m+mmm+mmm5+mm+-m5++55+m5-5mQ5XQQQQQXXXXXXXX5--QX,,,,:,+5m5
+          --++++m5QQQ5+----+---+--XQ5m5++m+mmm+mmmm55++-:m5m+--:::,:55XQQQQQQXQXXXX5---mX,,,:,,:mm55
+          -+--++m55555m-----+-----XQQmm++++mm+mmmmmm++++:-+:-:-,,,5mQXQQQXQQQQXXX+----5Q:,:,,,,-5m55
+          ++--++m55555m----+----+-XQQmmm-+mmm+m+mm+m-:-::++:--:,,5+QQQQQQQQQQQQmm--+m5Q,,,:,:::mm555
+          +++-++m55555+---+----++-mXX5mm+mm+mmmmm5+-::,,,+,:-:,+Q+QQQQQQQQQQQQ-+m5555Q,,:::,,,-mm555
+          ++++++m55555m-------+++--XQQ5-+m+m+mmm+-:::::,-::::m,Q+QQQQQQ5QQQQ:+++m55QQ:,,:::,::mm5555
+          +++--+m55Q55m----+---+++-XQ55mm+mmmm+++-::,+,:-:::,,mmXQQQQQ5QQQQQ---m+55Q:,,:::,,::mm5555
+          +++--+m555Q5m-----+--++++-XQ++++m++++---+:,-:,,---:++QQQQQQQQQQQQQm-+:m55,,,::::,:,-mm5555
+          +++---m5Q5Q5m:----++-++++-XXm++++mm---:::-::-,,,,:-5QQQ55QQQ5QQQQQ5-:+mm+,,,::::,,:+m55555
+          +++---m55555m----++--++++-XX++++mm+:::,:--,,+-,,,+QmQQQ55Q55QQXXXXQ-,::5-,,::::,:,-mm55555
+          -++---m55555m----+-+++m+++XQ++-m+::--,::,::::,,,m55m5Q555m5QQQQXXXX+:,-5-:::::,::,+m555555
+          +++---m55555m---++-+-++++++X++mmm-:,-,,,:::--+,5m5Qm5Q55m55QQQXXXXXm:,:5-:::::,:,:mm5555mm
+          ++++--m55555m----++++++++++Q+mmm::+,,,-:,,:-,m5+5QQ5Q55555QQQXXXXXX5-,,m-:::::,:,-mm555555
+          +++-+-m555Q5m-----+++++++++m++++:,-,:+:,,,:+,++555QQ55555QQQQQQXXXXQ-,,-m:-:::::,mm5555555
+          ++----m55Q55m---++-++++++X:,mm+,-,+:::,,,,,,:-QQ55QQ:+mm5QQQQQQQXXX5:,,,5:::-:,,:mm5555555
+          ++-+--m555Q5m----+-+++++mm:,5+-:,:m,:,,,,::,mQ5X5Q5m55+-:m55QQQQQ5+--,,:5:-::,,:+mm5555555
+          --+---m5QQ55m----+-++-+m5m5m-::m---,:,+,:,,5Q5QQQ++:--,+m+m55QQQm+::::,-Q-:::,::m+55555555
+          ------m55QQ5m-:--+---+Xmm5--,++-:---:,,+,,:+5QXQ-:::,::,-mm55XX+:::::,,:Q-::,:::mm55555555
+          -+---:m5QQQ5m-----+--5Qm5m-,-:,--:,,m,,,::mXQQX+-:--,:X-++mmQX5:,+5:,,,:5-::::,+mm55555555
+          ++---:m5QQQ5m--+++++::QX+,,-::---:,,:,,,,:m5QQ5+m+++:XX5+++mQX+m-+5:,,,:5:-:::,mm555555555
+          +++--:m5QQQ5m--+++,:555,,-+-,,:--+,,:,,,,mQQXm+mmmm++m55mmmmQ@5mm5+::,:,5-:,,:+mm555m55m55
+          +++--:+55QQ5m---++mm5--::+m+::++mm,,,,,,++QQ5-mmmmmmmm555mmm5@5mmm+-:,::5m:,:,-mm555m55m55
+          +----:m5QQQ5m--+++++:-,,:+,-,:,m:+,,,:,,+QQQ-+mm55555555mmmm5XQ55m++:,::5m-,:,+m555555mmmm
+          ----::+55QQ5m---+m55--::--+,,,-+m,-,,,,m+QX,-+mm55Q5Q5Q5mmmm5XQ5mmm+:,,,55:,:,mm55555555mm
+          ----::+5QQQ5m---+m+--::++-,,,,,,,-+,,:,+XQ,:++mm55QQ5555mmmm5XQ55mmm:,::m5::,-mm555mm5m5mm
+          :--:::+555Q5m---++m++:-::m::,,,:,--+,,m+QQ,:++mm555QQ555mmmm5XX55mm+:::,+m,::+mQ555m5mmmmm
+          -:-::,+555Q5m---m+,++::+5:,:,,:-,++m,,+QX,::+mmmm5555555mmm+mQX5mmm+,::,-m-:,mm555555mmmmm
+          --:::,+55QQ5m--++m:+-,-+--,,,,--5-m,,m+X,,-:++mmm555555mm+++mQ@55mm-,::,-5+,:mm555555mmmmm
+          ---::,+55QQ5m--m++-:-:-,-mm::,:5++,,mm+5,,-:-+mmmm55555m+mmmmQ@mmm+,,:-:,5m,+m555m555mmmmm
+          ---::,+555Q5m+--+-:--,+:+Q+::,,:m,,,5Q5:,,--++mmmm55555m+m:++5X5mm+,,::,,5m,mm555m55mmmmmm
+          ---:::m55QQ5m--++-:::m--m+-,,5,,-,:+m5:,,,--++mmm5m5555mmmm++555mm-:,::,,5m,mm55m55m55mmmm
+          ::-::-m555Q5m---+m,:-:--+-+-:m:--+5+m5,:::--++mmmmmm55555mmQ5Q55mm:,,:-,,mm:mm5555mmmmmmm5
+          :::-:-m555Q5m---m+:m::-:--m+--,,Q55-Q,,,-:-+++mmmmmm55555m5XQQ5mm-:,:-::,+m+m55555mmmmmmm5
+          :::::-m55QQQm-:m+---:::-:-:+m,++mQ-5,-,,:::+-m+mmmmmmmmmm55XQQ5mm,,,:--:,++mm555mmmmmmmmm5
+          :::::-m55QQ5m---+:,+:::++:+++-+QX-+,,:,::::--+mmmmmm++mmmm+mm+-m-,:,---:,:+5m5555mm5mmmm+Q
+          :::::-m55QQ5m-+-m::,:::m-+-+-mm@5-5,,:,::-:--+++mmmmm+++mmmm5mmm,,,:::-::,m5m5555mmmmmmmmQ
+          :::::-m555Q5mm:++:m,,::5,+-:+mmX+Q,::,:,:-:-:++++mmmmm+mmm555mm:,:,:,--::,55555555mmmmmmmQ
+          :::::-m5QQQ5m--m+:m,-:-++--m-5+m5:::-::::::::-+++mmmmmmm+mm+mmm,,:,:,:-::,555555555mmmmm+X
+          ,:,:+-m55QQ5m----::,-:+m++++-m+5-:::::::::,::--++mmmmmmmmmm5mm,:,::,,:-:-:555555555mmmmm+X
+          ,,:,+-m55QQ5m-:+:+:,-::+++--+++5,:,::::,::,::::-++mmmm555555mm:,:::,,:-:::Qmm55555m5mmmm+X
+          ,:,,--m555Q5m---::,,-:-+:m+++m+:::::::::::::::,,-+mmmm5555555:::,:,,:-:-,:Qm55555m55mmmmmX
+          ,:,::+m555Q5m-:-,+::::,m:-+5m5m:,:,:,:,::,::::::,::-+mm5555mm,:::::,:---::5mmmmmmmm5mmm+5X
+          ,,,,:-m555Q5m-5-,-:::,,+::++:5:5:,,:,:,:,,,::::--+mmmmm5555QQ+:,:::::---::5+++++mmmmmmm+QX
+          :::,::+m5555m+-5,-:::::+m,+5++-:m,:-,:,,:::::::-+mmmmmmmmm5QQXX5::::---:-:m+m+++++++mm++QX
+          m+-::,-m555Xm--:,,-,:--:m:m--m++-+::,-,,::,:::,-m+mmmmmmmm5QQQQXXQ,,---::,5mmmm++++--++-QX
+          mm+--,-m5555m+Q,,,-,:::,-+--+-m+5,::,-,,,:::::,-++++mmmmm55QQQQXXXX,:---::5mmmmmm+++-++:QX
+          +mmm-,-m5555mQ-,,,:::--m,:-:-+mm,55:,-:::::::-,-+m+mmmmmm555QQQQXXXX:-:::-5mmmmmmmm++m++XX
+          +mmmm:-m55Q5m+-,::::::,,,+::+-mmm+:,,-:,,::::+,:m+mmmmmm55555QQQQXXXX,,::+mmmmmmmmmm+mm5XX
+          ,-m5m:-m5QQ5m+:,,+::,::,:-+----mQ,m+,-::,:::-+:-+mmmmmmm55555QQQQXXXXQ,::5mmmmmmmmmm+mmQXX
+          ,:m55::m5QQ5mX,,:,:,::-,,::-+:-+5-mQ,--::-,:-+::+mmmmmmm55555QQQQXXXXX,,,5mmmmmmmmm++mQXXX
+          ,:m55::mQQQ5mm,,:,,,+::,,,::+--m5:--,--:,:,:-+:-+mmmmmmmmm5555QQQXXXXXX,,mm5mmmmmmm+mQXXXX
+          ,,m55::mQQQ5m+,::,,,+:,::,,:+::m5m5Q,::,,:,-+m--+mmmmmmmmm55555QQQXXXXX,,m5mmmmmmm++QXXXXX
+          ,,+55::mQQQ55+:,,::--:,-,,:-:++m:mm,::,:,,:-mm:-mmmmmmmmmmm555QQQQXXXXX+,mmmmmmmmm++QXXXXQ
+          ,,+55-:mQ5Q5mm,,,:,:-::::,,+,:mm-,,+++m::::++m:+mmmmmmmmmmm5555QQQQXXXXX,mmmmmmmmmm+XXXXX5
+          ,,+55-:m5QQQm+,,,,:,::,,,,,:,-++++,,:::-::-+mm:+mmmmmmmmmmm55555QQQXXXXX:m5mmmmmmmmmQXQXXm
+          ,,-55+:mQQQ5mm-,,-,,::::-:-:+-++:+-,:::,,:-+m+-mmmmmmmmmmmm55555QQQXXXXX+mmmmmmmmmmmm5XXXm
+          ,,-55+:m5QQ5mm:,,:,::::::,,,+-:-,:m,,:,,:-++m:-mmmmmmmmmmmm55555QQQXXXXXQ+--+mmmmmm5mmXXQ+
+          ,,:5Qm:m55QQ5+-,:,,:::-,,,:+++::,-::,,,,:-+++:+mmmmmmmmmmmmm55555QQXXXXXX-+:---++m55m5XXm-
+          ,,,5Qm:m555Q5+-,,,:,::-:,:,:+m5+-,:,,,,:-+++,-mmmmmmmmmmmmmm55555QQXXXXXX-----::,:+Q5QXQ-:
+          :--5Q5:m5QQQmm,::,,,::::,::-,:m-:,:,,,,-+++::mmmmmmmmmmmmmmmm55555QQXXXXX5-+---:,,+X5XXm::
+          --+5Q5:m5QQQm+:,,,::,,-,,,::,::++,,,,,:-++::+mmmmmmmmmmmmmmmm55555QQXXXXXX-+++--:,-QQQm:::
+          :++5Q5-m5QQQm+,,,:,:,:-:-,-:::-+::,,,,---,-+mmmmmmmmmmmmmmmmmm5555QQQXXXXX-+--+---+XQ+::::
+          ,--mQ5-m5QQQ5-:,:::-:---+::,-:-5,,:,,,,,-++mmmmmmmmmmmmmmmmmmmm555QQQQXXXX---++-+++5+-:-:-
+          ,,-+55++5QQQ5-,:,::+,:::-,--:+:m+,,,::-++++mmmmmmmmmmmmmmmmmmmm5555QQQXXXXQ--+++++++-----+
+          :,:+XQmm5QQQ+:,:,::,,:,,:m,m,::-:,,::-++++mmmmmmmmmmmmmmmmmmmmmm555QQQQXXXX--+++++++++--+-
+          ,::mQQ5+5QQQ+:::,:-::+::,m,+,::-:+,:-+++++mmmmmmmmmmmmmmmm55mm55555QQQQXXXX--+++++++m+----
+up
+55555mm5555m+---+++++++++mmm+mmmm+mmmmm5mmQ5QQQQQQm+++mm++mm++++++mmmm5555555mmmmmmmQXXXm+-,,,:::,,,
+55Q5mmm5555m+-----+++++++mm+mmmm+mmm+5mm5m555QQQQQQQ+++m++m+++++++mmmmm55mmmmmmmmmmmmXX@X+,,,:::,:,,
+5555+-m55555+---++-+++++++m++mm+mmm++mmmmmm5Q5Q5QQQQQQ++++++++++++mmmmm5m5mmm5mmmmmmm5X@@,,,:::,,:,,
+555m-+m5555m+------++++++m+++m+5+m+++mmmmm55Q5QQQQQQQQQ+++++++++-+mm5mmmm5mmmmmmmmmmmmX@5,,,:::,:,,:
+Q5m+-+m5555m+:--++---+++++++++m+++++mmmm+mmm55QQQQQQQXQQm+++++++-+m555mmmm5mmmmmmmmmm55m,,,,::,::,:,
+55m--+m5555m+:--+--++++++++++mm++++++m+mmmm555QQQQQQQQQQXX++++++++m55mmm+mmmm5mmmmmmm5m,,,::,,:,,:,,
+55+--+m5555m+:-----++++++m+++m+++++++m+mmmmmmQQQQQQQQXXXXXX--++--+m555m+-+mmmmmmmmm55m,,,:,:,:,,:-,m
+5+---+m5555m+----++--+++++++m++++m+++mmmmmm555QQQ5QXXXXXXXXX-----+m5m5mm::+mmmmmmmmm5:,,:,,,::,:--mm
+m----+m5555m+----+--+++++++++++++++++mmmm5mm55Q55XXXXXXXXXXXm----+m555mm-,-m5mmmmmmm-,,,::,:,,:::mmm
++----+m5555m+---+-+++++++++m++++++++mmmmmmmmmQmQXXXQQQXQQXXX@5:--+m555mm-,:+mmmmmm55,,,::,,:,:::mmm5
+-----+m5555m+------+++++++m++++++++m+mmmmmmmmmQQQQXQQXXXXXXXXXQ:-+m55m5m-:,-m5mmmm5:,,:::,:,:::+mm55
+-----+m5555m+----++-++++++m+++++++mmmmmmmmm+QQXQQQ5QXXXXXXXXXXX-:+m555mm-,,,+mmmm5m,,,:,:,,:,,+5mm55
+-----+m5555m+----++-+++++m+++++++++mmmmmmm+QQQQQ5QXQQXQXXQXXXXX@:-mm555m-,,,:mXXQm,,::,::::::-5mm555
+-----+m5555m+:------++++-X+++++++mmmm+m++mQXQ5QQQQQXQQQQXXXXXXXX+-m5555m-,,,QXQX@X,,::-::,:::mmm5555
+------m5555m+:-------++++Q+-+++++m++mmm+5QQ5Q5QQQQQQQQXQXQXXXXXXX:m5555m:,,XQXXXX@,,,:,:,::,m5m55555
+--+-+-m5555m+::---+++++++5++++++mm+m+++5Q5Q5Q5QQQQQQQQQXXXXXQQXXXQ+555m+:-X5XXXXX@,,:,,,,:,:5m555555
+--++-+m5555m+---+++-++++m5+--+++++m+m-55mQQ5QQ5QQ5QQQQQQQX5XQXXXXXXm55m-XQQXXXQXX@,,,:,,:,,mmm555555
+++--++m55555+----+-+-+++Qm+-+++++m+++5mmm55Q55QQ5QQQQQQQX5QQQQXXQQX55mQXQXXXXXXXXX,:,:,,:,+5m5555555
++--+++m55555+---+++-+++-X5++++++m+m+mmm+55555QQ5QQQQQQQ5QQQQQQQQQQQQ5XQQXXQXXXXXXX,,,,::::mm55555555
++---++m55Q55+----+--+++-X5++-+++mm+5mm+m5555Q55QQ5Q5QQQQQQQQQ5QQQQQXQQXXXQQXXXQXXX,,:,,,:+5m55555555
+--+--+m55555+----++--++-Xmmm++++++mmm+mmmm5Q5QQ55Q555QQQQQQQQQ5Q55QQXXXQQQXXX5QXX:,,:,:::5m555555555
+-----+m55555+---+++-++--Qmmm+-++-mm5+m5m5mmm55555Q555555QQ55QQ55XQQXQQQQQQXX55Q5X:::,,,:mmm555555555
+-----+m55555+-------+---Q5mm+-++mmmmmmmmm5m555Q555Q5555555Q555Q5QXXQQQQQQXXX5Q5QX,,:,::-5m5555555555
+-----+m55555m------+-+--QQ55m+-mmm+mmmmmmm55m55mmm55555555555QQXQQQQQQXXXXXm55+Q,,:::,:mm55555555555
+----++m55555+-----------XQ5mm+++m+mmm+mmm5+mm+-m5++55+m5-5mQ5XQQQQQXXXXXXXX5--QX,,,,:,+5m55555555555
+--++++m5QQQ5+----+---+--XQ5m5++m+mmm+mmmm55++-:m5m+--:::,:55XQQQQQQXQXXXX5---mX,,,:,,:mm555555555555
+-+--++m55555m-----+-----XQQmm++++mm+mmmmmm++++:-+:-:-,,,5mQXQQQXQQQQXXX+----5Q:,:,,,,-5m555555555555
+++--++m55555m----+----+-XQQmmm-+mmm+m+mm+m-:-::++:--:,,5+QQQQQQQQQQQQmm--+m5Q,,,:,:::mm5555555555555
++++-++m55555+---+----++-mXX5mm+mm+mmmmm5+-::,,,+,:-:,+Q+QQQQQQQQQQQQ-+m5555Q,,:::,,,-mm5555555555555
+++++++m55555m-------+++--XQQ5-+m+m+mmm+-:::::,-::::m,Q+QQQQQQ5QQQQ:+++m55QQ:,,:::,::mm55555555555555
++++--+m55Q55m----+---+++-XQ55mm+mmmm+++-::,+,:-:::,,mmXQQQQQ5QQQQQ---m+55Q:,,:::,,::mm55555555555555
++++--+m555Q5m-----+--++++-XQ++++m++++---+:,-:,,---:++QQQQQQQQQQQQQm-+:m55,,,::::,:,-mm55555555555555
++++---m5Q5Q5m:----++-++++-XXm++++mm---:::-::-,,,,:-5QQQ55QQQ5QQQQQ5-:+mm+,,,::::,,:+m555555555555555
++++---m55555m----++--++++-XX++++mm+:::,:--,,+-,,,+QmQQQ55Q55QQXXXXQ-,::5-,,::::,:,-mm555555555555555
+-++---m55555m----+-+++m+++XQ++-m+::--,::,::::,,,m55m5Q555m5QQQQXXXX+:,-5-:::::,::,+m5555555555555555
++++---m55555m---++-+-++++++X++mmm-:,-,,,:::--+,5m5Qm5Q55m55QQQXXXXXm:,:5-:::::,:,:mm5555mm5m5555555m
+++++--m55555m----++++++++++Q+mmm::+,,,-:,,:-,m5+5QQ5Q55555QQQXXXXXX5-,,m-:::::,:,-mm5555555mmmmm5555
++++-+-m555Q5m-----+++++++++m++++:,-,:+:,,,:+,++555QQ55555QQQQQQXXXXQ-,,-m:-:::::,mm555555555mmmmmm5m
+++----m55Q55m---++-++++++X:,mm+,-,+:::,,,,,,:-QQ55QQ:+mm5QQQQQQQXXX5:,,,5:::-:,,:mm55555555555mmmmmm
+++-+--m555Q5m----+-+++++mm:,5+-:,:m,:,,,,::,mQ5X5Q5m55+-:m55QQQQQ5+--,,:5:-::,,:+mm5555555555555mmmm
+--+---m5QQ55m----+-++-+m5m5m-::m---,:,+,:,,5Q5QQQ++:--,+m+m55QQQm+::::,-Q-:::,::m+55555555555555mmmm
+------m55QQ5m-:--+---+Xmm5--,++-:---:,,+,,:+5QXQ-:::,::,-mm55XX+:::::,,:Q-::,:::mm55555555555555mmmm
+-+---:m5QQQ5m-----+--5Qm5m-,-:,--:,,m,,,::mXQQX+-:--,:X-++mmQX5:,+5:,,,:5-::::,+mm55555555555mmmmmmm
+++---:m5QQQ5m--+++++::QX+,,-::---:,,:,,,,:m5QQ5+m+++:XX5+++mQX+m-+5:,,,:5:-:::,mm5555555555mmmmmmmm5
++++--:m5QQQ5m--+++,:555,,-+-,,:--+,,:,,,,mQQXm+mmmm++m55mmmmQ@5mm5+::,:,5-:,,:+mm555m55m555mmmmmm5QQ
++++--:+55QQ5m---++mm5--::+m+::++mm,,,,,,++QQ5-mmmmmmmm555mmm5@5mmm+-:,::5m:,:,-mm555m55m55mmmmm5QQQQ
++----:m5QQQ5m--+++++:-,,:+,-,:,m:+,,,:,,+QQQ-+mm55555555mmmm5XQ55m++:,::5m-,:,+m555555mmmmmmmm5QQQQQ
+----::+55QQ5m---+m55--::--+,,,-+m,-,,,,m+QX,-+mm55Q5Q5Q5mmmm5XQ5mmm+:,,,55:,:,mm55555555mmmmm5QQQQQQ
+----::+5QQQ5m---+m+--::++-,,,,,,,-+,,:,+XQ,:++mm55QQ5555mmmm5XQ55mmm:,::m5::,-mm555mm5m5mmmm5QQQQQQQ
+:--:::+555Q5m---++m++:-::m::,,,:,--+,,m+QQ,:++mm555QQ555mmmm5XX55mm+:::,+m,::+mQ555m5mmmmmmmQQQQQXXX
+-:-::,+555Q5m---m+,++::+5:,:,,:-,++m,,+QX,::+mmmm5555555mmm+mQX5mmm+,::,-m-:,mm555555mmmmmm5QQQQXXXX
+--:::,+55QQ5m--++m:+-,-+--,,,,--5-m,,m+X,,-:++mmm555555mm+++mQ@55mm-,::,-5+,:mm555555mmmmmmQQQQXXXXX
+---::,+55QQ5m--m++-:-:-,-mm::,:5++,,mm+5,,-:-+mmmm55555m+mmmmQ@mmm+,,:-:,5m,+m555m555mmmmm5QQQXXXXXX
+---::,+555Q5m+--+-:--,+:+Q+::,,:m,,,5Q5:,,--++mmmm55555m+m:++5X5mm+,,::,,5m,mm555m55mmmmmmQQQXXXXXXX
+---:::m55QQ5m--++-:::m--m+-,,5,,-,:+m5:,,,--++mmm5m5555mmmm++555mm-:,::,,5m,mm55m55m55mmmmQQQXXXXXXX
+::-::-m555Q5m---+m,:-:--+-+-:m:--+5+m5,:::--++mmmmmm55555mmQ5Q55mm:,,:-,,mm:mm5555mmmmmmm5QQXXXXXXXX
+:::-:-m555Q5m---m+:m::-:--m+--,,Q55-Q,,,-:-+++mmmmmm55555m5XQQ5mm-:,:-::,+m+m55555mmmmmmm5QQXXXXXXXX
+:::::-m55QQQm-:m+---:::-:-:+m,++mQ-5,-,,:::+-m+mmmmmmmmmm55XQQ5mm,,,:--:,++mm555mmmmmmmmm5QXXXXXXXXX
+:::::-m55QQ5m---+:,+:::++:+++-+QX-+,,:,::::--+mmmmmm++mmmm+mm+-m-,:,---:,:+5m5555mm5mmmm+QXXXXXXXXXX
+:::::-m55QQ5m-+-m::,:::m-+-+-mm@5-5,,:,::-:--+++mmmmm+++mmmm5mmm,,,:::-::,m5m5555mmmmmmmmQXXXXXXXXXX
+:::::-m555Q5mm:++:m,,::5,+-:+mmX+Q,::,:,:-:-:++++mmmmm+mmm555mm:,:,:,--::,55555555mmmmmmmQXXXXXXXXXX
+:::::-m5QQQ5m--m+:m,-:-++--m-5+m5:::-::::::::-+++mmmmmmm+mm+mmm,,:,:,:-::,555555555mmmmm+XXXXXXXXXXX
+,:,:+-m55QQ5m----::,-:+m++++-m+5-:::::::::,::--++mmmmmmmmmm5mm,:,::,,:-:-:555555555mmmmm+XXXXXXXXXXX
+,,:,+-m55QQ5m-:+:+:,-::+++--+++5,:,::::,::,::::-++mmmm555555mm:,:::,,:-:::Qmm55555m5mmmm+XXXXXXXXXXX
+,:,,--m555Q5m---::,,-:-+:m+++m+:::::::::::::::,,-+mmmm5555555:::,:,,:-:-,:Qm55555m55mmmmmXXXXXXXXXXX
+,:,::+m555Q5m-:-,+::::,m:-+5m5m:,:,:,:,::,::::::,::-+mm5555mm,:::::,:---::5mmmmmmmm5mmm+5XXXXXXXXQm:
+,,,,:-m555Q5m-5-,-:::,,+::++:5:5:,,:,:,:,,,::::--+mmmmm5555QQ+:,:::::---::5+++++mmmmmmm+QXXXXXXQm:,,
+:::,::+m5555m+-5,-:::::+m,+5++-:m,:-,:,,:::::::-+mmmmmmmmm5QQXX5::::---:-:m+m+++++++mm++QXXXXXQ5:,:-
+m+-::,-m555Xm--:,,-,:--:m:m--m++-+::,-,,::,:::,-m+mmmmmmmm5QQQQXXQ,,---::,5mmmm++++--++-QXXXXX5,::--
+mm+--,-m5555m+Q,,,-,:::,-+--+-m+5,::,-,,,:::::,-++++mmmmm55QQQQXXXX,:---::5mmmmmm+++-++:QXXXXm,:----
++mmm-,-m5555mQ-,,,:::--m,:-:-+mm,55:,-:::::::-,-+m+mmmmmm555QQQQXXXX:-:::-5mmmmmmmm++m++XXXXQ,:---+-
++mmmm:-m55Q5m+-,::::::,,,+::+-mmm+:,,-:,,::::+,:m+mmmmmm55555QQQQXXXX,,::+mmmmmmmmmm+mm5XXXXm:---++-
+,-m5m:-m5QQ5m+:,,+::,::,:-+----mQ,m+,-::,:::-+:-+mmmmmmm55555QQQQXXXXQ,::5mmmmmmmmmm+mmQXXXQ----++-+
+,:m55::m5QQ5mX,,:,:,::-,,::-+:-+5-mQ,--::-,:-+::+mmmmmmm55555QQQQXXXXX,,,5mmmmmmmmm++mQXXXX5---++--+
+,:m55::mQQQ5mm,,:,,,+::,,,::+--m5:--,--:,:,:-+:-+mmmmmmmmm5555QQQXXXXXX,,mm5mmmmmmm+mQXXXXQ+--++--+-
+,,m55::mQQQ5m+,::,,,+:,::,,:+::m5m5Q,::,,:,-+m--+mmmmmmmmm55555QQQXXXXX,,m5mmmmmmm++QXXXXX5---++-++-
+,,+55::mQQQ55+:,,::--:,-,,:-:++m:mm,::,:,,:-mm:-mmmmmmmmmmm555QQQQXXXXX+,mmmmmmmmm++QXXXXQm+-+++-++-
+,,+55-:mQ5Q5mm,,,:,:-::::,,+,:mm-,,+++m::::++m:+mmmmmmmmmmm5555QQQQXXXXX,mmmmmmmmmm+XXXXX5++-++--+--
+,,+55-:m5QQQm+,,,,:,::,,,,,:,-++++,,:::-::-+mm:+mmmmmmmmmmm55555QQQXXXXX:m5mmmmmmmmmQXQXXm++-+--+---
+,,-55+:mQQQ5mm-,,-,,::::-:-:+-++:+-,:::,,:-+m+-mmmmmmmmmmmm55555QQQXXXXX+mmmmmmmmmmmm5XXXm+----+--+-
+,,-55+:m5QQ5mm:,,:,::::::,,,+-:-,:m,,:,,:-++m:-mmmmmmmmmmmm55555QQQXXXXXQ+--+mmmmmm5mmXXQ+----++----
+,,:5Qm:m55QQ5+-,:,,:::-,,,:+++::,-::,,,,:-+++:+mmmmmmmmmmmmm55555QQXXXXXX-+:---++m55m5XXm-----+--+-:
+,,,5Qm:m555Q5+-,,,:,::-:,:,:+m5+-,:,,,,:-+++,-mmmmmmmmmmmmmm55555QQXXXXXX-----::,:+Q5QXQ-:---+---+-:
+:--5Q5:m5QQQmm,::,,,::::,::-,:m-:,:,,,,-+++::mmmmmmmmmmmmmmmm55555QQXXXXX5-+---:,,+X5XXm::-:+---++-:
+--+5Q5:m5QQQm+:,,,::,,-,,,::,::++,,,,,:-++::+mmmmmmmmmmmmmmmm55555QQXXXXXX-+++--:,-QQQm::::--:--+--:
+:++5Q5-m5QQQm+,,,:,:,:-:-,-:::-+::,,,,---,-+mmmmmmmmmmmmmmmmmm5555QQQXXXXX-+--+---+XQ+::::-+-:-++-::
+,--mQ5-m5QQQ5-:,:::-:---+::,-:-5,,:,,,,,-++mmmmmmmmmmmmmmmmmmmm555QQQQXXXX---++-+++5+-:-:-+-::+++-::
+,,-+55++5QQQ5-,:,::+,:::-,--:+:m+,,,::-++++mmmmmmmmmmmmmmmmmmmm5555QQQXXXXQ--+++++++-----+--:-++--::
+:,:+XQmm5QQQ+:,:,::,,:,,:m,m,::-:,,::-++++mmmmmmmmmmmmmmmmmmmmmm555QQQQXXXX--+++++++++--+-:--+m+-:::
+,::mQQ5+5QQQ+:::,:-::+::,m,+,::-:+,:-+++++mmmmmmmmmmmmmmmm55mm55555QQQQXXXX--+++++++m+------+m+-:,:-
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+down
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+++++m55555555555555QXXX+++mmm+++m+++m++5
+55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmm+++m55555555555555QXXX+++++++++m++++++5
+55555555555m+--++++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmm+mmmmmm++++mm5555555555555mXXXQ+++++++++++mmm+,
+55555555555m+--+++++++++mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm++++m5555555555mm5m5XXX++++++++++mmm-,,
+55555555555mm--+++++++++m+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+m+++mm5555555555555mQXXQ++++m++mmmm-,:,
+55555555555m+-+-+++++++++m+mmmmmmmmmmmmmm+m+mmmmmmmmm+mmmm+m+m++++m555555555555mm5XXXm+++++++mm-:,,,
+55555555555m+---+-+++++++mmmmmmmmmmmmmmm++mmmm+mmmmm+mmmmmmmm++++mm5555555555555mmQXXX-++++mmm-,,:,,
+55555555555m+--+++++++++++m+m++mmmmmmmmmm+++m+++mmmmmmmmm++m++++++m55555555555555mmXXX5+++++m-,,::::
+55555555555m+--++++++++++m+mm+m+mmm+mmmmmmm+++++mmmmmmmmmmm+++++++m55555555555555mmQXXX++++m-,,,:,,,
+555555555555+--+++++++++m+mmmmmmmmmmmmm+mmmm555m++++mmmmmmmmm+++++mmm555555555mmmmmmXXXQ+++-,,,:::,,
+55555mm5555m+---+++++++++mmm+mmmm+mmmmm5mmQ5QQQQQQm+++mm++mm++++++mmmm5555555mmmmmmmQXXXm+-,,,:::,,,
+55Q5mmm5555m+-----+++++++mm+mmmm+mmm+5mm5m555QQQQQQQ+++m++m+++++++mmmmm55mmmmmmmmmmmmXX@X+,,,:::,:,,
+5555+-m55555+---++-+++++++m++mm+mmm++mmmmmm5Q5Q5QQQQQQ++++++++++++mmmmm5m5mmm5mmmmmmm5X@@,,,:::,,:,,
+555m-+m5555m+------++++++m+++m+5+m+++mmmmm55Q5QQQQQQQQQ+++++++++-+mm5mmmm5mmmmmmmmmmmmX@5,,,:::,:,,:
+Q5m+-+m5555m+:--++---+++++++++m+++++mmmm+mmm55QQQQQQQXQQm+++++++-+m555mmmm5mmmmmmmmmm55m,,,,::,::,:,
+55m--+m5555m+:--+--++++++++++mm++++++m+mmmm555QQQQQQQQQQXX++++++++m55mmm+mmmm5mmmmmmm5m,,,::,,:,,:,,
+55+--+m5555m+:-----++++++m+++m+++++++m+mmmmmmQQQQQQQQXXXXXX--++--+m555m+-+mmmmmmmmm55m,,,:,:,:,,:-,m
+5+---+m5555m+----++--+++++++m++++m+++mmmmmm555QQQ5QXXXXXXXXX-----+m5m5mm::+mmmmmmmmm5:,,:,,,::,:--mm
+m----+m5555m+----+--+++++++++++++++++mmmm5mm55Q55XXXXXXXXXXXm----+m555mm-,-m5mmmmmmm-,,,::,:,,:::mmm
++----+m5555m+---+-+++++++++m++++++++mmmmmmmmmQmQXXXQQQXQQXXX@5:--+m555mm-,:+mmmmmm55,,,::,,:,:::mmm5
+-----+m5555m+------+++++++m++++++++m+mmmmmmmmmQQQQXQQXXXXXXXXXQ:-+m55m5m-:,-m5mmmm5:,,:::,:,:::+mm55
+-----+m5555m+----++-++++++m+++++++mmmmmmmmm+QQXQQQ5QXXXXXXXXXXX-:+m555mm-,,,+mmmm5m,,,:,:,,:,,+5mm55
+-----+m5555m+----++-+++++m+++++++++mmmmmmm+QQQQQ5QXQQXQXXQXXXXX@:-mm555m-,,,:mXXQm,,::,::::::-5mm555
+-----+m5555m+:------++++-X+++++++mmmm+m++mQXQ5QQQQQXQQQQXXXXXXXX+-m5555m-,,,QXQX@X,,::-::,:::mmm5555
+------m5555m+:-------++++Q+-+++++m++mmm+5QQ5Q5QQQQQQQQXQXQXXXXXXX:m5555m:,,XQXXXX@,,,:,:,::,m5m55555
+--+-+-m5555m+::---+++++++5++++++mm+m+++5Q5Q5Q5QQQQQQQQQXXXXXQQXXXQ+555m+:-X5XXXXX@,,:,,,,:,:5m555555
+--++-+m5555m+---+++-++++m5+--+++++m+m-55mQQ5QQ5QQ5QQQQQQQX5XQXXXXXXm55m-XQQXXXQXX@,,,:,,:,,mmm555555
+++--++m55555+----+-+-+++Qm+-+++++m+++5mmm55Q55QQ5QQQQQQQX5QQQQXXQQX55mQXQXXXXXXXXX,:,:,,:,+5m5555555
++--+++m55555+---+++-+++-X5++++++m+m+mmm+55555QQ5QQQQQQQ5QQQQQQQQQQQQ5XQQXXQXXXXXXX,,,,::::mm55555555
++---++m55Q55+----+--+++-X5++-+++mm+5mm+m5555Q55QQ5Q5QQQQQQQQQ5QQQQQXQQXXXQQXXXQXXX,,:,,,:+5m55555555
+--+--+m55555+----++--++-Xmmm++++++mmm+mmmm5Q5QQ55Q555QQQQQQQQQ5Q55QQXXXQQQXXX5QXX:,,:,:::5m555555555
+-----+m55555+---+++-++--Qmmm+-++-mm5+m5m5mmm55555Q555555QQ55QQ55XQQXQQQQQQXX55Q5X:::,,,:mmm555555555
+-----+m55555+-------+---Q5mm+-++mmmmmmmmm5m555Q555Q5555555Q555Q5QXXQQQQQQXXX5Q5QX,,:,::-5m5555555555
+-----+m55555m------+-+--QQ55m+-mmm+mmmmmmm55m55mmm55555555555QQXQQQQQQXXXXXm55+Q,,:::,:mm55555555555
+----++m55555+-----------XQ5mm+++m+mmm+mmm5+mm+-m5++55+m5-5mQ5XQQQQQXXXXXXXX5--QX,,,,:,+5m55555555555
+--++++m5QQQ5+----+---+--XQ5m5++m+mmm+mmmm55++-:m5m+--:::,:55XQQQQQQXQXXXX5---mX,,,:,,:mm555555555555
+-+--++m55555m-----+-----XQQmm++++mm+mmmmmm++++:-+:-:-,,,5mQXQQQXQQQQXXX+----5Q:,:,,,,-5m555555555555
+++--++m55555m----+----+-XQQmmm-+mmm+m+mm+m-:-::++:--:,,5+QQQQQQQQQQQQmm--+m5Q,,,:,:::mm5555555555555
++++-++m55555+---+----++-mXX5mm+mm+mmmmm5+-::,,,+,:-:,+Q+QQQQQQQQQQQQ-+m5555Q,,:::,,,-mm5555555555555
+++++++m55555m-------+++--XQQ5-+m+m+mmm+-:::::,-::::m,Q+QQQQQQ5QQQQ:+++m55QQ:,,:::,::mm55555555555555
++++--+m55Q55m----+---+++-XQ55mm+mmmm+++-::,+,:-:::,,mmXQQQQQ5QQQQQ---m+55Q:,,:::,,::mm55555555555555
++++--+m555Q5m-----+--++++-XQ++++m++++---+:,-:,,---:++QQQQQQQQQQQQQm-+:m55,,,::::,:,-mm55555555555555
++++---m5Q5Q5m:----++-++++-XXm++++mm---:::-::-,,,,:-5QQQ55QQQ5QQQQQ5-:+mm+,,,::::,,:+m555555555555555
++++---m55555m----++--++++-XX++++mm+:::,:--,,+-,,,+QmQQQ55Q55QQXXXXQ-,::5-,,::::,:,-mm555555555555555
+-++---m55555m----+-+++m+++XQ++-m+::--,::,::::,,,m55m5Q555m5QQQQXXXX+:,-5-:::::,::,+m5555555555555555
++++---m55555m---++-+-++++++X++mmm-:,-,,,:::--+,5m5Qm5Q55m55QQQXXXXXm:,:5-:::::,:,:mm5555mm5m5555555m
+++++--m55555m----++++++++++Q+mmm::+,,,-:,,:-,m5+5QQ5Q55555QQQXXXXXX5-,,m-:::::,:,-mm5555555mmmmm5555
++++-+-m555Q5m-----+++++++++m++++:,-,:+:,,,:+,++555QQ55555QQQQQQXXXXQ-,,-m:-:::::,mm555555555mmmmmm5m
+++----m55Q55m---++-++++++X:,mm+,-,+:::,,,,,,:-QQ55QQ:+mm5QQQQQQQXXX5:,,,5:::-:,,:mm55555555555mmmmmm
+++-+--m555Q5m----+-+++++mm:,5+-:,:m,:,,,,::,mQ5X5Q5m55+-:m55QQQQQ5+--,,:5:-::,,:+mm5555555555555mmmm
+--+---m5QQ55m----+-++-+m5m5m-::m---,:,+,:,,5Q5QQQ++:--,+m+m55QQQm+::::,-Q-:::,::m+55555555555555mmmm
+------m55QQ5m-:--+---+Xmm5--,++-:---:,,+,,:+5QXQ-:::,::,-mm55XX+:::::,,:Q-::,:::mm55555555555555mmmm
+-+---:m5QQQ5m-----+--5Qm5m-,-:,--:,,m,,,::mXQQX+-:--,:X-++mmQX5:,+5:,,,:5-::::,+mm55555555555mmmmmmm
+++---:m5QQQ5m--+++++::QX+,,-::---:,,:,,,,:m5QQ5+m+++:XX5+++mQX+m-+5:,,,:5:-:::,mm5555555555mmmmmmmm5
++++--:m5QQQ5m--+++,:555,,-+-,,:--+,,:,,,,mQQXm+mmmm++m55mmmmQ@5mm5+::,:,5-:,,:+mm555m55m555mmmmmm5QQ
++++--:+55QQ5m---++mm5--::+m+::++mm,,,,,,++QQ5-mmmmmmmm555mmm5@5mmm+-:,::5m:,:,-mm555m55m55mmmmm5QQQQ
++----:m5QQQ5m--+++++:-,,:+,-,:,m:+,,,:,,+QQQ-+mm55555555mmmm5XQ55m++:,::5m-,:,+m555555mmmmmmmm5QQQQQ
+----::+55QQ5m---+m55--::--+,,,-+m,-,,,,m+QX,-+mm55Q5Q5Q5mmmm5XQ5mmm+:,,,55:,:,mm55555555mmmmm5QQQQQQ
+----::+5QQQ5m---+m+--::++-,,,,,,,-+,,:,+XQ,:++mm55QQ5555mmmm5XQ55mmm:,::m5::,-mm555mm5m5mmmm5QQQQQQQ
+:--:::+555Q5m---++m++:-::m::,,,:,--+,,m+QQ,:++mm555QQ555mmmm5XX55mm+:::,+m,::+mQ555m5mmmmmmmQQQQQXXX
+-:-::,+555Q5m---m+,++::+5:,:,,:-,++m,,+QX,::+mmmm5555555mmm+mQX5mmm+,::,-m-:,mm555555mmmmmm5QQQQXXXX
+--:::,+55QQ5m--++m:+-,-+--,,,,--5-m,,m+X,,-:++mmm555555mm+++mQ@55mm-,::,-5+,:mm555555mmmmmmQQQQXXXXX
+---::,+55QQ5m--m++-:-:-,-mm::,:5++,,mm+5,,-:-+mmmm55555m+mmmmQ@mmm+,,:-:,5m,+m555m555mmmmm5QQQXXXXXX
+---::,+555Q5m+--+-:--,+:+Q+::,,:m,,,5Q5:,,--++mmmm55555m+m:++5X5mm+,,::,,5m,mm555m55mmmmmmQQQXXXXXXX
+---:::m55QQ5m--++-:::m--m+-,,5,,-,:+m5:,,,--++mmm5m5555mmmm++555mm-:,::,,5m,mm55m55m55mmmmQQQXXXXXXX
+::-::-m555Q5m---+m,:-:--+-+-:m:--+5+m5,:::--++mmmmmm55555mmQ5Q55mm:,,:-,,mm:mm5555mmmmmmm5QQXXXXXXXX
+:::-:-m555Q5m---m+:m::-:--m+--,,Q55-Q,,,-:-+++mmmmmm55555m5XQQ5mm-:,:-::,+m+m55555mmmmmmm5QQXXXXXXXX
+:::::-m55QQQm-:m+---:::-:-:+m,++mQ-5,-,,:::+-m+mmmmmmmmmm55XQQ5mm,,,:--:,++mm555mmmmmmmmm5QXXXXXXXXX
+:::::-m55QQ5m---+:,+:::++:+++-+QX-+,,:,::::--+mmmmmm++mmmm+mm+-m-,:,---:,:+5m5555mm5mmmm+QXXXXXXXXXX
+:::::-m55QQ5m-+-m::,:::m-+-+-mm@5-5,,:,::-:--+++mmmmm+++mmmm5mmm,,,:::-::,m5m5555mmmmmmmmQXXXXXXXXXX
+:::::-m555Q5mm:++:m,,::5,+-:+mmX+Q,::,:,:-:-:++++mmmmm+mmm555mm:,:,:,--::,55555555mmmmmmmQXXXXXXXXXX
+:::::-m5QQQ5m--m+:m,-:-++--m-5+m5:::-::::::::-+++mmmmmmm+mm+mmm,,:,:,:-::,555555555mmmmm+XXXXXXXXXXX
+,:,:+-m55QQ5m----::,-:+m++++-m+5-:::::::::,::--++mmmmmmmmmm5mm,:,::,,:-:-:555555555mmmmm+XXXXXXXXXXX
+,,:,+-m55QQ5m-:+:+:,-::+++--+++5,:,::::,::,::::-++mmmm555555mm:,:::,,:-:::Qmm55555m5mmmm+XXXXXXXXXXX
+,:,,--m555Q5m---::,,-:-+:m+++m+:::::::::::::::,,-+mmmm5555555:::,:,,:-:-,:Qm55555m55mmmmmXXXXXXXXXXX
+,:,::+m555Q5m-:-,+::::,m:-+5m5m:,:,:,:,::,::::::,::-+mm5555mm,:::::,:---::5mmmmmmmm5mmm+5XXXXXXXXQm:
+,,,,:-m555Q5m-5-,-:::,,+::++:5:5:,,:,:,:,,,::::--+mmmmm5555QQ+:,:::::---::5+++++mmmmmmm+QXXXXXXQm:,,
+:::,::+m5555m+-5,-:::::+m,+5++-:m,:-,:,,:::::::-+mmmmmmmmm5QQXX5::::---:-:m+m+++++++mm++QXXXXXQ5:,:-
+m+-::,-m555Xm--:,,-,:--:m:m--m++-+::,-,,::,:::,-m+mmmmmmmm5QQQQXXQ,,---::,5mmmm++++--++-QXXXXX5,::--
+mm+--,-m5555m+Q,,,-,:::,-+--+-m+5,::,-,,,:::::,-++++mmmmm55QQQQXXXX,:---::5mmmmmm+++-++:QXXXXm,:----
++mmm-,-m5555mQ-,,,:::--m,:-:-+mm,55:,-:::::::-,-+m+mmmmmm555QQQQXXXX:-:::-5mmmmmmmm++m++XXXXQ,:---+-
++mmmm:-m55Q5m+-,::::::,,,+::+-mmm+:,,-:,,::::+,:m+mmmmmm55555QQQQXXXX,,::+mmmmmmmmmm+mm5XXXXm:---++-
+,-m5m:-m5QQ5m+:,,+::,::,:-+----mQ,m+,-::,:::-+:-+mmmmmmm55555QQQQXXXXQ,::5mmmmmmmmmm+mmQXXXQ----++-+
+,:m55::m5QQ5mX,,:,:,::-,,::-+:-+5-mQ,--::-,:-+::+mmmmmmm55555QQQQXXXXX,,,5mmmmmmmmm++mQXXXX5---++--+
+,:m55::mQQQ5mm,,:,,,+::,,,::+--m5:--,--:,:,:-+:-+mmmmmmmmm5555QQQXXXXXX,,mm5mmmmmmm+mQXXXXQ+--++--+-
+,,m55::mQQQ5m+,::,,,+:,::,,:+::m5m5Q,::,,:,-+m--+mmmmmmmmm55555QQQXXXXX,,m5mmmmmmm++QXXXXX5---++-++-
+,,+55::mQQQ55+:,,::--:,-,,:-:++m:mm,::,:,,:-mm:-mmmmmmmmmmm555QQQQXXXXX+,mmmmmmmmm++QXXXXQm+-+++-++-
+,,+55-:mQ5Q5mm,,,:,:-::::,,+,:mm-,,+++m::::++m:+mmmmmmmmmmm5555QQQQXXXXX,mmmmmmmmmm+XXXXX5++-++--+--
+,,+55-:m5QQQm+,,,,:,::,,,,,:,-++++,,:::-::-+mm:+mmmmmmmmmmm55555QQQXXXXX:m5mmmmmmmmmQXQXXm++-+--+---
+,,-55+:mQQQ5mm-,,-,,::::-:-:+-++:+-,:::,,:-+m+-mmmmmmmmmmmm55555QQQXXXXX+mmmmmmmmmmmm5XXXm+----+--+-

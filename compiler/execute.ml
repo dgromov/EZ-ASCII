@@ -22,8 +22,43 @@ let execute_prog prog debug_flag =
   and pop_address_val = function
       IntValue(i) -> raise (Failure ("Expected an address but popped an int."))    
     | Address(i) -> (Hashtbl.find prog.glob_hash i) 
-  and stack = Array.make 1024 (IntValue 0)
+  in 
+  let stack = Array.make 1024 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
+  in 
+  let get_pnts sel_type sp h w =  
+      (* This match should be on some sort of enum *)
+      ( match sel_type with 
+          1 -> 
+            let x = pop_int stack.(sp-4) 
+            and y = pop_int stack.(sp-3) in
+            Canvas.select_point x y        
+        | 2 -> 
+            let x1 = pop_int stack.(sp-6) 
+            and x2 = pop_int stack.(sp-5) 
+            and y1 = pop_int stack.(sp-4)
+            and y2 = pop_int stack.(sp-3) in
+            Canvas.select_rect x1 x2 y1 y2  
+        | 3 -> 
+            let x = pop_int stack.(sp-5)
+            and y1 = pop_int stack.(sp-4)
+            and y2 = pop_int stack.(sp-3) in
+            Canvas.select_hslice x y1 y2  
+        | 4 -> 
+            let x1 = pop_int stack.(sp-5)
+            and x2 = pop_int stack.(sp-4)
+            and y  = pop_int stack.(sp-3) in
+            Canvas.select_vslice x1 x2 y  
+        | 5 -> 
+            let x = pop_int stack.(sp-3) in
+            Canvas.select_hslice_all x w
+        | 6 -> 
+            let y = pop_int stack.(sp-3) in
+            Canvas.select_vslice_all y h 
+        | 7 -> 
+            Canvas.select_all h w
+        | _ -> 
+          raise (Failure("Invalid Select: SS should catch this")) )
   (*and canv_env = Array.make 100 [] *)
   and debug s =
     if debug_flag then print_string s
@@ -341,41 +376,8 @@ let execute_prog prog debug_flag =
               | _ -> raise(Failure("Jsr -6: Expected canvas type."))
             in 
             let sel_type = (pop_int stack.(sp-2)) in
-            let selected = 
-              (* This match should be on some sort of enum *)
-              match sel_type with 
-                  1 -> 
-                    let x = pop_int stack.(sp-4) 
-                    and y = pop_int stack.(sp-3) in
-                    Canvas.select_point x y existing        
-                | 2 -> 
-                    let x1 = pop_int stack.(sp-6) 
-                    and x2 = pop_int stack.(sp-5) 
-                    and y1 = pop_int stack.(sp-4)
-                    and y2 = pop_int stack.(sp-3) in
-                    Canvas.select_rect x1 x2 y1 y2 existing 
-                | 3 -> 
-                    let x = pop_int stack.(sp-5)
-                    and y1 = pop_int stack.(sp-4)
-                    and y2 = pop_int stack.(sp-3) in
-                    Canvas.select_hslice x y1 y2 existing 
-                | 4 -> 
-                    let x1 = pop_int stack.(sp-5)
-                    and x2 = pop_int stack.(sp-4)
-                    and y  = pop_int stack.(sp-3) in
-                    Canvas.select_vslice x1 x2 y existing 
-                | 5 -> 
-                    let x = pop_int stack.(sp-3) in
-                    Canvas.select_hslice_all x existing 
-                | 6 -> 
-                    let y = pop_int stack.(sp-3) in
-                    Canvas.select_vslice_all y existing 
-                | 7 -> 
-                    Canvas.select_all existing 
-                | _ -> 
-                  raise (Failure("Invalid Select: SS should catch this"))
-            in 
-
+            let pnts = get_pnts sel_type sp (Canvas.height existing) (Canvas.width existing) in 
+            let selected = (Canvas.select_rect_from_list pnts existing) in 
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
             let ret_val = Address !(prog.glob_hash_counter) in
               prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
