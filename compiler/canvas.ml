@@ -157,13 +157,6 @@ let rec set_point can intensity = function
   let l = (fetch_match can []) in 
     set_point can intensity l 
  *)
-let set_rect_int x1 x2 y1 y2 can intensity = 
-  let l = (fetch_box x1 x2 y1 y2 [] )in 
-    set_point can intensity l ; 
-  can
-
-
-
 let set_rect_can l old_can new_can= 
   let rec set_point = function 
     x :: xs -> (match x with 
@@ -179,10 +172,17 @@ let set_rect_can l old_can new_can=
   set_point (l);
   (new_can)
 
+let set_from_list can intensity pnts = 
+  set_point can intensity pnts
+
 let select_rect_from_list l can = 
    let blank_slate = create_blank_from_existing can (-1) in 
     set_rect_can  l can blank_slate 
- 
+
+(* 
+   The following functions simply return points representing various boxes
+   They are labels for the various select operations.
+*)
 let select_rect x1 x2 y1 y2 = 
     fetch_box x1 x2 y1 y2 []
 
@@ -212,7 +212,6 @@ let mask can1 can2 =
      let cp_can1 = set_rect_can pl can1 blank_slate in
      (set_rect_can  pl can2 cp_can1 ) 
   
- 
 let shift can dir steps = 
   let shifted = create_blank_from_existing can (-1) in 
     let rec set_point = function
@@ -240,9 +239,6 @@ let shift can dir steps =
                   set_point xs;
     | [] -> ()
   in 
-  
-
-
   let l = 
     (match ( get_dir (dir) ) with 
                           UP ->

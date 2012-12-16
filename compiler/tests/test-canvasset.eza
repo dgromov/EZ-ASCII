@@ -1,0 +1,7 @@
+// tests static semantic analysis
+
+d <- load("../tmp/small.i", 10);
+
+d[3,] <- 5;  // ok
+
+d -> out, false;

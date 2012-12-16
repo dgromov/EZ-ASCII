@@ -132,7 +132,7 @@ let rec string_of_stmt = function
       string_of_expr e ^ ", " ^ string_of_expr render_expr ^ " -> " ^ string_of_expr fname
   | Assign(v, e) -> 
       v ^ " <- " ^ string_of_expr e
-  | CanSet(_, _, _) -> "Can Set"
+  | CanSet(can, sel, exp) -> string_of_expr can ^ string_of_expr sel ^ " <- " ^ string_of_expr exp  
   | Include(str) ->
      "include " ^ str
 

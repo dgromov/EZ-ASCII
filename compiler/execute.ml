@@ -26,40 +26,39 @@ let execute_prog prog debug_flag =
   let stack = Array.make 1024 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
   in 
-  let get_pnts sel_type sp h w =  
+  let get_pnts sel_type soff h w =  
       (* This match should be on some sort of enum *)
       ( match sel_type with 
           1 -> 
-            let x = pop_int stack.(sp-4) 
-            and y = pop_int stack.(sp-3) in
+            let x = pop_int stack.(soff - 1) 
+            and y = pop_int stack.(soff) in
             Canvas.select_point x y        
         | 2 -> 
-            let x1 = pop_int stack.(sp-6) 
-            and x2 = pop_int stack.(sp-5) 
-            and y1 = pop_int stack.(sp-4)
-            and y2 = pop_int stack.(sp-3) in
+            let x1 = pop_int stack.(soff - 3) 
+            and x2 = pop_int stack.(soff - 2) 
+            and y1 = pop_int stack.(soff - 1)
+            and y2 = pop_int stack.(soff) in
             Canvas.select_rect x1 x2 y1 y2  
         | 3 -> 
-            let x = pop_int stack.(sp-5)
-            and y1 = pop_int stack.(sp-4)
-            and y2 = pop_int stack.(sp-3) in
+            let x = pop_int stack.(soff - 2)
+            and y1 = pop_int stack.(soff - 1)
+            and y2 = pop_int stack.(soff) in
             Canvas.select_hslice x y1 y2  
         | 4 -> 
-            let x1 = pop_int stack.(sp-5)
-            and x2 = pop_int stack.(sp-4)
-            and y  = pop_int stack.(sp-3) in
+            let x1 = pop_int stack.(soff - 2)
+            and x2 = pop_int stack.(soff - 1)
+            and y  = pop_int stack.(soff) in
             Canvas.select_vslice x1 x2 y  
         | 5 -> 
-            let x = pop_int stack.(sp-3) in
+            let x = pop_int stack.(soff) in
             Canvas.select_hslice_all x w
         | 6 -> 
-            let y = pop_int stack.(sp-3) in
+            let y = pop_int stack.(soff) in
             Canvas.select_vslice_all y h 
         | 7 -> 
             Canvas.select_all h w
         | _ -> 
           raise (Failure("Invalid Select: SS should catch this")) )
-  (*and canv_env = Array.make 100 [] *)
   and debug s =
     if debug_flag then print_string s
   in 
@@ -290,12 +289,6 @@ let execute_prog prog debug_flag =
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
-            let filename = 
-              ( match (pop_address_val stack.(sp-2)) with
-                  Hashtypes.String(s) -> s
-                | _ ->
-                    raise (Failure("Jsr -2 expected a string filepath but got a different type.")) 
-              ) in 
             let render = 
               (match stack.(sp-3) with 
                   IntValue(i) -> raise (Failure ("Render should be a boolean"))
@@ -304,6 +297,12 @@ let execute_prog prog debug_flag =
                     Hashtypes.Bool(b) -> b (* add error handling *)
                   | _ -> raise (Failure("Jsr -2 expected a boolean render but got a different type.")) 
               ) in
+             let filename = 
+              ( match (pop_address_val stack.(sp-2)) with
+                  Hashtypes.String(s) -> s
+                | _ ->
+                    raise (Failure("Jsr -2 expected a string filepath but got a different type.")) 
+              ) in 
            
             let oc = open_out filename in 
               output_string oc ( (Hashtypes.string_of_ct render lookup) ^ "\n" );
@@ -376,8 +375,11 @@ let execute_prog prog debug_flag =
               | _ -> raise(Failure("Jsr -6: Expected canvas type."))
             in 
             let sel_type = (pop_int stack.(sp-2)) in
-            let pnts = get_pnts sel_type sp (Canvas.height existing) (Canvas.width existing) in 
+            let stack_offset = sp-3 in 
+            let pnts = get_pnts 
+                        sel_type stack_offset (Canvas.height existing) (Canvas.width existing) in 
             let selected = (Canvas.select_rect_from_list pnts existing) in 
+           
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
             let ret_val = Address !(prog.glob_hash_counter) in
               prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
@@ -386,6 +388,22 @@ let execute_prog prog debug_flag =
         | Jsr (-7) ->
             (* SET POINT *)
             debug ("Jsr -7: - Set point" ^ "\n");
+            let existing = match (pop_address_val stack.(sp-1)) with
+                Hashtypes.Canvas(c) -> c
+              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
+            and set_val = (pop_int stack.(sp-2))
+            and sel_type = (pop_int stack.(sp-3))
+            and stack_offset = sp-4 in
+
+            let pnts = get_pnts sel_type stack_offset (Canvas.height existing) (Canvas.width existing) in 
+            Canvas.set_from_list existing set_val pnts;
+
+            (* 
+               Don't actually need to set the canvas back to what it was because it's being modified directly.    
+                let modified_can = (Canvas.set_from_list existing set_val pnts) in 
+               Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(modified_can)); 
+            *) 
+
             exec fp sp (pc + 1)
         | Jsr i -> 
             stack.(sp) <- IntValue (pc + 1); 

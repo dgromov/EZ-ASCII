@@ -26,6 +26,15 @@ type bstmt =
   | Lct of int          (* Load complex type by absolute address *)
   | CAtr of Ast.attr    (* Get Canvas Attribute*) 
   | Hlt                 (* Terminate *)
+  
+(* 
+    I would like to add these two but won't out of time constraints. 
+
+  | CSel of Ast.seltype (* Select from canvas *)
+  | CSet of Ast.seltype * int         (* Store some value into canvas *)          
+  
+ *)
+
 
 type prog = {
   num_globals : int;    (* Number of global variables *) 
