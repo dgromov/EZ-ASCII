@@ -9,6 +9,40 @@ module IntMap =
     let compare = compare end
   )
 
+let make_map vals =
+  let rec add_val the_map = function
+     v :: vs -> (add_val (IntMap.add (IntMap.cardinal the_map) v the_map) vs) 
+    | [] -> the_map
+  in add_val IntMap.empty vals
+
+(* Default mapping taken from http://incredibleart.org/links/ascii/new_faq.html *)
+let default_map = 
+   make_map (['.';'`';'^';':';'"';';';'~';  
+            '-';'_';'+';'<';'>';'i';'!'
+            ;'l';'I';'l';'?';'|';
+            '(';')';'1';'{';'}';'[';']';    
+            'r';'c';'v';'u';'n';'x';'z';'j'
+            ;'f';'t';'L';'C';'J';'U';'Y';'X'
+            ;'Z';'O';'0';'Q';'o';'a';'h';'k'
+            ;'b';'d';'p';'q';'w';'m';'*';'W';
+            'M';'B';'8';'&';'%';'$';'#';'@']) 
+
+(* If 0 or Max Granularity Then min or max, otherwise even dist *)
+let get_char_for_intensity intensity granularity map = 
+  let max_int = (granularity - 1) in 
+  let card = (IntMap.cardinal map) in 
+  let idx = 
+    match intensity == 0 with 
+      true -> 0 
+    | false -> match intensity == max_int with 
+        true -> ((card-1))  
+      | false  -> let divisor = ( card - 2 ) / (granularity - 2) in 
+                    let x = (card - 2 ) / divisor in 
+                      x * intensity 
+  in 
+  Char.escaped (IntMap.find idx map);
+
+
 type canvas =  
 {
   data: int array array; 
@@ -50,10 +84,10 @@ let get_dir = function
 
 (* Blank Function  *)
 let blank height width granularity default= 
-  { 
+{ 
     data = Array.make_matrix height width default; 
     gran = granularity
-  }
+}
 
 (* Make File Name *)
 let make_name name render = 
@@ -63,21 +97,18 @@ let make_name name render =
     String.concat "" [name; ".i"]
 
 (* Print Row *)
-let string_of_row row render the_map =
+let string_of_row row render the_map gran =
   match render with
       false -> String.concat " " (Array.to_list (Array.map string_of_int row ))
     | true ->  String.concat "" (Array.to_list (Array.map (fun x ->   match x with 
                                                                       (-1) -> " "
-                                                                      | _ ->  Char.escaped (IntMap.find x the_map)) row))
+                                                                      | _ ->  (get_char_for_intensity 
+                                                                                x gran the_map)) row))
 
-let make_map vals =
-  let rec add_val the_map = function
-     v :: vs -> (add_val (IntMap.add (IntMap.cardinal the_map) v the_map) vs) 
-    | [] -> the_map
-  in add_val IntMap.empty vals
+
 
 let string_of_canvas can map render =
-  String.concat "\n" (Array.to_list(Array.map (fun r -> string_of_row r render map ) can.data))
+  String.concat "\n" (Array.to_list(Array.map (fun r -> string_of_row r render map can.gran ) can.data))
 
 
 (* CANVAS ATTRIBUTES *)

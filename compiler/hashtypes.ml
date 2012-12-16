@@ -18,7 +18,7 @@ let string_of_ct render = function
     Int(i) -> string_of_int i
   | String(s) -> ( Scanf.unescaped s )
   | Bool(b) -> string_of_bool b
-  | Canvas(c) -> (Canvas.string_of_canvas c (make_map ['.'; ','; ':'; '-'; '+'; 'm'; '5'; 'Q'; 'X'; '@']) render)
+  | Canvas(c) -> (Canvas.string_of_canvas c Canvas.default_map render)
 
 
 

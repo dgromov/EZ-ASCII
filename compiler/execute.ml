@@ -299,11 +299,15 @@ let execute_prog prog debug_flag =
               ) in
              let filename = 
               ( match (pop_address_val stack.(sp-2)) with
-                  Hashtypes.String(s) -> s
+                  Hashtypes.String(s) -> 
+                                        (match lookup with 
+                                          Hashtypes.Canvas(c) -> Canvas.make_name s render
+                                        | _ -> s )
+
                 | _ ->
                     raise (Failure("Jsr -2 expected a string filepath but got a different type.")) 
               ) in 
-           
+              
             let oc = open_out filename in 
               output_string oc ( (Hashtypes.string_of_ct render lookup) ^ "\n" );
             exec fp sp (pc+1) 
