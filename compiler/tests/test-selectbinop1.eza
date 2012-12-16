@@ -1,0 +1,21 @@
+// tests static semantic analysis
+
+d <- load("asdf", 10);
+
+d[< 3] <- 5;  // ok
+
+d[<= 4] <- 6; // ok
+
+d[= 5] <- 7;  // ok
+
+d[~= 8] <- 9; // ok
+
+d[> 10] <- 3; // ok
+
+d[>= 20] <- 2; // ok
+
+// d[< 3 && > 4] <- 6; // ok
+
+// d[> 4 || ~= 3] <- 8; // ok
+
+d[+ 4] <- 9; // binop error

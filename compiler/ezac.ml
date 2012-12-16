@@ -53,6 +53,9 @@ let _ =
          TypeException(astexpr1, astexpr2, expected_typ, actual_typ) ->
            print_endline("Type error at subexpression " ^ (Ast.string_of_expr astexpr1) ^ " in expression " ^ (Ast.string_of_expr astexpr2) ^ ".  Expected type " ^ (Ssanalyzer.string_of_t expected_typ) ^ " but got type " ^ (Ssanalyzer.string_of_t actual_typ ^ "."));
            exit(0)
+       | BinopException(astop, astexpr, expected_op) ->
+           print_endline("Binop error in expression " ^ (Ast.string_of_expr astexpr) ^ ".  Expected binop " ^ (Ssanalyzer.string_of_t expected_op) ^ " but got binop " ^ (Ast.string_of_op astop));
+           exit(0)
        | UndefinedVarException(astexpr) ->
            print_endline("Undefined variable " ^ (Ast.string_of_expr astexpr)); 
            exit(0) 

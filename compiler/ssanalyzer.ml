@@ -12,6 +12,7 @@ type t =
   | Bool
   | Char 
   | String 
+  | RelOp
   | Canvas
 
 let string_of_t = function
@@ -20,6 +21,7 @@ let string_of_t = function
   | Bool -> "Bool"
   | Char -> "Char"
   | String -> "String"
+  | RelOp -> "&&, ||, =, ~=, <, <=. >, >="
   | Canvas -> "Canvas"
 
 module StringMap = Map.Make(String)
@@ -39,6 +41,7 @@ type env = {
 }
 
 exception TypeException of Ast.expr * Ast.expr * t * t
+exception BinopException of Ast.op * Ast.expr * t    
 exception UndefinedVarException of Ast.expr
 exception UndefinedFxnException of string * Ast.expr
 
@@ -175,21 +178,79 @@ let semantic_checker (stmt_lst, func_decls) =
           (match (t1, t2) with
                (Int, Int) ->
                  Sast.Canvas, Canvas
+             | (Int, _) ->
+                 raise(TypeException(y, Ast.Select_Point(x, y), Int, t2))
              | (_, _) ->
                  raise(TypeException(x, Ast.Select_Point(x, y), Int, t1))
           )
     | Ast.Select_Rect (x1, x2, y1, y2) -> 
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) x1
+        and (v2, t2) = (expr env scope) x2
+        and (v3, t3) = (expr env scope) y1 
+        and (v4, t4) = (expr env scope) y2 
+        in
+          (match (t1, t2, t3, t4) with
+               (Int, Int, Int, Int) ->
+                 Sast.Canvas, Canvas
+             | (Int, Int, Int, _) ->
+                 raise(TypeException(y2, Ast.Select_Rect(x1, x2, y1, y2), Int, t4))
+             | (Int, Int, _, Int) ->
+                 raise(TypeException(y1, Ast.Select_Rect(x1, x2, y1, y2), Int, t3))
+             | (Int, _, Int, Int) ->
+                 raise(TypeException(x2, Ast.Select_Rect(x1, x2, y1, y2), Int, t2))
+             | (_, _, _, _) ->
+                 raise(TypeException(x1, Ast.Select_Rect(x1, x2, y1, y2), Int, t1))
+          )
     | Ast.Select_VSlice (x1, y1, y2)  -> 
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) x1
+        and (v2, t2) = (expr env scope) y1 
+        and (v3, t3) = (expr env scope) y2 
+        in
+          (match (t1, t2, t3) with
+               (Int, Int, Int) ->
+                 Sast.Canvas, Canvas
+             | (Int, Int, _) ->
+                 raise(TypeException(y2, Ast.Select_VSlice(x1, y1, y2), Int, t3))
+             | (Int, _, Int) ->
+                 raise(TypeException(y1, Ast.Select_VSlice(x1, y1, y2), Int, t2))
+             | (_, _, _) ->
+                 raise(TypeException(x1, Ast.Select_VSlice(x1, y1, y2), Int, t1))
+          )
     | Ast.Select_HSlice (x1, x2, y1) ->
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) x1
+        and (v2, t2) = (expr env scope) x2 
+        and (v3, t3) = (expr env scope) y1 
+        in
+          (match (t1, t2, t3) with
+               (Int, Int, Int) ->
+                 Sast.Canvas, Canvas
+             | (Int, Int, _) ->
+                 raise(TypeException(y1, Ast.Select_HSlice(x1, x2, y1), Int, t3))
+             | (Int, _, Int) ->
+                 raise(TypeException(x2, Ast.Select_HSlice(x1, x2, y1), Int, t2))
+             | (_, _, _) ->
+                 raise(TypeException(x1, Ast.Select_HSlice(x1, x2, y1), Int, t1))
+          )
     | Ast.Select_VSliceAll x ->
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) x
+        in
+          (match t1 with
+               Int ->
+                 Sast.Canvas, Canvas
+             | _ ->
+                 raise(TypeException(x, Ast.Select_VSliceAll(x), Int, t1))
+          )
     | Ast.Select_HSliceAll y ->
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) y 
+        in
+          (match t1 with
+               Int ->
+                 Sast.Canvas, Canvas
+             | _ ->
+                 raise(TypeException(y, Ast.Select_HSliceAll(y), Int, t1))
+          )
     | Ast.Select_All -> 
-        Sast.IntLiteral(1), Canvas 
+        Sast.Canvas, Canvas
     | Ast.Select (canv, selection) -> 
         let (v1, t1) = (expr env scope) canv 
         and (v2, t2) = (expr env scope) selection 
@@ -197,26 +258,67 @@ let semantic_checker (stmt_lst, func_decls) =
           (match (t1, t2) with
                (Canvas, Canvas) ->
                  Sast.Canvas, Canvas
+             | (Canvas, _) ->
+                 raise(TypeException(selection, Ast.Select(canv, selection), Canvas, t2))
              | (_, _) ->
                  raise(TypeException(canv, Ast.Select(canv, selection), Canvas, t1))
           )
     | Ast.Select_Binop(op, e) -> 
-        Sast.IntLiteral(1), Canvas 
+        let (v1, t1) = (expr env scope) e
+        in
+          (match (op, t1) with
+               (* op must be a relational operator *)
+               (Ast.Eq, Int | Ast.Neq, Int | Ast.Lt, Int | Ast.Gt, Int 
+                | Ast.Leq, Int | Ast.Geq, Int) ->
+                 Sast.Canvas, Canvas
+(*
+             | (Ast.And, Bool | Ast.Or, Bool) ->
+                 Sast.Canvas, Canvas
+ *)
+             | (Ast.Eq, _ | Ast.Neq, _ | Ast.Lt, _ | Ast.Gt, _ | Ast.Leq, _ | Ast.Geq, _) ->
+                 raise(TypeException(e, Ast.Select_Binop(op, e), Int, t1))
+(*
+             | (Ast.And, _ | Ast.Or, _) ->
+                 raise(TypeException(e, Ast.Select_Binop(op, e), Bool, t1))
+ *)
+             | (_, _) ->
+                 raise(BinopException(op, Ast.Select_Binop(op, e), RelOp))
+          )
     | Ast.Select_Bool(e) -> 
-        Sast.IntLiteral(1), Canvas 
+        (* e here is select_bool_expr which ultimately has type Canvas *)
+        let (v1, t1) = (expr env scope) e
+        in
+          (match t1 with
+               Canvas ->
+                 Sast.Canvas, Canvas
+             | _ ->
+                 raise(TypeException(e, Ast.Select_Bool(e), Canvas, t1))
+          )
     | Ast.Shift(canv, dir, count) ->
-      Sast.IntLiteral(1), Canvas
+        let (v1, t1) = (expr env scope) canv 
+        and (v2, t2) = (expr env scope) dir 
+        and (v3, t3) = (expr env scope) count 
+        in
+          (match (t1, t2, t3) with
+               (Canvas, Int, Int) ->
+                 Sast.Canvas, Canvas
+             | (Canvas, Int, _) ->
+                 raise(TypeException(count, Ast.Shift(canv, dir, count), Int, t3))
+             | (Canvas, _, Int) ->
+                 raise(TypeException(dir, Ast.Shift(canv, dir, count), Int, t2))
+             | (_, _, _) ->
+                 raise(TypeException(canv, Ast.Shift(canv, dir, count), Canvas, t1))
+          )
     | Ast.GetAttr(canv, attr) -> 
         let (v1, t1) = (expr env scope) canv in
-        (match t1 with
-          (Canvas) -> 
-            (match attr with 
-              Ast.W | Ast.H | Ast.G ->
-                Sast.Canvas, Canvas )
-          | (_) -> 
-              raise(TypeException(canv, Ast.GetAttr(canv, attr), Canvas, t1))
+          (match t1 with
+               Canvas -> 
+                 (match attr with 
+                      Ast.W | Ast.H | Ast.G ->
+                          Sast.Canvas, Canvas )
+             | _ -> 
+                 raise(TypeException(canv, Ast.GetAttr(canv, attr), Canvas, t1))
           )
-        
   
   (* execute statement *)                              
   and stmt env scope = function
@@ -320,7 +422,21 @@ let semantic_checker (stmt_lst, func_decls) =
           fxn_env_lookup.ret_type <- (v, typ);
     | Ast.Include(str) -> 
         (); (* no type checking needed since we know it's already a string *)
-    | Ast.CanSet (_, _, _) -> ()
+    | Ast.CanSet (canv, select_expr, set_expr) -> 
+        let (v1, t1) = (expr env scope) canv
+        and (v2, t2) = (expr env scope) select_expr
+        and (v3, t3) = (expr env scope) set_expr
+        in
+         (match (t1, t2, t3) with
+              (Canvas, Canvas, Int) ->
+                ();
+            | (Canvas, Canvas, _) ->
+                raise(TypeException(set_expr, set_expr, Int, t3))
+            | (Canvas, _, Int) ->
+                raise(TypeException(select_expr, select_expr, Canvas, t2))
+            | (_, _, _) ->
+                raise(TypeException(canv, canv, Canvas, t1))
+         )
   
   (************************ 
    * start main code here 

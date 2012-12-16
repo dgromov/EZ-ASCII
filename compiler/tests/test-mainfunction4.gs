@@ -1,1 +1,1 @@
->>> Parse error at line 1, character 112: 'main'
+>>> Parse error at character 112: 'main'

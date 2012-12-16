@@ -1,0 +1,5 @@
+// tests static semantic analysis
+
+d <- load("asdf", 10);
+d[,] <- 5;          // select-all ok
+d[,] <- "hello" ;   // type error

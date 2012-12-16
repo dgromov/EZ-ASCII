@@ -1,0 +1,5 @@
+// tests static semantic analysis
+
+d <- load("asdf", 10);
+d[1:2, 3:4] <- 5;       // select rect ok
+d[1:2, 3:"hello"] <- 6; // type error
