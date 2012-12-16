@@ -144,8 +144,15 @@ let translate (stmt_lst, func_decls) =
         let ev1_val = (expr env) canv
         in 
           (expr env) selection @ ev1_val @ [Jsr (-6)] 
-    | Ast.Select_Binop(op, e) -> [Lit 1]
-    | Ast.Select_Bool(e) -> [Lit 1]
+    | Ast.Select_Bool(e) -> 
+        let expr_val = (expr env) e in  
+        expr_val @ [Lit (Canvas.select_type (Canvas.BOOL))]
+
+    | Ast.Select_Binop (op, e) -> 
+      let expr_val = (expr env) e 
+      and op_id = Ast.op_id op in 
+      expr_val @ [Lit op_id]
+
     | Ast.Shift(canv, dir, count) ->
         let canv_val = (expr env) canv
         and dir_val = (expr env) dir 

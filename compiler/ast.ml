@@ -9,6 +9,16 @@ type op = Plus | Minus | Times | Divide  | Mod
         | Lt  | Gt  | Eq | Leq | Geq | Neq
         | Mask
 
+let op_id op = 
+  match op with 
+    | Eq     -> 0       
+    | Neq    -> 1     
+    | Lt     -> 2        
+    | Leq    -> 3      
+    | Gt     -> 4        
+    | Geq    -> 5 
+
+
 let string_of_op op =
   match op with
       Plus   -> "+"      
@@ -27,6 +37,10 @@ let string_of_op op =
     | Mask   -> "MASK"
 
 type attr = W | H | G 
+
+type seltype =  POINT | RECT | VSLICE 
+              | HSLICE | VSLICE_ALL | HSLICE_ALL | ALL
+
 
 type expr = 
     IntLiteral of int                            (* 42 *)

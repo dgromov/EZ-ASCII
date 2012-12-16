@@ -26,7 +26,9 @@ type bstmt =
   | Lct of int          (* Load complex type by absolute address *)
   | CAtr of Ast.attr    (* Get Canvas Attribute*) 
   | Hlt                 (* Terminate *)
-  
+  (* | CSel of Ast.seltype (* Select from canvas *)
+  | CSet of Ast.seltype (* Store Some Val to canvas *)
+   *)
 (* 
     I would like to add these two but won't out of time constraints. 
 

@@ -26,8 +26,10 @@ let execute_prog prog debug_flag =
   let stack = Array.make 1024 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
   in 
-  let get_pnts sel_type soff h w =  
+  let get_pnts sel_type soff canv =  
       (* This match should be on some sort of enum *)
+      let h = (Canvas.height canv -1)
+      and w = (Canvas.width canv -1) in 
       ( match sel_type with 
           1 -> 
             let x = pop_int stack.(soff - 1) 
@@ -57,6 +59,36 @@ let execute_prog prog debug_flag =
             Canvas.select_vslice_all y h 
         | 7 -> 
             Canvas.select_all h w
+        | 8 -> 
+            let op_id = pop_int stack.(soff)
+            and limit = pop_int stack.(soff - 1) in 
+            (match op_id with 
+              0 -> 
+                 let eq x y =
+                    Canvas.get x y canv == limit in 
+                  Canvas.fetch_match 0 h w eq [];
+             | 1 -> 
+                  let neq x y =
+                    Canvas.get x y canv != limit in 
+                  Canvas.fetch_match 0 h w neq [];
+             | 2 -> 
+                  let less x y =
+                    Canvas.get x y canv < limit in 
+                  Canvas.fetch_match 0 h w less [];
+             | 3 -> 
+                  let leq x y =
+                    Canvas.get x y canv <= limit in 
+                  Canvas.fetch_match 0 h w leq [];
+             | 4 -> 
+                  let gt x y =
+                    Canvas.get x y canv > limit in 
+                  Canvas.fetch_match 0 h w gt [];
+             | 5 -> 
+                  let gte x y =
+                    Canvas.get x y canv >= limit in 
+                  Canvas.fetch_match 0 h w gte [];
+
+            | _ -> raise (Failure("Invalid Select: SS should catch this"))) 
         | _ -> 
           raise (Failure("Invalid Select: SS should catch this")) )
   and debug s =
@@ -376,12 +408,11 @@ let execute_prog prog debug_flag =
             debug ("Jsr -6: - Select Piece of Canvas" ^ "\n");
             let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
-              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
-            in 
+              | _ -> raise(Failure("Jsr -6: Expected canvas type.")) in 
             let sel_type = (pop_int stack.(sp-2)) in
             let stack_offset = sp-3 in 
             let pnts = get_pnts 
-                        sel_type stack_offset (Canvas.height existing) (Canvas.width existing) in 
+                        sel_type stack_offset existing in 
             let selected = (Canvas.select_rect_from_list pnts existing) in 
            
             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
@@ -399,7 +430,7 @@ let execute_prog prog debug_flag =
             and sel_type = (pop_int stack.(sp-3))
             and stack_offset = sp-4 in
 
-            let pnts = get_pnts sel_type stack_offset (Canvas.height existing) (Canvas.width existing) in 
+            let pnts = get_pnts sel_type stack_offset existing in 
             Canvas.set_from_list existing set_val pnts;
 
             (* 

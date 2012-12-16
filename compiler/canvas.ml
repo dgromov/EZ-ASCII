@@ -57,6 +57,7 @@ type stypes =
 | VSLICE_ALL 
 | HSLICE_ALL  
 | ALL
+| BOOL 
 
 let select_type = function 
   POINT -> 1
@@ -66,6 +67,7 @@ let select_type = function
 | VSLICE_ALL -> 5  
 | HSLICE_ALL -> 6 
 | ALL -> 7 
+| BOOL -> 8 
 
 
 type dir =
@@ -146,7 +148,7 @@ let accept_all x y =
   true 
 
 
-let rec fetch_row x1 y1 y2 acc cond =
+let rec fetch_row x1 y1 y2 acc cond=
     match y1 <= y2 with 
       true -> 
            if (cond x1 y1) then 
@@ -160,10 +162,10 @@ let rec fetch_box x1 x2 y1 y2 acc =
       true -> (fetch_row x1 y1 y2 acc accept_all) @ fetch_box (x1+1) x2 y1 y2 acc 
       | false -> []
 
-(* let rec fetch_match pl acc can cond = 
-    match x1 <= x2 with
-      true -> (fetch_row x1 y1 y2 acc cond) @ fetch_box (x1+1) x2 y1 y2 acc 
-      | false -> [] *)
+let rec fetch_match x h w cond acc = 
+    match x <= h with
+      true -> (fetch_row x 0 w acc cond) @ fetch_match (x+1) h w cond acc
+      | false -> [] 
 
 let string_of_point = function 
   (x, y) -> string_of_int x ^ " " ^ string_of_int y ;;
@@ -214,6 +216,7 @@ let select_rect_from_list l can =
    The following functions simply return points representing various boxes
    They are labels for the various select operations.
 *)
+ 
 let select_rect x1 x2 y1 y2 = 
     fetch_box x1 x2 y1 y2 []
 
