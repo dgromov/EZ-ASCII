@@ -23,7 +23,7 @@ let execute_prog prog debug_flag =
       IntValue(i) -> raise (Failure ("Expected an address but popped an int."))    
     | Address(i) -> (Hashtbl.find prog.glob_hash i) 
   in 
-  let stack = Array.make 1024 (IntValue 0)
+  let stack = Array.make 102400 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
   in 
   let get_pnts sel_type soff canv =  
@@ -88,9 +88,9 @@ let execute_prog prog debug_flag =
                     Canvas.get x y canv >= limit in 
                   Canvas.fetch_match 0 h w gte [];
 
-            | _ -> raise (Failure("Invalid Select: SS should catch this"))) 
+            | _ -> raise (Failure("Invalid Select: 1 SS should catch this"))) 
         | _ -> 
-          raise (Failure("Invalid Select: SS should catch this")) )
+          raise (Failure("Invalid Select: 2 SS should catch this")) )
   and debug s =
     if debug_flag then print_string s
   in 
