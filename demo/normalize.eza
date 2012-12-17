@@ -1,0 +1,7 @@
+include "../demo/invert_image.eza"; 
+
+d <- z[5:40, 20:50]; 
+m <- c & d; 
+
+m -> out, true;
+

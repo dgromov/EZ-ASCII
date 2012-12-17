@@ -315,7 +315,7 @@ let semantic_checker (stmt_lst, func_decls) =
                Canvas -> 
                  (match attr with 
                       Ast.W | Ast.H | Ast.G ->
-                          Sast.Canvas, Canvas )
+                          Sast.IntLiteral(1), Int )
              | _ -> 
                  raise(TypeException(canv, Ast.GetAttr(canv, attr), Canvas, t1))
           )

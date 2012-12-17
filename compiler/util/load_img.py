@@ -19,8 +19,8 @@ x, y = im.size
 result = ""
 for k in xrange(y): 
 	line = ""
-	for i in xrange(x): 
-		line += str(im.getpixel((i,k)) / (256 / granularity)) + " "
+	for i in xrange(x):
+		line += str(int((im.getpixel((i,k)) / 256.0) *  (granularity))) + " "
 	result += line[:-1]  # Skip extra space 
 	result += "\n"
 
