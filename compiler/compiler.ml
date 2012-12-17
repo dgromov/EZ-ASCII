@@ -189,14 +189,14 @@ let translate (stmt_lst, func_decls) =
                 let exis_global_idx = StringMap.find var env.global_idx in
                   (* side effect: update env.global_idx *)
                   env.global_idx <- (StringMap.add var exis_global_idx env.global_idx);
-                  [Str exis_global_idx]
+                  [Str exis_global_idx] @ [Drp]
               else 
                 (* note the +1 for the next available local idx *)
                 let new_local_idx = (List.length (StringMap.bindings env.local_idx)) + 1
                 in 
                   (* side effect: modify env.local_idx *)
                   env.local_idx <- (StringMap.add var new_local_idx env.local_idx);
-                  [Sfp new_local_idx] 
+                  [Sfp new_local_idx]
           else 
             [Str
                (if (StringMap.mem var env.global_idx) 
@@ -210,18 +210,18 @@ let translate (stmt_lst, func_decls) =
                         (* side effect: modify env.global_idx *)
                         env.global_idx <- (StringMap.add var new_global_idx env.global_idx);
                         new_global_idx)] 
-
+            @ [Drp]
 
     | Ast.OutputC(var, rend) ->
         let var_val = (expr env var) in
         let rend_val = (expr env rend) in 
-        rend_val @ var_val @ [Jsr (-1)]
+        rend_val @ var_val @ [Jsr (-1)] @ [Drp] @ [Drp]
 
     | Ast.OutputF(var, fn, rend) ->
         let var_val = (expr env var) in 
         let fn_val = (expr env fn) in 
         let rend_val = (expr env rend) in
-        rend_val @ fn_val @ var_val @ [Jsr (-2)]
+        rend_val @ fn_val @ var_val @ [Jsr (-2)] @ [Drp] @ [Drp] @ [Drp]
 
     | Ast.If(cond, stmt_lst) ->
         let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst))
@@ -234,7 +234,7 @@ let translate (stmt_lst, func_decls) =
         and f_stmts = (List.concat (List.map (stmt env scope) stmt_lst2))
         in 
           (expr env cond) @
-          [Beq (2 + List.length t_stmts)] @
+          [Beq (2 + List.length t_stmts)] @ 
           t_stmts @
           [Bra (1 + List.length f_stmts)] @
           f_stmts
