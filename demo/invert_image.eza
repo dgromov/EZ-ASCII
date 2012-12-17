@@ -1,19 +1,9 @@
 // Inverts Apple Image
 
-c <- load("../image/apple.jpeg", 20);
-c -> out, true;
+include "../demo/demo_lib.eza"; 
 
-z <- blank(c$h, c$w, c$g); 
-
-for i <- 0 | i < c$g | i <- i+1
-{
-	d <- c[=i];
-	d[=i] <- c$g-i-1;
-	z <- z & d;
-}
-z -> out, true;
-
-
-
-
-
+ a <- load_image("../image/apple.jpeg"); 
+// a <- load_image("../image/bot.jpeg", 10);
+ i <- invert(a);
+ a -> out, true; 
+ i -> out, true; 
