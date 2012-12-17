@@ -7,3 +7,5 @@ compiler/scanner.ml
 compiler/test_ezac.log
 compiler/tests/*.out
 compiler/tests/*.diff
+*.i
+*.result
