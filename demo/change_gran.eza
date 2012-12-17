@@ -1,0 +1,12 @@
+// Loops through various granularities and shows the result. 
+
+include "../demo/demo_lib.eza"; 
+
+min_gran <- 2; 
+max_gran <- 65; 
+
+for i <- min_gran | i < max_gran | i <- i + 1 
+{
+	c <- load_image("../image/lena.jpeg", i); 
+	c -> out, true;
+}

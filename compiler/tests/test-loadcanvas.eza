@@ -7,19 +7,4 @@ Fun to_Render()
 }
 
 c <- load("~/Desktop/joconde.jpeg", 10);
-c -> out, true;
-
-z <- blank(c$h, c$w, c$g); 
-
-for i <- 0 | i < c$g | i <- i+1
-{
-	d <- c[=i];
-	d[=i] <- c$g - i -1;
-	z <- z & d;
-}
-z -> out, true;
-
-
-
-
-
+c -> out, to_Render();

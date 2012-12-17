@@ -1,0 +1,16 @@
+// Filter Extremes 
+// This is sort of like contrast raising.
+
+include "../demo/demo_lib.eza"; 
+
+intensity <- 60; 
+
+c <- load_image("../image/lena.jpeg", 60); 
+c -> out, true;
+
+c[<20] <- 0; 
+c[>40] <- c$g - 1; 
+
+nothing <- "";
+nothing -> out;
+c -> out, true;

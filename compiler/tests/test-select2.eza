@@ -1,6 +1,6 @@
 new_line <- "";
 
-v <- load ("~/Desktop/edwards.jpeg", 10 );
+v <- load ("../image/edwards.jpeg", 10 );
 // v -> out;
 
 // Select 

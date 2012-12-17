@@ -1,14 +1,8 @@
 // Demo Library
 
-Fun load_image2(path, gran)
+Fun load_image(path, gran)
 {
 	c <- load(path, gran);
-	return c; 
-}
-
-Fun load_image(path)
-{
-	c <- load(path, 20);
 	return c; 
 }
 
@@ -35,7 +29,7 @@ Fun invert_loop(c)
         for k <- 0 | k < z$w | k <- k+1
         {
         		q <- z[k, i];
-            z [k, i] <- (z$g - q - 1);
+            z [k, i] <- (z$g - z[k, i] - 1);
         }
     }
     

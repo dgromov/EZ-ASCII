@@ -1,9 +1,9 @@
-XXXXXXX                                                             
-@@XXXXX                                                             
-@@XX@@X                                                             
-@@@@@@@                                                             
-@@@X@@@                                                             
-@@@@@@@                                                             
+*******                                                             
+*******                                                             
+*******                                                             
+*******                                                             
+*******                                                             
+*******                                                             
                                                                     
                                                                     
                                                                     
@@ -101,7 +101,7 @@ XXXXXXX
 
                                                                     
                                                                     
-@@XX@@XXXXXXXXXQQXXXXXXXXQQQQQQQQQ555QQQQQQQQQQQQXQXQXXQXQQQQQQQQ5QQ
+**************kkkkk******kkkkkZZZZZZZZZZkkZkkkkkkkkkkkkkkkkkkkkZZZZk
                                                                     
                                                                     
                                                                     
@@ -203,10 +203,10 @@ XXXXXXX
                                                                     
                                                                     
                                                                     
-   @                                                                
-   X                                                                
-   @                                                                
-   @                                                                
+   *                                                                
+   *                                                                
+   *                                                                
+   *                                                                
                                                                     
                                                                     
                                                                     

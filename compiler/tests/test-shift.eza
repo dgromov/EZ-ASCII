@@ -3,7 +3,7 @@ Fun print_dir(dir)
 	dir -> out;
 }
 
-c <- load ("~/Desktop/lena.jpeg", 10);
+c <- load ("../image/lena.jpeg", 10);
 c -> out, true;
 
 x <- print_dir("left");
