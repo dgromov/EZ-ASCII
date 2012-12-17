@@ -1,0 +1,31 @@
+// Demo Library
+
+Fun load_image2(path, gran)
+{
+	c <- load(path, gran);
+	return c; 
+}
+
+Fun load_image(path)
+{
+	c <- load(path, 20);
+	return c; 
+}
+
+Fun invert(c)
+{
+	z <- blank(c$h, c$w, c$g); 
+
+	for i <- 0 | i < c$g | i <- i+1
+	{
+		d <- c[=i];
+		d[=i] <- c$g-i-1;
+		z <- z & d;
+	}
+
+	return z; 
+}
+
+
+
+

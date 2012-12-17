@@ -1,11 +1,19 @@
 include "../demo/demo_lib.eza"; 
 
  a <- load_image("../image/apple.jpeg"); 
- a <- invert(a);
+// a <- invert(a);
+
  b <- load_image("../image/bot.jpeg");
+ b <- invert(b);
 
- a -> out, true; 
+ b <- shift(b, SHIFT_DOWN, 10); 
+
+ a_piece <- a[0:14, 20:50];
+ a_piece <- a_piece[<(a$g-1)];
+
+ a_piece <- shift(a_piece, SHIFT_RIGHT, 10);
+
+ b <- b & a_piece;
  b -> out, true; 
-
 
 

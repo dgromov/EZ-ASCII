@@ -3,7 +3,7 @@
 include "../demo/demo_lib.eza"; 
 
  a <- load_image("../image/apple.jpeg"); 
-// a <- load_image("../image/bot.jpeg", 10);
+// a <- load_image2("../image/bot.jpeg", 10);
  i <- invert(a);
  a -> out, true; 
  i -> out, true; 
