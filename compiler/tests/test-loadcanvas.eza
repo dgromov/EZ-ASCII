@@ -6,5 +6,5 @@ Fun to_Render()
 	return b; 
 }
 
-c <- load("~/Desktop/joconde.jpeg", 10);
+c <- load("../image/joconde.jpg", 10);
 c -> out, to_Render();
