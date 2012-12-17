@@ -1,0 +1,8 @@
+c <- load("../tmp/small.i", 10); 
+c -> out; 
+
+c[~=2] <- 1; 
+c -> out ;
+
+d <- c[<2];
+d -> out;

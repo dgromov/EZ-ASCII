@@ -218,7 +218,12 @@ let execute_prog prog debug_flag =
                           Mask -> 
                             debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c1))   ) ^ "\n");
                             debug("Canvas 1\n: " ^(Hashtypes.string_of_ct true (Hashtypes.Canvas(c2)) ) ^ "\n");
-                            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (Canvas.mask c1 c2));
+
+(*                            ( if not ( Canvas.height c1 != Canvas.height c2 && Canvas.width c1 == Canvas.width c2 ) then 
+                              raise (Failure ("Canvas Mapping must be on canvas of same dimension ")))
+                            ;
+ *)
+                             Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas (Canvas.mask c1 c2));
                             let ret_val = Address !(prog.glob_hash_counter) in
                                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
                                   ret_val

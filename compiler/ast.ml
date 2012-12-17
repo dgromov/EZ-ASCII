@@ -17,6 +17,7 @@ let op_id op =
     | Leq    -> 3      
     | Gt     -> 4        
     | Geq    -> 5 
+    | _ -> -1
 
 
 let string_of_op op =

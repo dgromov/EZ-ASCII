@@ -30,18 +30,19 @@ let default_map =
 (* If 0 or Max Granularity Then min or max, otherwise even dist *)
 let get_char_for_intensity intensity granularity map = 
   let max_int = (granularity - 1) in 
-  let card = (IntMap.cardinal map) in 
+  let card = ((IntMap.cardinal map) - 1) in 
+  let multip =  card /  max_int in 
   let idx = 
     match intensity == 0 with 
       true -> 0 
-    | false -> match intensity == max_int with 
-        true -> ((card-1))  
-      | false  -> let divisor = ( card - 2 ) / (granularity - 2) in 
-                    let x = (card - 2 ) / divisor in 
-                      x * intensity 
+    | false -> match intensity = max_int with 
+        true -> (card)
+      | false  -> multip * intensity
   in 
-  Char.escaped (IntMap.find idx map);
-
+  try 
+    Char.escaped (IntMap.find idx map);
+  with e ->
+    raise (Failure ("Intensity " ^ string_of_int idx ^ " is out of bounds "))
 
 type canvas =  
 {
