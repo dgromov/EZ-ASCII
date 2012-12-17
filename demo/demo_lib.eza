@@ -28,17 +28,18 @@ Fun invert(c)
 
 Fun invert_loop(c)
 {
-	z <- c[,];
+	  z <- c[,];
 
-	for i <- 0 | i < z$h | i <- i+1
-	{
-		for k <- 0 | k < z$w | k <- k+1
-		{
-			z [i, k] <- (z$g - z[i, k] - 1);
-		}
-	}
-	
-	return z; 
+    for i <- 0 | i < z$h | i <- i+1
+    {
+        for k <- 0 | k < z$w | k <- k+1
+        {
+        		q <- z[k, i];
+            z [k, i] <- (z$g - q - 1);
+        }
+    }
+    
+    return z; 
 }
 
 
