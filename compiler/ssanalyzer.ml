@@ -125,7 +125,7 @@ let semantic_checker (stmt_lst, func_decls) =
              (* first evaluate the actuals *)
              let res = (List.map (expr env scope) (List.rev actuals)) in
              let fxn_env_lookup = (StringMap.find fname env.fxn_envs) in
-             let bindings = List.combine (fxn_env_lookup.fxn_params) res in
+             let bindings = List.combine (List.rev fxn_env_lookup.fxn_params) res in
              let rec init_loc_env accum_env = function
                  [] -> accum_env
                | (param_name, (sast_elem, typ)) :: tail ->
