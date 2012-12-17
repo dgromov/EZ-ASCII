@@ -88,7 +88,12 @@ let get_dir = function
 (* Blank Function  *)
 let blank height width granularity default= 
 { 
-    data = Array.make_matrix height width default; 
+    data = (match granularity < 2 
+              || granularity > ((IntMap.cardinal default_map) - 1)  with 
+            false -> 
+              Array.make_matrix height width default; 
+            | true -> 
+              raise (Failure("Granularity must be between 2 and the max cardinality of the intensity map")));  
     gran = granularity
 }
 
@@ -298,10 +303,7 @@ let load_canvas fname granularity  =
     really_input ic s 0 n; 
     close_in ic;
     let lines = Str.split (Str.regexp("\n")) s  in
-    let can = {
-                data = (Array.make_matrix (List.length lines) (String.length (List.hd lines))) 0; 
-                gran = granularity;
-              }
+    let can = blank (List.length lines) (String.length (List.hd lines)) granularity 0
     in 
     let x = ref 0 in  
       List.iter (

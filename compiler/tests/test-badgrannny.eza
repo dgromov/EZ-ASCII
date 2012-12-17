@@ -1,0 +1,2 @@
+c <- load("../image/small.i", 0); 
+c -> out; 

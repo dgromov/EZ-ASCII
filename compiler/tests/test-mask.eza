@@ -1,6 +1,7 @@
 new_line <- "";
 c <- load("../image/lena.jpeg", 4);
-b <- blank(100,100,10);
+b <- blank(100,100, 4);
+
 
 // v -> out;
 
