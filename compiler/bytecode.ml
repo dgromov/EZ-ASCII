@@ -11,7 +11,7 @@ open Hashtypes
 
 type bstmt =
     Lit of int          (* Push a literal *)
-  | Drp                 (* Discard a value *)
+  | Drp of int                (* Discard a value *)
   | Bin of Ast.op       (* Perform arithmetic on top of stack *)
   | Lod of int          (* Fetch global variable *)
   | Str of int          (* Store global variable *)
@@ -54,7 +54,7 @@ let string_of_prog prog =
         let s = 
           match hd with
               Lit(i)      -> s ^ "Lit " ^ string_of_int i ^ "\n"
-            | Drp         -> s ^ "Drp\n"
+            | Drp(i)      -> s ^ "Drp " ^ string_of_int i ^ "\n"
             | Bin(op)     -> s ^ "Bin\n"
             | Lod(i)      -> s ^ "Lod " ^ string_of_int i ^ "\n"
             | Str(i)      -> s ^ "Str " ^ string_of_int i ^ "\n"
