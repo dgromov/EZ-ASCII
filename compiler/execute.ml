@@ -416,15 +416,24 @@ let execute_prog prog debug_flag =
               | _ -> raise(Failure("Jsr -6: Expected canvas type.")) in 
             let sel_type = (pop_int stack.(sp-2)) in
             let stack_offset = sp-3 in 
-            let pnts = get_pnts 
-                        sel_type stack_offset existing in 
+            let pnts = get_pnts sel_type stack_offset existing in 
             let selected = (Canvas.select_rect_from_list pnts existing) in 
-           
-            Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
-            let ret_val = Address !(prog.glob_hash_counter) in
-              prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
-              stack.(sp-1) <- ret_val;
-              exec fp sp (pc+1)
+          ( 
+             match sel_type > 1 with 
+
+              true -> 
+                Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
+                let ret_val = Address !(prog.glob_hash_counter) in
+                  prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                  stack.(sp-1) <- ret_val; 
+
+            | false -> 
+                match List.hd pnts with 
+                  (x, y) -> 
+                      stack.(sp-1) <- IntValue (Canvas.get x y existing);
+ 
+          );
+            exec fp sp (pc+1)
         | Jsr (-7) ->
             (* SET POINT *)
             debug ("Jsr -7: - Set point" ^ "\n");
