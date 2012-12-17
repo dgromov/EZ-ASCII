@@ -4,6 +4,6 @@ include "../demo/demo_lib.eza";
 
  a <- load_image("../image/apple.jpeg"); 
 // a <- load_image2("../image/bot.jpeg", 10);
- i <- invert(a);
+ i <- invert_loop(a);
  a -> out, true; 
  i -> out, true; 
