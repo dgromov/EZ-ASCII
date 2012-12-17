@@ -182,7 +182,7 @@ let translate (stmt_lst, func_decls) =
               let exis_local_idx = StringMap.find var env.local_idx in
                 (* side effect: update env.local_idx *)
                 env.local_idx <- (StringMap.add var exis_local_idx env.local_idx);
-                [Sfp exis_local_idx] 
+                [Sfp exis_local_idx] @ [Drp]
             else 
               if (StringMap.mem var env.global_idx) 
                 then 
@@ -196,7 +196,7 @@ let translate (stmt_lst, func_decls) =
                 in 
                   (* side effect: modify env.local_idx *)
                   env.local_idx <- (StringMap.add var new_local_idx env.local_idx);
-                  [Sfp new_local_idx]
+                  [Sfp new_local_idx] @ [Drp]
           else 
             [Str
                (if (StringMap.mem var env.global_idx) 
