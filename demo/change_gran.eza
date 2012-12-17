@@ -7,6 +7,7 @@ max_gran <- 65;
 
 for i <- min_gran | i < max_gran | i <- i + 1 
 {
-	c <- load_image("../image/lena.jpeg", i); 
-	c -> out, true;
+	c <- load_image("../image/edwards.jpeg", i); 
+	d <- c[>10];
+	d -> out, true;
 }

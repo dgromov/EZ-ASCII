@@ -1,9 +1,9 @@
 include "../demo/demo_lib.eza"; 
 
- a <- load_image("../image/apple.jpeg"); 
+ a <- load_image("../image/apple.jpeg", 20); 
 // a <- invert(a);
 
- b <- load_image("../image/bot.jpeg");
+ b <- load_image("../image/bot.jpeg", 20);
  b <- invert(b);
 
  b <- shift(b, SHIFT_DOWN, 10); 
@@ -13,7 +13,8 @@ include "../demo/demo_lib.eza";
 
  a_piece <- shift(a_piece, SHIFT_RIGHT, 10);
 
- b <- b & a_piece;
- b -> out, true; 
+ c <- b & a_piece;
 
+ c -> out, false; 
+ c -> out, true;
 

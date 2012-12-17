@@ -26,17 +26,6 @@ type bstmt =
   | Lct of int          (* Load complex type by absolute address *)
   | CAtr of Ast.attr    (* Get Canvas Attribute*) 
   | Hlt                 (* Terminate *)
-  (* | CSel of Ast.seltype (* Select from canvas *)
-  | CSet of Ast.seltype (* Store Some Val to canvas *)
-   *)
-(* 
-    I would like to add these two but won't out of time constraints. 
-
-  | CSel of Ast.seltype (* Select from canvas *)
-  | CSet of Ast.seltype * int         (* Store some value into canvas *)          
-  
- *)
-
 
 type prog = {
   num_globals : int;    (* Number of global variables *) 
@@ -47,6 +36,8 @@ type prog = {
 }
 
 
+
+
 let string_of_prog prog =
   let rec string_of_prog_helper s = function
       []          -> s 
@@ -55,7 +46,7 @@ let string_of_prog prog =
           match hd with
               Lit(i)      -> s ^ "Lit " ^ string_of_int i ^ "\n"
             | Drp(i)      -> s ^ "Drp " ^ string_of_int i ^ "\n"
-            | Bin(op)     -> s ^ "Bin\n"
+            | Bin(op)     -> s ^ "Bin " ^ Ast.string_of_op op ^ "\n"
             | Lod(i)      -> s ^ "Lod " ^ string_of_int i ^ "\n"
             | Str(i)      -> s ^ "Str " ^ string_of_int i ^ "\n"
             | Lfp(i)      -> s ^ "Lfp " ^ string_of_int i ^ "\n"

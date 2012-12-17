@@ -17,7 +17,7 @@ let make_map vals =
 
 (* Default mapping taken from http://incredibleart.org/links/ascii/new_faq.html *)
 let default_map = 
-   make_map (['.';'`';'^';':';'"';';';'~';  
+   make_map ([' '; '.';'`';'^';':';'"';';';'~';  
             '-';'_';'+';'<';'>';'i';'!'
             ;'l';'I';'l';'?';'|';
             '(';')';'1';'{';'}';'[';']';    
