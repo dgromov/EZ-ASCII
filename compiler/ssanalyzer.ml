@@ -177,7 +177,7 @@ let semantic_checker (stmt_lst, func_decls) =
         in
           (match (t1, t2) with
                (Int, Int) ->
-                 Sast.Canvas, Canvas
+                 Sast.IntLiteral(1), Int
              | (Int, _) ->
                  raise(TypeException(y, Ast.Select_Point(x, y), Int, t2))
              | (_, _) ->
@@ -256,8 +256,8 @@ let semantic_checker (stmt_lst, func_decls) =
         and (v2, t2) = (expr env scope) selection 
         in
           (match (t1, t2) with
-               (Canvas, Canvas) ->
-                 Sast.Canvas, Canvas
+               (Canvas, Canvas) | (Canvas, Int) ->
+                 (v2, t2)
              | (Canvas, _) ->
                  raise(TypeException(selection, Ast.Select(canv, selection), Canvas, t2))
              | (_, _) ->
@@ -430,6 +430,8 @@ let semantic_checker (stmt_lst, func_decls) =
          (match (t1, t2, t3) with
               (Canvas, Canvas, Int) ->
                 ();
+            | (Canvas, Int, Int) ->
+                (); 
             | (Canvas, Canvas, _) ->
                 raise(TypeException(set_expr, set_expr, Int, t3))
             | (Canvas, _, Int) ->
