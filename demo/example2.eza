@@ -1,0 +1,7 @@
+canv <- blank(10,10,10);
+for i <- 0 | i < 9 | i <- i + 1
+{
+	canv[i,i] <- 9;
+}
+
+canv -> out, true; 

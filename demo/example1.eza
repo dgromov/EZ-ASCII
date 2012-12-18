@@ -1,0 +1,8 @@
+canv <- load("../image/bot.jpeg", 10); 
+
+sel1 <- canv[10:20, 30:40];
+sel2 <- canv[<7]; 
+
+canv -> out, true; 
+sel1 -> out, true; 
+sel2 -> out, true;
