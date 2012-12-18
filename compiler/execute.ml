@@ -107,9 +107,9 @@ let execute_prog prog debug_flag =
             stack.(sp) <- Address i;
             debug ("Lct " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1)
-        | Drp i -> 
-            debug ("Drp " ^ string_of_int i ^ "\n");
-            exec fp (sp-1) (pc+i)
+        | Drp    -> 
+            debug ("Drp\n");
+            exec fp (sp-1) (pc+1)
         | Bin op ->
             let op1 = 
               (match stack.(sp-2) with
