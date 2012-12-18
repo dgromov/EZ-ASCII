@@ -1,0 +1,63 @@
+include "../demo/demo_lib.eza"; 
+
+a <- blank (30, 30, 10); 
+b <- blank (30, 30, 10);
+a_text <- "Blank text"; 
+
+
+q <- ""; 
+q -> out;
+
+a_text -> out;
+a -> out, false;
+q->out;
+
+Fun draw_with_loops(v)
+{
+	for i <- 3 | i <= 20 | i <- i + 1 
+	{
+			v[3, i] <- 5; 
+	}
+
+	for i <- 3 | i <= 20 | i <- i + 1 
+	{
+			v[20, i] <- 5; 
+	}
+
+	for i <- 3 | i <= 20 | i <- i + 1 
+	{
+			v[i, 3] <- 5; 
+	}
+
+	for i <- 3 | i <= 20 | i <- i + 1 
+	{
+			v[i, 20] <- 5; 
+	}
+
+	return v;
+}
+
+Fun draw_with_range(v)
+{
+	v[3, 3:20] <- 5;
+	v[20, 3:20] <- 5;
+	v[3:20, 3] <- 5;
+	v[3:20, 20] <- 5;
+
+	return v; 
+}
+
+
+a_text <- "A Drawn with loops";
+a <- draw_with_loops(a);
+
+b_text <- "B Drawn with Range";
+b <- draw_with_range(b); 
+
+a_text -> out; 
+a -> out, true;
+
+q->out;
+
+b_text -> out;
+b -> out, true;

@@ -10,10 +10,11 @@ include "../demo/demo_lib.eza";
 
  a_piece <- a[0:14, 20:50];
  a_piece <- a_piece[<(a$g-1)];
-
  a_piece <- shift(a_piece, SHIFT_RIGHT, 10);
+ 
+ a_width <- a$w; 
+ a_height <- a$h; 
 
  c <- b & a_piece;
- a -> out, true;
  c -> out, true;
 

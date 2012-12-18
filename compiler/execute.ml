@@ -23,7 +23,7 @@ let execute_prog prog debug_flag =
       IntValue(i) -> raise (Failure ("Expected an address but popped an int."))    
     | Address(i) -> (Hashtbl.find prog.glob_hash i) 
   in 
-  let stack = Array.make 1024 (IntValue 0)
+  let stack = Array.make 10240 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
   in 
   let get_pnts sel_type soff canv =  

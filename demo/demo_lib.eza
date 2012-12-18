@@ -36,7 +36,3 @@ Fun invert_loop(c)
     
     return z; 
 }
-
-
-
-
