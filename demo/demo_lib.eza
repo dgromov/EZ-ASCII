@@ -24,15 +24,15 @@ Fun invert_loop(c)
 {
 	  z <- c[,];
 	  gran <- z$g; 
+	  height <- z$h; 
+	  width <- z$w; 
 
-    for i <- 0  | i < z$h | i <- i+1
+
+    for i <- 0  | i < height | i <- i+1
     {
-        for k <- 0 | k < z$w | k <- k+1
+        for k <- 0 | k < width | k <- k+1
         {
-        		x <- 1 ; 
-        		//q <- z[k, i];
-            z[k, i] <- (z$g - z[k,i] - 1);
-     				//z [k, i] <- (z$g - q - 1);
+         	  z[k, i] <- (gran - z[k,i] - 1);
         }
     }
     
