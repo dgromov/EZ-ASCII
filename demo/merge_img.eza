@@ -14,7 +14,6 @@ include "../demo/demo_lib.eza";
  a_piece <- shift(a_piece, SHIFT_RIGHT, 10);
 
  c <- b & a_piece;
-
- c -> out, false; 
+ a -> out, true;
  c -> out, true;
 
