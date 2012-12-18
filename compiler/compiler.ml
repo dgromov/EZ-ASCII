@@ -196,7 +196,7 @@ let translate (stmt_lst, func_decls) =
                 in 
                   (* side effect: modify env.local_idx *)
                   env.local_idx <- (StringMap.add var new_local_idx env.local_idx);
-                  [Sfp new_local_idx]         
+                  [Sfp new_local_idx]
       
 
           else 
@@ -217,13 +217,19 @@ let translate (stmt_lst, func_decls) =
     | Ast.OutputC(var, rend) ->
         let var_val = (expr env var) in
         let rend_val = (expr env rend) in 
+(*
         rend_val @ var_val @ [Jsr (-1)] @ [Drp] @ [Drp]
+ *)
+        var_val @ rend_val @ [Jsr (-1)] @ [Drp] @ [Drp]
 
     | Ast.OutputF(var, fn, rend) ->
         let var_val = (expr env var) in 
         let fn_val = (expr env fn) in 
         let rend_val = (expr env rend) in
+(*
         rend_val @ fn_val @ var_val @ [Jsr (-2)] @ [Drp] @ [Drp] @ [Drp]
+ *)
+        var_val @ rend_val @ fn_val @ [Jsr (-2)] @ [Drp] @ [Drp] @ [Drp]
 
     | Ast.If(cond, stmt_lst) ->
         let t_stmts = (List.concat (List.map (stmt env scope) stmt_lst))

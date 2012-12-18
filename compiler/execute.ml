@@ -13,6 +13,9 @@ type stack_t =
     IntValue of int
   | Address of int
 
+let string_of_stackt = function
+    IntValue(i) -> "Int " ^ string_of_int i
+  | Address(i)  -> "Address " ^ string_of_int i 
 
 let execute_prog prog debug_flag =
   (* wrapper functions around extracting types from the stack *)
@@ -100,10 +103,12 @@ let execute_prog prog debug_flag =
         debug ("DEBUG: fp=" ^ (string_of_int fp) ^ ", sp=" ^ (string_of_int sp) ^ ", pc=" ^ (string_of_int pc) ^ ":  ");
         match prog.text.(pc) with 
           Lit i -> 
+            debug (" stack[" ^ (string_of_int sp) ^ "] = " ^ (string_of_stackt (IntValue(i))));
             stack.(sp) <- IntValue i; 
             debug ("Lit " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1)
         | Lct i ->
+            debug (" stack[" ^ (string_of_int (sp)) ^ "] = " ^ (string_of_stackt (Address(i))));
             stack.(sp) <- Address i;
             debug ("Lct " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1)
@@ -122,7 +127,8 @@ let execute_prog prog debug_flag =
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               )
             in 
-              (stack.(sp-2) <- 
+              
+                let tmp = 
                (let boolean b = if b then 1 else 0 
                 and bool_of_int i = if i > 0 then true else false
                 in 
@@ -241,9 +247,14 @@ let execute_prog prog debug_flag =
                      | (_, _) ->
                           (* This shouldn't happened if the SS gets to it first *)
                           raise (Failure ("Binop not supported on those operand types."))
-                  ))); 
+                  )
+               )
+                in 
+                  debug (" stack[" ^ (string_of_int (sp-2)) ^ "] = " ^ (string_of_stackt tmp));
+                  stack.(sp-2) <- tmp;
                   exec fp (sp-1) (pc+1)
         | Lod i -> 
+            debug (" stack[" ^ (string_of_int (sp)) ^ "] = " ^ (string_of_stackt globals.(i)));
             stack.(sp) <- globals.(i); 
             debug ("Lod " ^ string_of_int i ^ " Global=" ^ 
                    (match globals.(i) with
@@ -280,16 +291,17 @@ let execute_prog prog debug_flag =
                | _ ->
                    stack.(sp) <- stack.(fp+i));
  *)
+            debug (" stack[" ^ (string_of_int (sp)) ^ "] = " ^ string_of_stackt stack.(fp+i));
             stack.(sp) <- stack.(fp + i);
             debug ("Lfp " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1) 
         | Sfp i -> 
+            debug (" stack[" ^ (string_of_int (fp+i)) ^ "] = " ^ string_of_stackt stack.(sp-1));
             stack.(fp+i) <- stack.(sp-1); 
             debug ("Sfp " ^ string_of_int i ^ "\n");
-            exec fp (sp+1) (pc+1) 
+            exec fp (sp) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
         | CAtr atr -> 
-            debug ("CAtr " ^ Ast.string_of_attr atr ^ "\n"); 
             let canv_id = stack.(sp-1) in 
               let canv = (match pop_address_val canv_id with 
                 Hashtypes.Canvas(c) -> c 
@@ -302,13 +314,15 @@ let execute_prog prog debug_flag =
                 | Ast.H -> Canvas.height canv 
                 | Ast.G -> Canvas.granularity canv 
               ) in 
-            stack.(sp-1) <- IntValue result; 
-            exec fp sp (pc+1)
+            debug (" stack[" ^ (string_of_int (sp)) ^ "] = " ^ string_of_stackt (IntValue(result)));
+            stack.(sp) <- IntValue result; 
+            debug ("CAtr " ^ Ast.string_of_attr atr ^ "\n"); 
+            exec fp (sp+1) (pc+1)
 
         | Jsr(-1) ->
             debug ("Jsr -1" ^ "\n");
             let lookup =
-              (match stack.(sp-1) with
+              (match stack.(sp-2) with
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> 
                      try (Hashtbl.find prog.glob_hash i)
@@ -317,7 +331,7 @@ let execute_prog prog debug_flag =
                        raise(Failure("Jsr -1: No value found at address " ^ string_of_int i))
               ) in 
             let render = 
-              (match stack.(sp-2) with 
+              (match stack.(sp-1) with 
                   IntValue(i) -> raise (Failure ("Jsr -1: Render should be a boolean."))
                 | Address(i) -> 
                     match (Hashtbl.find prog.glob_hash i) with 
@@ -327,14 +341,13 @@ let execute_prog prog debug_flag =
             print_endline (Hashtypes.string_of_ct render lookup);
             exec fp sp (pc+1)
         | Jsr(-2) ->
-            debug ("Jsr -2");
             let lookup =
-              (match stack.(sp-1) with
+              (match stack.(sp-3) with
                    IntValue(i) -> Hashtypes.Int(i)
                  | Address(i) -> (Hashtbl.find prog.glob_hash i) (* add error handling *)
               ) in 
             let render = 
-              (match stack.(sp-3) with 
+              (match stack.(sp-2) with 
                   IntValue(i) -> raise (Failure ("Render should be a boolean"))
                 | Address(i) -> match (Hashtbl.find prog.glob_hash i) 
                   with 
@@ -342,7 +355,7 @@ let execute_prog prog debug_flag =
                   | _ -> raise (Failure("Jsr -2 expected a boolean render but got a different type.")) 
               ) in
              let filename = 
-              ( match (pop_address_val stack.(sp-2)) with
+              ( match (pop_address_val stack.(sp-1)) with
                   Hashtypes.String(s) -> 
                                         (match lookup with 
                                           Hashtypes.Canvas(c) -> Canvas.make_name s render
@@ -354,10 +367,10 @@ let execute_prog prog debug_flag =
               
             let oc = open_out filename in 
               output_string oc ( (Hashtypes.string_of_ct render lookup) ^ "\n" );
+            debug ("Jsr -2" ^ "\n");
             exec fp sp (pc+1) 
         | Jsr(-3) ->
             (* CANVAS LOADING *)
-            debug ("Jsr -2" ^ "\n");
             let gran_val = pop_int(stack.(sp-1))
             and path = 
               match (pop_address_val stack.(sp-2)) with
@@ -384,7 +397,9 @@ let execute_prog prog debug_flag =
                 (Hashtypes.Canvas (Canvas.load_canvas filename  gran_val));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                debug (" stack[" ^ (string_of_int (sp-1)) ^ "] = " ^ (string_of_stackt ret_val));
                 stack.(sp-1) <- ret_val;
+                debug ("Jsr -3" ^ "\n");
                 exec fp sp (pc+1)
         | Jsr(-4) ->
             (* BLANK *)
@@ -397,14 +412,15 @@ let execute_prog prog debug_flag =
                 (Hashtypes.Canvas (Canvas.blank h_val w_val g_val 0));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
-                stack.(sp-1) <- ret_val;
-                exec fp sp (pc+1)
+                debug (" stack[" ^ (string_of_int (sp-3)) ^ "] = " ^ (string_of_stackt ret_val));
+                stack.(sp-3) <- ret_val;
+                exec fp (sp-2) (pc+1)
        | Jsr (-5) -> 
             (* SHIFT *)
             debug ("Jsr -5" ^ "\n");
              let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
-              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
+              | _ -> raise(Failure("Jsr -5: Expected canvas type."))
              and dir = pop_int stack.(sp-2)
              and dist = pop_int stack.(sp-3)
            in 
@@ -413,11 +429,11 @@ let execute_prog prog debug_flag =
                 (Hashtypes.Canvas (shifted));
               let ret_val = Address !(prog.glob_hash_counter) in
                 prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                debug (" stack[" ^ (string_of_int (sp-1)) ^ "] = " ^ (string_of_stackt ret_val));
                 stack.(sp-1) <- ret_val;
                 exec fp sp (pc+1)
        | Jsr (-6) -> 
             (* SELECT *)
-            debug ("Jsr -6: - Select Piece of Canvas" ^ "\n");
             let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
               | _ -> raise(Failure("Jsr -6: Expected canvas type.")) in 
@@ -433,15 +449,21 @@ let execute_prog prog debug_flag =
                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
                 let ret_val = Address !(prog.glob_hash_counter) in
                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
+                  debug (" stack[" ^ (string_of_int (sp-num_discard-3)) ^ "] = " ^ (string_of_stackt ret_val));
                   stack.(sp-num_discard-3) <- ret_val; 
 
             | false -> 
                 match List.hd pnts with 
-                  (x, y) -> 
-                      stack.(sp-num_discard-3) <- IntValue (Canvas.get x y existing);
+                  (x, y) ->
+                    let tmp = IntValue(Canvas.get x y existing) in
+                    debug (" stack[" ^ (string_of_int (sp-num_discard-3)) ^ "] = " ^ (string_of_stackt tmp));
+                      stack.(sp-num_discard-3) <- tmp;
  
           );
+(*
             debug(string_of_int num_discard ^ "\n");
+ *)
+            debug ("Jsr -6: - Select Piece of Canvas" ^ "\n");
             exec fp (sp-(num_discard+2)) (pc+1)
         | Jsr (-7) ->
             (* SET POINT *)
@@ -465,10 +487,12 @@ let execute_prog prog debug_flag =
 
             exec fp (sp-num_discard-4) (pc + 1)
         | Jsr i -> 
+            debug (" stack[" ^ (string_of_int (sp)) ^ "] = " ^ (string_of_stackt (IntValue(pc+1))));
             stack.(sp) <- IntValue (pc + 1); 
             debug ("Jsr " ^ string_of_int i ^ "\n");
             exec fp (sp+1) i
         | Ent i -> 
+            debug (" stack[" ^ (string_of_int (sp)) ^ "] = " ^ (string_of_stackt (IntValue(fp))));
             stack.(sp) <- IntValue (fp); 
             debug ("Ent " ^ string_of_int i ^ "\n");
             exec sp (sp+i+1) (pc+1) 
@@ -476,6 +500,7 @@ let execute_prog prog debug_flag =
             let new_fp = pop_int stack.(fp) 
             and new_pc = pop_int stack.(fp-1) 
             in
+              debug (" stack[" ^ (string_of_int (fp-i-1)) ^ "] = " ^ (string_of_stackt stack.(sp-1)));
               stack.(fp-i-1) <- stack.(sp-1);
               debug ("Rts " ^ string_of_int i ^ "\n");
               exec new_fp (fp-i) new_pc 
