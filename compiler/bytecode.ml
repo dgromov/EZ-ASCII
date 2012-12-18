@@ -11,7 +11,7 @@ open Hashtypes
 
 type bstmt =
     Lit of int          (* Push a literal *)
-  | Drp                 (* Discard a value *)
+  | Drp of int                (* Discard a value *)
   | Bin of Ast.op       (* Perform arithmetic on top of stack *)
   | Lod of int          (* Fetch global variable *)
   | Str of int          (* Store global variable *)
@@ -35,6 +35,9 @@ type prog = {
   glob_hash_counter : int ref;  
 }
 
+
+
+
 let string_of_prog prog =
   let rec string_of_prog_helper s = function
       []          -> s 
@@ -42,7 +45,7 @@ let string_of_prog prog =
         let s = 
           match hd with
               Lit(i)      -> s ^ "Lit " ^ string_of_int i ^ "\n"
-            | Drp      -> s ^ "Drp " ^ "\n"
+            | Drp(i)      -> s ^ "Drp " ^ string_of_int i ^ "\n"
             | Bin(op)     -> s ^ "Bin " ^ Ast.string_of_op op ^ "\n"
             | Lod(i)      -> s ^ "Lod " ^ string_of_int i ^ "\n"
             | Str(i)      -> s ^ "Str " ^ string_of_int i ^ "\n"

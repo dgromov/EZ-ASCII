@@ -23,16 +23,14 @@ Fun invert(c)
 Fun invert_loop(c)
 {
 	  z <- c[,];
-	  gran <- z$g; 
 
-    for i <- 0  | i < z$h | i <- i+1
+    for i <- z$h - 5  | i < z$h | i <- i+1
     {
-        for k <- 0 | k < z$w | k <- k+1
+        for k <- z$w - 5 | k < z$w | k <- k+1
         {
-        		x <- 1 ; 
-        		//q <- z[k, i];
-            z[k, i] <- (z$g - z[k,i] - 1);
-     				//z [k, i] <- (z$g - q - 1);
+        	  q <- z[k, i];
+            // z [k, i] <- (z$g - z[k, i] - 1);
+     				z [k, i] <- (z$g - q - 1);
         }
     }
     

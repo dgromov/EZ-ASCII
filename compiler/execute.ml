@@ -23,7 +23,7 @@ let execute_prog prog debug_flag =
       IntValue(i) -> raise (Failure ("Expected an address but popped an int."))    
     | Address(i) -> (Hashtbl.find prog.glob_hash i) 
   in 
-  let stack = Array.make 102400 (IntValue 0)
+  let stack = Array.make 1024 (IntValue 0)
   and globals = Array.make prog.num_globals (IntValue 0) 
   in 
   let get_pnts sel_type soff canv =  
@@ -107,9 +107,9 @@ let execute_prog prog debug_flag =
             stack.(sp) <- Address i;
             debug ("Lct " ^ string_of_int i ^ "\n");
             exec fp (sp+1) (pc+1)
-        | Drp -> 
-            debug ("Drp " ^ string_of_int 1 ^ "\n");
-            exec fp (sp-1) (pc+1)
+        | Drp i -> 
+            debug ("Drp " ^ string_of_int i ^ "\n");
+            exec fp (sp-1) (pc+i)
         | Bin op ->
             let op1 = 
               (match stack.(sp-2) with
@@ -289,7 +289,7 @@ let execute_prog prog debug_flag =
             exec fp (sp+1) (pc+1) 
         (* here Jsr -1, refers to OutputC functionality *)
         | CAtr atr -> 
-            debug ("CAtr " ^ Ast.string_of_attr atr ^ "\n"); 
+            debug ("CAtr "); 
             let canv_id = stack.(sp-1) in 
               let canv = (match pop_address_val canv_id with 
                 Hashtypes.Canvas(c) -> c 
@@ -422,8 +422,7 @@ let execute_prog prog debug_flag =
                 Hashtypes.Canvas(c) -> c
               | _ -> raise(Failure("Jsr -6: Expected canvas type.")) in 
             let sel_type = (pop_int stack.(sp-2)) in
-            let num_discard = (pop_int stack.(sp-3)) in 
-            let stack_offset = sp-4 in 
+            let stack_offset = sp-3 in 
             let pnts = get_pnts sel_type stack_offset existing in 
             let selected = (Canvas.select_rect_from_list pnts existing) in 
           ( 
@@ -433,26 +432,24 @@ let execute_prog prog debug_flag =
                 Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(selected));
                 let ret_val = Address !(prog.glob_hash_counter) in
                   prog.glob_hash_counter := !(prog.glob_hash_counter)+1;
-                  stack.(sp-num_discard-3) <- ret_val; 
+                  stack.(sp-1) <- ret_val; 
 
             | false -> 
                 match List.hd pnts with 
                   (x, y) -> 
-                      stack.(sp-num_discard-3) <- IntValue (Canvas.get x y existing);
+                      stack.(sp-1) <- IntValue (Canvas.get x y existing);
  
           );
-            debug(string_of_int num_discard ^ "\n");
-            exec fp (sp-(num_discard+2)) (pc+1)
+            exec fp sp (pc+1)
         | Jsr (-7) ->
             (* SET POINT *)
             debug ("Jsr -7: - Set point" ^ "\n");
             let existing = match (pop_address_val stack.(sp-1)) with
                 Hashtypes.Canvas(c) -> c
-              | _ -> raise(Failure("Jsr -7: Expected canvas type."))
+              | _ -> raise(Failure("Jsr -6: Expected canvas type."))
             and set_val = (pop_int stack.(sp-2))
             and sel_type = (pop_int stack.(sp-3))
-            and num_discard = (pop_int stack.(sp-4))
-            and stack_offset = sp-5 in
+            and stack_offset = sp-4 in
 
             let pnts = get_pnts sel_type stack_offset existing in 
             Canvas.set_from_list existing set_val pnts;
@@ -463,7 +460,7 @@ let execute_prog prog debug_flag =
                Hashtbl.add prog.glob_hash !(prog.glob_hash_counter) (Hashtypes.Canvas(modified_can)); 
             *) 
 
-            exec fp (sp-num_discard-4) (pc + 1)
+            exec fp sp (pc + 1)
         | Jsr i -> 
             stack.(sp) <- IntValue (pc + 1); 
             debug ("Jsr " ^ string_of_int i ^ "\n");
